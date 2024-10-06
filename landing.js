@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
-            if (pageYOffset >= sectionTop - 100) {
+            if (window.scrollY >= sectionTop - 100) {
                 current = section.getAttribute('id');
             }
         });
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Interactivity for interest selector
     const topics = document.querySelectorAll('.topic');
     const continueBtn = document.getElementById('continueBtn');
-    const selectedTopics = new Set();
+    const selectedTopics = new Set();   
 
     topics.forEach(topic => {
         topic.addEventListener('click', () => {
@@ -80,6 +80,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     continueBtn.addEventListener('click', () => {
         if (!continueBtn.disabled) {
+            const selectedProject = Array.from(selectedTopics)[0];
+            // Store the selected project in localStorage
+            localStorage.setItem('selectedProject', selectedProject);
+
+            console.log("Stored project: ", selectedProject); // Debug log
+
             // Redirect to home page
             window.location.href = 'index.html'; 
         }
