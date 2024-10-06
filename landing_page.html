@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to My Portfolio</title>
+    <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+    <header>
+        <h1>My Portfolio</h1>
+        <p>Welcome, Visitor!</p>
+    </header>
+    <main>
+        <div class="interest-selector">
+            <h2>Pick one or more topics</h2>
+            <p>This will help us recommend projects you'll love</p>
+            <div class="topics">
+                <div class="topic" data-topic="deco7140">
+                    <img src="pictures/bird-icon.png" alt="DECO7140 project icon">
+                    <h3>DECO7140 Project</h3>
+                </div>
+                <div class="topic" data-topic="data-analyst">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71" alt="Graphs of performance analytics on a laptop screen">
+                    <h3>Data Analyst Project</h3>
+                </div>
+                <div class="topic" data-topic="web-design">
+                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=400" alt="Web Design icon">
+                    <h3>Web Design Project</h3>
+                </div>
+            </div>
+            <button id="continueBtn" disabled title="Please select at least one option to proceed">Next</button>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
