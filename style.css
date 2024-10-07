@@ -1,3 +1,4 @@
+/* Base styles for the body */
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -7,6 +8,7 @@ body {
     background-color: #333; 
 }
 
+/* Header styles */
 header {
     background-color: #f4f4f4;
     padding: 1rem;
@@ -19,6 +21,7 @@ h1 {
     padding-bottom: 1rem;
 }
 
+/* Navigation styles */
 nav {
     overflow-x: auto;
 }
@@ -46,6 +49,7 @@ nav {
     background-color: #ddd;
 }
 
+/* Main content area styles */
 main {
     padding: 2rem;
     max-width: 800px;
@@ -174,12 +178,12 @@ html {
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    border: 1px solid #ddd; /* Add a light grey border */
+    border: 1px solid #ddd; 
     transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
 }
 
 .post:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Slightly larger shadow on hover */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
 }
 
 .post.featured {
@@ -216,7 +220,7 @@ html {
 .post.featured .image.main img {
     width: 100%;
     height: auto;
-    max-height: 600px; /* Increased from 500px to 600px */
+    max-height: 600px; 
     object-fit: contain;
 }
 
@@ -264,8 +268,8 @@ html {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     border: 1px solid #ddd;
     transition: box-shadow 0.3s ease;
-    position: relative;  /* Add this */
-    padding-bottom: 60px;  /* Add this to make room for the button */
+    position: relative;  
+    padding-bottom: 60px;
 }
 
 .posts article:hover {
@@ -273,7 +277,7 @@ html {
 }
 
 .posts article .actions {
-    position: absolute;  /* Add this */
+    position: absolute;  
     bottom: 0;  /* Position 5% from the bottom */
     left: 0;  /* Align to the left edge of the article */
     right: 0;  /* Align to the right edge of the article */
@@ -304,7 +308,7 @@ html {
 .post .embedded-site {
     overflow-y: hidden;
     width: 100%;
-    max-width: 800px; /* Adjust this value as needed */
+    max-width: 800px; 
     aspect-ratio: 16 / 9; /* This gives a slightly taller aspect ratio */
     margin: 1rem auto;
 }
@@ -341,7 +345,6 @@ html {
     }
 }
 
-/* Optional: Add a hover effect for the featured embedded site */
 .post.featured .embedded-site:hover {
     transform: scale(1.02); /* Slightly enlarge on hover */
     transition: transform 0.3s ease;
@@ -378,7 +381,7 @@ html {
 /* Adjust for smaller screens */
 @media (max-width: 768px) {
     .posts {
-        grid-template-columns: 1fr; /* Single column for mobile */
+        grid-template-columns: 1fr; 
     }
 }
 
@@ -431,7 +434,7 @@ html {
 
 /* Navigation styles */
 #portfolio-nav {
-    background-color: #4a4a4a; /* Dark grey background */
+    background-color: #4a4a4a;
     padding: 0;
     position: sticky;
     top: 0;
@@ -505,10 +508,5 @@ html {
     height: auto; /* This allows the image to maintain its aspect ratio */
     object-fit: contain; /* This ensures the entire image is visible */
     object-position: center; /* Center the image within its container */
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    /* Add any specific mobile adjustments if needed */
 }
 

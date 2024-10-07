@@ -1,3 +1,4 @@
+/* Base styles for the body */
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -10,27 +11,30 @@ body {
     overflow-x: hidden;
 }
 
+/* Header styles */
 header {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 1rem;
-    margin-left: 250px; 
-    width: calc(100% - 250px); 
+    margin-left: 250px; /* Offset for side navigation */
+    width: calc(100% - 250px); /* Adjust width to account for side nav */
     box-sizing: border-box;
 }
 
+/* Main content area styles */
 main {
     padding: 2rem;
-    margin-left: 250px; 
+    margin-left: 250px; /* Offset for side navigation */
     margin-right: 30px;
-    width: calc(100% - 250px); 
+    width: calc(100% - 250px); /* Adjust width to account for side nav */
     max-width: 100%;
     background-color: #f4f4f4;
     box-sizing: border-box;
     overflow-x: hidden;
 }
 
+/* Side navigation styles */
 #side-nav {
     width: 250px;
     height: 100vh;

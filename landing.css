@@ -1,3 +1,4 @@
+/* Base styles for the body */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -5,6 +6,7 @@ body {
     background-color: #f0f0f0;
 }
 
+/* Header styles */
 header {
     background-color: #333;
     color: white;
@@ -14,6 +16,7 @@ header {
     align-items: center;
 }
 
+/* Main content area styles */
 main {
     max-width: 800px;
     margin: 2rem auto;
@@ -23,15 +26,18 @@ main {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Interest selector heading styles */
 .interest-selector h2 {
     margin-bottom: 0.5rem;
 }
 
+/* Interest selector description styles */
 .interest-selector > p {
     color: #666;
     margin-bottom: 1.5rem;
 }
 
+/* Grid layout for topics */
 .topics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -39,6 +45,7 @@ main {
     margin-bottom: 1.5rem;
 }
 
+/* Individual topic styles */
 .topic {
     border: 2px solid #ddd;
     border-radius: 8px;
@@ -56,6 +63,7 @@ main {
     background-color: #e6f2ff;
 }
 
+/* Topic image styles */
 .topic img {
     width: 100%;
     height: 120px;
@@ -65,11 +73,13 @@ main {
     background-color: #f0f0f0; /* Light gray background */
 }
 
+/* Topic heading styles */
 .topic h3 {
     margin: 0;
     font-size: 1rem;
 }
 
+/* General button styles */
 button {
     background-color: #007bff;
     color: white;
@@ -90,6 +100,7 @@ button:disabled {
     cursor: not-allowed;
 }
 
+/* Continue button specific styles */
 #continueBtn {
     transition: all 0.3s ease;
 }

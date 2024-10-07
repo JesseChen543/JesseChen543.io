@@ -1,4 +1,6 @@
+// Wait for the DOM to be fully loaded before executing the script
 document.addEventListener('DOMContentLoaded', function() {
+    // Get references to DOM elements
     const stickyNoteIcon = document.getElementById('sticky-note-icon');
     const notePopup = document.getElementById('note-popup');
     const closeBtn = document.querySelector('.close-btn');
@@ -6,14 +8,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const sendToMeBtn = document.getElementById('send-to-me');
     const noteEditor = document.getElementById('note-editor');
 
+    // Show note popup when sticky note icon is clicked
     stickyNoteIcon.addEventListener('click', function() {
         notePopup.classList.add('show');
     });
 
+    // Hide note popup when close button is clicked
     closeBtn.addEventListener('click', function() {
         notePopup.classList.remove('show');
     });
 
+    // Handle sending note to website owner
     sendToOwnerBtn.addEventListener('click', function() {
         const noteContent = noteEditor.value;
         if (noteContent.trim() !== '') {
@@ -26,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Handle sending note to user's email
     sendToMeBtn.addEventListener('click', function() {
         const noteContent = noteEditor.value;
         if (noteContent.trim() !== '') {
@@ -43,15 +49,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Placeholder function for sending email
+    // In a real-world scenario, this would be handled by a server
     function sendEmail(to, subject, body) {
-        // This is a placeholder function. In a real-world scenario, 
-        // this data should be sent to server which would then use an
-        // email service to send the actual email.
         console.log(`Sending email to: ${to}`);
         console.log(`Subject: ${subject}`);
         console.log(`Body: ${body}`);
     }
 
+    // Function to validate email format
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
