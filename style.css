@@ -174,10 +174,16 @@ html {
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #ddd; /* Add a light grey border */
+    transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.post:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2); /* Slightly larger shadow on hover */
 }
 
 .post.featured {
-    border: 2px solid #007bff;
+    border: 2px solid #007bff; /* Thicker, colored border for featured posts */
     min-height: 800px;
     height: 80%; 
 }
@@ -234,8 +240,16 @@ html {
 
 .posts {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .posts {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 #footer {
@@ -348,4 +362,73 @@ html {
     background-color: #f4f4f4;
     padding: 2rem;
     border-radius: 8px;
+}
+
+/* Add this to the end of your CSS file */
+.image.fit {
+    width: 100%; /* This ensures the image width matches the article width */
+    margin-bottom: 1rem;
+}
+
+.image.fit img {
+    width: 100%;
+    height: auto; /* This allows the image to maintain its aspect ratio */
+    object-fit: contain; /* This ensures the entire image is visible */
+    object-position: center; /* Center the image within its container */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    /* Add any specific mobile adjustments if needed */
+}
+
+.posts article {
+    background-color: #fff;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+    transition: box-shadow 0.3s ease;
+    position: relative;  /* Add this */
+    padding-bottom: 60px;  /* Add this to make room for the button */
+}
+
+.posts article:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.posts article .actions {
+    position: absolute;  /* Add this */
+    bottom: 0;  /* Position 5% from the bottom */
+    left: 0;  /* Align to the left edge of the article */
+    right: 0;  /* Align to the right edge of the article */
+    text-align: center;  /* Center the button horizontally */
+}
+
+.posts article .button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.posts article .button:hover {
+    background-color: #0056b3;
+}
+
+/* Remove underline from all title links */
+.posts article h2 a,
+.post.featured h2 a {
+    text-decoration: none;
+    color: inherit; /* This will keep the color consistent with other headings */
+}
+
+/* Optional: Add an underline on hover for better user experience */
+.posts article h2 a:hover,
+.post.featured h2 a:hover {
+    text-decoration: underline;
 }
