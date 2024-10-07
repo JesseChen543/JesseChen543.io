@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to create the dynamic header
     function createDynamicHeader(title, description) {
         const headerHtml = `
+            <style>
+                .hero-content p {
+                    font-size: 1.8em;
+                    line-height: 1.6;
+                }
+            </style>
             <header class="hero">
                 <div class="hero-content">
                     <h1>${title}</h1>
@@ -24,20 +30,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const portfolioContent = {
         'data-analyst': {
             title: "JESSE THE ANALYST",
-            description: "Showcasing data analyst projects demonstrating skills in data interpretation, analysis, and visualization using various tools.",
+            description: "As a dedicated data analyst, I excel at transforming complex datasets into actionable " +
+                "intelligence. With expertise in statistical analysis, data visualization, and machine learning, " +
+                "I extract meaningful insights that drive business decisions. Proficient in Python, R, SQL, and " +
+                "advanced visualization tools, I thrive on uncovering hidden trends and communicating findings " +
+                "clearly. My work demonstrates a commitment to accuracy, efficiency, and delivering value through " +
+                "data-driven strategies.",
         },
-        'deco7140': {
-            title: "DECO7140 TEAM PROJECT",
-            description: "A collaborative project for a birdwatch website, highlighting web development and teamwork skills.",
+        'deco7180': {
+            title: "DECO7180 TEAM PROJECT",
+            description: "In the DECO7180 team project, I led backend development for our birdwatch website. " +
+                "I integrated the Wildlife API, implemented Google Maps for bird location visualization, and " +
+                "created algorithms to enhance information display. This project honed my full-stack development " +
+                "skills and highlighted my ability to work efficiently in a team. I delivered a comprehensive " +
+                "solution that met user needs and project requirements, showcasing both technical prowess and " +
+                "collaborative skills.",
         },
         'web-design': {
             title: "WEB DESIGN PROJECT",
-            description: "Featuring creative and responsive web design projects, showcasing UI/UX skills and modern web technologies.",
+            description: "As a passionate website developer, I create engaging, responsive web experiences. " +
+                "My expertise covers HTML, CSS, JavaScript, and React, combined with a keen eye for UI/UX design. " +
+                "I craft visually appealing, intuitive interfaces that perform optimally across devices. " +
+                "My approach blends creativity with technical proficiency, pushing web design boundaries to " +
+                "deliver innovative solutions that engage users and meet business objectives.",
         }
     };
 
-    // Get content based on selected project, or use deco7140 as default if not found
-    const content = portfolioContent[selectedProject] || portfolioContent["deco7140"];
+    // Get content based on selected project, or use deco7180 as default if not found
+    const content = portfolioContent[selectedProject] || portfolioContent["deco7180"];
 
     createDynamicHeader(content.title, content.description);
 

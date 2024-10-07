@@ -183,9 +183,55 @@ html {
 }
 
 .post.featured {
-    border: 2px solid #007bff; /* Thicker, colored border for featured posts */
+    border: 2px solid #007bff;
     min-height: 800px;
-    height: 80%; 
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto 4rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f8f9fa;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+}
+
+/* Adjust the content within the featured post */
+.post.featured > * {
+    width: 100%;
+    max-width: 1000px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Adjust the embedded site and image styles */
+.post.featured .embedded-site,
+.post.featured .image.main {
+    width: 100%;
+    max-width: 100%;
+    margin: 1rem auto;
+}
+
+.post.featured .embedded-site iframe,
+.post.featured .image.main img {
+    width: 100%;
+    height: auto;
+    max-height: 600px; /* Increased from 500px to 600px */
+    object-fit: contain;
+}
+
+/* Ensure the description text in the featured post is centered */
+.post.featured p {
+    text-align: center;
+    max-width: 90%;
+    margin: 1rem auto;
+}
+
+/* Center the button in the featured post */
+.post.featured .actions {
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
 }
 
 .post header {
@@ -210,13 +256,96 @@ html {
     text-decoration: underline;
 }
 
-.embedded-site {
-    width: 100% !important;
-    height: 700px; 
-    min-height: 1000px !important;
-    display: block;
+.posts article {
+    background-color: #fff;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+    transition: box-shadow 0.3s ease;
+    position: relative;  /* Add this */
+    padding-bottom: 60px;  /* Add this to make room for the button */
 }
 
+.posts article:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.posts article .actions {
+    position: absolute;  /* Add this */
+    bottom: 0;  /* Position 5% from the bottom */
+    left: 0;  /* Align to the left edge of the article */
+    right: 0;  /* Align to the right edge of the article */
+    text-align: center;  /* Center the button horizontally */
+}
+
+.posts article .button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.posts article .button:hover {
+    background-color: #0056b3;
+}
+
+/* Remove underline from all title links */
+.posts article h2 a,
+.post.featured h2 a {
+    text-decoration: none;
+    color: inherit; /* This will keep the color consistent with other headings */
+}
+
+.post .embedded-site {
+    overflow-y: hidden;
+    width: 100%;
+    max-width: 800px; /* Adjust this value as needed */
+    aspect-ratio: 16 / 9; /* This gives a slightly taller aspect ratio */
+    margin: 1rem auto;
+}
+
+.post .embedded-site iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Specific styles for featured post */
+.post.featured .embedded-site {
+    width: 100%;
+    max-width: 1000px; /* Larger for featured posts */
+    aspect-ratio: 16 / 9; /* Maintain 16:9 aspect ratio */
+    margin: 2rem auto; /* Increased margin */
+    box-shadow: 0 0 20px rgba(0,0,0,0.2); /* Add a shadow for emphasis */
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Ensure the iframe respects the border radius */
+}
+
+.post.featured .embedded-site iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block; /* Removes any potential inline spacing */
+}
+
+/* Add a responsive design for smaller screens */
+@media (max-width: 768px) {
+    .post.featured .embedded-site {
+        max-width: 100%; /* Full width on smaller screens */
+        aspect-ratio: 16 / 10; /* Slightly taller on mobile for better visibility */
+    }
+}
+
+/* Optional: Add a hover effect for the featured embedded site */
+.post.featured .embedded-site:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+    transition: transform 0.3s ease;
+}
 
 .actions {
     list-style: none;
@@ -240,15 +369,16 @@ html {
 
 .posts {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr); /* This creates 2 columns */
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-@media (min-width: 992px) {
+/* Adjust for smaller screens */
+@media (max-width: 768px) {
     .posts {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1fr; /* Single column for mobile */
     }
 }
 
@@ -380,56 +510,5 @@ html {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     /* Add any specific mobile adjustments if needed */
-}
-
-.posts article {
-    background-color: #fff;
-    margin-bottom: 2rem;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    border: 1px solid #ddd;
-    transition: box-shadow 0.3s ease;
-    position: relative;  /* Add this */
-    padding-bottom: 60px;  /* Add this to make room for the button */
-}
-
-.posts article:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
-
-.posts article .actions {
-    position: absolute;  /* Add this */
-    bottom: 0;  /* Position 5% from the bottom */
-    left: 0;  /* Align to the left edge of the article */
-    right: 0;  /* Align to the right edge of the article */
-    text-align: center;  /* Center the button horizontally */
-}
-
-.posts article .button {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-}
-
-.posts article .button:hover {
-    background-color: #0056b3;
-}
-
-/* Remove underline from all title links */
-.posts article h2 a,
-.post.featured h2 a {
-    text-decoration: none;
-    color: inherit; /* This will keep the color consistent with other headings */
-}
-
-/* Optional: Add an underline on hover for better user experience */
-.posts article h2 a:hover,
-.post.featured h2 a:hover {
-    text-decoration: underline;
 }
 
