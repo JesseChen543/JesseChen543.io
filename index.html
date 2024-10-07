@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jesse The Analyst Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="write_note.css">
 </head>
 <body>
     <div id="dynamic-header"></div>
@@ -150,7 +151,7 @@
                         This project showcased my skills in API integration, data manipulation, and backend optimization for web applications.
                     </p>
                         <p>
-                        <a href="https://www.kaggle.com/datasets/d49d3935d6dff48d136c43535177d6a4986e5e32ffc223781edb6f1cb377e236" 
+                        <a href="wingwatch_process.html" 
                         target="_blank">My learning process and reflection</a></p>
                     <ul class="actions special">
                         <li><a href="https://deco1800teams-t03-wingwatch.uqcloud.net/"target="_blank" 
@@ -160,33 +161,30 @@
             
             </section>
 
+<!-- Sticky Note Icon -->
+<div id="sticky-note-icon">
+    <img src="pictures/write_note.jpg" alt="Write a note">
+</div>
 
-
-
-<!-- About Me Section -->
-<section id="about">
-    <h2>About Me</h2>
-    <p>Add your personal information and bio here.</p>
-</section>
-
-<!-- Footer -->
-<footer id="footer"> 
-    <section class="split contact">
-        <section>
-            <h3>Email</h3>
-            <p><a href="mailto:jessechen959@gmail.com">jessechen959@gmail.com</a></p>
-        </section>
-        <section>
-            <h3>Social</h3>
-            <ul class="icons alt">
-                <li><a href="https://www.linkedin.com/in/jize-chen-59b0a4236/" target="_blank"
-                    class="icon brands alt fa-linkedin"><span class="label">linkeDin</span></a></li>
-            </ul>
-        </section>
-    </section>
-</footer>
+<!-- Popup Window -->
+<div id="note-popup" class="hidden">
+    <div class="popup-content">
+        <span class="close-btn">&times;</span>
+        <div class="popup-left">
+            <p>Feel free to make a note:</p>
+        </div>
+        <div class="popup-right">
+            <textarea id="note-editor" rows="10" cols="50"></textarea>
+        </div>
+        <div class="popup-buttons">
+            <button id="send-to-owner">Submit Feedback to WingWatch</button>
+            <button id="send-to-me">Email Note to Myself</button>
+        </div>
+    </div>
+</div>
 
 </div>  
 <script src="dynamic_heading.js"></script>
+<script src="note.js"></script>
 </body>
 </html>

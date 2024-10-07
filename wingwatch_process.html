@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WingWatch Development Process</title>
+    <link rel="stylesheet" href="wingwatch_process.css">
+    <link rel="stylesheet" href="write_note.css">
+</head>
+<body>
+    <nav id="side-nav">
+        <ul>
+            <li><a href="#project-brief">Project Brief</a></li>
+            <li><a href="#design-considerations">Design Considerations</a></li>
+            <li><a href="#project-design-proposal">Project Design Proposal</a></li>
+            <li><a href="#key-features">Key Features Implemented</a></li>
+        </ul>
+    </nav>
+    <header>
+        <h1>WingWatch Development Process</h1>
+    </header>
+
+    <main>
+        <section id="project-brief">
+            <h2>Project Brief</h2>
+            <p>WingWatch is an innovative website dedicated to revolutionizing the birdwatching experience in Brisbane. Our platform offers three key features designed to engage and educate bird enthusiasts:</p>
+            <ol>
+                <li><strong>Advanced Bird Search:</strong> Utilize our sophisticated search engine to discover and identify birds native to Brisbane, leveraging comprehensive databases and user-friendly interfaces.</li>
+                <li><strong>Personal Digital Collections:</strong> Create and curate your own digital bird collection, a unique feature that sets us apart from other birdwatching websites. This allows users to track their sightings and build a personalized ornithological portfolio.</li>
+                <li><strong>Community Sharing and Interaction:</strong> Explore and appreciate collections shared by fellow birdwatching enthusiasts, fostering a vibrant community of bird lovers and promoting knowledge exchange.</li>
+            </ol>
+        </section>
+
+        <section id="design-considerations">
+            <h2>Design Considerations</h2>
+            <div class="content-wrapper">
+                <div class="text-content">
+                    <h3>Initial Design Phase</h3>
+                    <p>In the initial stages of our WingWatch project, we prioritized clarifying key design considerations to ensure a user-centric approach. Through collaborative sketching sessions and the creation of low-fidelity prototypes, we identified a crucial need for a more modern and intuitive user interface. Feedback from potential users and team members suggested a shift away from traditional navigation bars towards a more fluid, flow-based user journey. This strategic decision aims to enhance user engagement, simplify site navigation, and create a more immersive birdwatching experience.</p>
+                    <p>Drawing inspiration from innovative concepts in related fields, we explored the potential of integrating gamification elements into our platform. These could include interactive features reminiscent of popular casual games, such as a Flappy Bird-style mini-game where user progression unlocks new content or bird species. By incorporating such elements, we aim to significantly boost user engagement, encourage regular visits, and enhance overall retention on our bird-watching platform. These forward-thinking considerations are actively shaping our design process, propelling us towards a more interactive, engaging, and user-centric approach for WingWatch.</p>
+                </div>
+                <div class="image-content">
+                    <img src="pictures/low_fi_prototype.jpg" alt="Initial Design Sketch">
+                </div>
+            </div>
+        </section>
+
+        <section id="project-design-proposal">
+            <h2>Project Design Proposal</h2>
+            <p>The project design proposal served as a crucial milestone, enabling our team to gather invaluable feedback on our initial design concepts. As the lead for the case scenario and interaction plan (a collaborative effort with James and Peng), I focused on creating a comprehensive and user-focused design strategy.</p>
+            
+            <div class="content-wrapper">
+                <div class="text-content">
+                    <h3>Case Scenario Development</h3>
+                    <p>In developing the case scenarios, we aimed to effectively communicate the core functionalities of our website: search, collect, and browse. These scenarios illustrate how data, sourced from both APIs and our database, seamlessly integrate to support these key features. Special emphasis was placed on the 'collect' feature, as it represents our unique value proposition and distinguishes WingWatch from other birdwatching platforms in the market. By crafting detailed and relatable scenarios, we ensure that our audience can easily grasp the practical applications and benefits of our platform.</p>
+                </div>
+                <div class="image-content">
+                    <img src="pictures/case_scenarios.png" alt="Case Scenario">
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="text-content">
+                    <h3>Comprehensive Interaction Plan</h3>
+                    <p>The interaction plan goes beyond a typical prototype by incorporating crucial elements such as design considerations, data flow diagrams, and user journey maps. This comprehensive approach allows viewers to gain a holistic understanding of both the user experience and the underlying system interactions. As the content lead for this section, I ensured that the plan effectively communicates how users will navigate through WingWatch, interact with its features, and how the system responds to these interactions. This detailed plan serves as a blueprint for our development process, ensuring that all team members have a clear and shared vision of the final product.</p>
+                </div>
+                <div class="image-content">
+                    <img src="pictures/interaction_plan.png" alt="Interaction Plan">
+                </div>
+            </div>
+        </section>
+
+        <section id="key-features">
+            <h2>Key Features Implemented</h2>
+
+            <h3>Fetch Data from the Dataset</h3>
+            <p>Wildlife API: https://biocache-ws.ala.org.au/ws/occurrences/search</p>
+            <div class="content-wrapper">
+                <div class="text-content">
+                    <p>We have successfully implemented data retrieval from the Wildlife API, including crucial location information that serves multiple features across our platform. To optimize performance during development and testing, we've implemented a limit on the amount of data fetched. Looking ahead to production, we plan to implement a robust caching system to ensure data is fetched accurately and efficiently, significantly reducing load times and API calls.</p>
+                    <p>A notable breakthrough in our development process came through collaboration with team member James. Together, we implemented date range and species filtering, resulting in a remarkable 1000% improvement in response time. This optimization not only enhances user experience by providing faster results but also reduces the load on both our servers and the Wildlife API.</p>
+                </div>
+                <div class="image-content">
+                    <div class="code-container">
+                        <pre><code class="language-javascript">
+function fetchOccurrences(map, centralLocation, radius) {
+    showLoading();
+    const dateRange = getDateRange(currentTimeframe);
+    const pageSize = 100;
+    const maxResults = 5000;
+    let startIndex = 0;
+    let allOccurrences = [];
+
+    function fetchPage() {
+        console.log(`Fetching page starting at index ${startIndex}...`);
+        $.ajax({
+            url: 'https://biocache-ws.ala.org.au/ws/occurrences/search',
+            method: 'GET',
+            data: {
+                q: `*:*`,
+                lat: centralLocation.lat,
+                lon: centralLocation.lng,
+                radius: radius.toFixed(2),
+                qualityProfile: 'ALA',
+                fq: [
+                    'species_group:"Birds"',
+                    `eventDate:[${dateRange.start}T00:00:00Z TO ${dateRange.end}T23:59:59Z]`
+                ],
+                pageSize: pageSize,
+                startIndex: startIndex,
+            },
+            success: function (response) {
+                console.log(`Fetched ${response.occurrences.length} occurrences from index ${startIndex}.`);
+                allOccurrences = allOccurrences.concat(response.occurrences);
+                if (startIndex + pageSize < Math.min(response.totalRecords, maxResults)) {
+                    startIndex += pageSize;
+                    fetchPage();
+                } else {
+                    console.log(`All pages fetched. Total records: ${allOccurrences.length}. Processing occurrences.`);
+                    processAllOccurrences(allOccurrences, map, centralLocation);
+                    hideLoading();
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data: ", status, error);
+                hideLoading();
+                alert("An error occurred while fetching data. Please try again.");
+            }
+        });
+    }
+    fetchPage();
+}
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Marker Filter Algorithm</h3>
+    <div class="content-wrapper">
+        <div class="text-content">
+            <p>Our user research revealed a critical insight: an overwhelming number of markers on the map can significantly degrade the user experience. In response, we've developed a sophisticated marker filter algorithm that limits the display to the five most relevant markers. This algorithm calculates the straight-line distance between the center of the map and each bird location, ensuring that only the closest and most pertinent data points are presented to the user.</p>
+            <p>This approach strikes a balance between providing comprehensive data and maintaining a clean, user-friendly interface. By focusing on the most relevant markers, we enhance the map's readability and reduce cognitive load for our users, allowing them to quickly identify and interact with the most significant bird sightings in their area of interest.</p>
+        </div>
+        <div class="image-content">
+            <div class="flip-container">
+                <div class="flipper">
+                    <div class="front">
+                        <img src="pictures/marker_filter_algo_output.png" alt="Marker Filter Output">
+                        <p>Click to see code</p>
+                    </div>
+                    <div class="back">
+                        <pre><code class="language-javascript">
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the Earth in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; // Distance in km
+}
+                        </code></pre>
+                        <p>Click to see output</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Google Map API</h3>
+    <div class="content-wrapper">
+        <div class="text-content">
+            <p>The map loader is a self-executing function that sets up a mechanism to load the Google Maps JavaScript API dynamically. It creates a promise-based system to load the API script, handling various configuration options and library imports. The function sets up a global google.maps.importLibrary method, which allows for on-demand loading of specific Google Maps libraries. When called, it adds the requested library to a set, initiates the API loading process if not already started, and returns a promise that resolves when the library is ready. The code uses URL parameters to configure the API request, including the API key and version. It also handles error cases and ensures the API is only loaded once, even if the function is called multiple times with different libraries. This approach allows for efficient and flexible loading of Google Maps functionality in a web application.</p>
+        </div>
+        <div class="image-content">
+            <div class="flip-container">
+                <div class="flipper">
+                    <div class="front">
+                        <img src="pictures/google_api_output.png" alt="Google Map Output">
+                        <p>Click to see code</p>
+                    </div>
+                    <div class="back">
+                        <pre><code class="language-javascript">
+(config => {
+  // Declare variables for later use
+  var apiLoadPromise, scriptElement, paramKey, 
+      errorMessage = "The Google Maps JavaScript API",  // Descriptive string for error messages
+      googleNamespace = "google",                      // Namespace for Google
+      importLibraryFn = "importLibrary",               // Function name to import Google Maps libraries
+      callbackName = "__ib__",                         // Internal callback property name
+      doc = document,                                  // Reference to the document object
+      win = window;                                    // Reference to the global window object
+
+  // Initialize the Google namespace and maps object if not already defined
+  win = win[googleNamespace] || (win[googleNamespace] = {});
+  var mapsNamespace = win.maps || (win.maps = {}),
+      librarySet = new Set(),                          // Set to store requested library names
+      queryParams = new URLSearchParams,               // Create URLSearchParams object to build query string
+      loadGoogleMapsAPI = () =>                        // Function to load the Google Maps JavaScript API
+          apiLoadPromise || (apiLoadPromise = new Promise(async (resolve, reject) => {
+              await (scriptElement = doc.createElement("script"));  // Create a new script element
+
+              // Add library names to the URL parameters
+              queryParams.set("libraries", [...librarySet] + "");
+              
+              // Add additional configuration options to the URL parameters
+              for (paramKey in config) 
+                  queryParams.set(paramKey.replace(/[A-Z]/g, match => "_" + match[0].toLowerCase()), config[paramKey]);
+
+              // Set the callback parameter to the global callback function
+              queryParams.set("callback", googleNamespace + ".maps." + callbackName);
+              
+              // Set the script source to the Google Maps API with the query parameters
+              scriptElement.src = `https://maps.${googleNamespace}apis.com/maps/api/js?` + queryParams;
+
+              // Define the global callback function to resolve the promise
+              mapsNamespace[callbackName] = resolve;
+
+              // Handle script loading error
+              scriptElement.onerror = () => apiLoadPromise = reject(Error(errorMessage + " could not load."));
+
+              // Set a nonce attribute if a script with a nonce exists in the document
+              scriptElement.nonce = doc.querySelector("script[nonce]")?.nonce || "";
+
+              // Append the script to the document head to start loading
+              doc.head.append(scriptElement);
+          }));
+
+  // Check if the importLibrary function is already defined and warn if so; otherwise, define it
+  mapsNamespace[importLibraryFn] ? console.warn(errorMessage + " only loads once. Ignoring:", config) :
+         mapsNamespace[importLibraryFn] = (libraryName, ...rest) => librarySet.add(libraryName) && loadGoogleMapsAPI().then(() => mapsNamespace[importLibraryFn](libraryName, ...rest));
+})
+                        </code></pre>
+                        <p>Click to see output</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Template Literal</h3>
+    <div class="content-wrapper">
+        <div class="text-content">
+            <p>This code processes bird occurrence data and creates markers on a Google Map for each occurrence. The key part related to template literals is the creation of the infoWindowContent. A template literal is used to construct a complex HTML structure for the info window that appears when a marker is clicked. This multi-line string includes dynamic content (like ${commonName}, ${lat}, ${lon}, etc.) interpolated directly into the HTML structure. The template literal allows for easy embedding of variables and expressions within the string, making it simpler to create a rich, formatted content string with both static HTML and dynamic data. This approach is more readable and maintainable than traditional string concatenation, especially for complex HTML structures like this info window content.</p>
+        </div>
+        <div class="image-content">
+            <div class="flip-container">
+                <div class="flipper">
+                    <div class="front">
+                        <img src="pictures/template_literal_output.png" alt="Template Literal Output">
+                        <p>Click to see code</p>
+                    </div>
+                    <div class="back">
+                        <pre><code class="language-javascript">
+$.each(data.occurrences, function (index, occurrence) {
+    var scientificName = occurrence.scientificName;
+    var species = occurrence.species;
+    var commonName = occurrence.vernacularName || species;
+    var location = (occurrence.stateProvince || '') + ", " + (occurrence.country || '');
+    var eventDate = occurrence.eventDate ? new Date(occurrence.eventDate).toLocaleDateString() : 'Unknown Date';
+    var lat = occurrence.decimalLatitude;
+    var lon = occurrence.decimalLongitude;
+
+    if (species && lat && lon) {
+      console.log(`Creating marker for ${commonName || species} at ${lat}, ${lon}`);
+      
+      var birdImageUrl = birdImages[index % birdImages.length];
+
+      var marker = new google.maps.Marker({
+        position: { lat: parseFloat(lat), lng: parseFloat(lon) },
+        map: map,
+        title: scientificName || species,
+        icon: {
+          url: birdImageUrl,
+          scaledSize: new google.maps.Size(54, 64)
+        }
+      });
+
+      globalMarkers.push(marker);
+
+      var infoWindowContent = `
+        &lt;div class="map-tips"&gt;
+            &lt;div class="tips-title"&gt;
+                &lt;h2&gt;${commonName || species}&lt;/h2&gt;
+                &lt;a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank" class="tips-msg"&gt;
+                    &lt;span class="google-maps-link"&gt;Google Maps&lt;/span&gt;
+                &lt;/a&gt;
+            &lt;/div&gt;
+            &lt;div class="tips-content"&gt;
+                &lt;h3&gt;${location}&lt;/h3&gt;
+                &lt;p&gt;Species: ${species}&lt;/p&gt;
+                &lt;p&gt;Scientific Name: ${scientificName || 'N/A'}&lt;/p&gt;
+                &lt;p&gt;Observed on: ${eventDate}&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="tips-footer"&gt;
+                &lt;button class="more-btn"&gt;More&lt;/button&gt;
+                &lt;div class="tips-image"&gt;
+                    &lt;img src="picture/icon-msg.png" alt="Bird Location" width="32" height="32"&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;            
+        &lt;/div&gt;
+      `;
+
+      var infoWindow = new google.maps.InfoWindow({
+        content: infoWindowContent
+      });
+                        </code></pre>
+                        <p>Click to see output</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Search Suggestion</h3>
+    <div class="content-wrapper">
+        <div class="text-content">
+            <p>This code implements an autocomplete feature for bird species search. Key points:</p>
+            <ul>
+                <li>As users type, it filters common and scientific bird names, showing real-time suggestions.</li>
+                <li>Searches both common and scientific names, accommodating different user knowledge levels.</li>
+                <li>Users can click suggestions to auto-fill the search field.</li>
+                <li>Starts searching after two characters are typed for efficiency.</li>
+                <li>Provides visual feedback by showing/hiding suggestions dynamically.</li>
+            </ul>
+            <p>Benefits for users:</p>
+            <ul>
+                <li>Faster, more accurate species selection</li>
+                <li>Reduces spelling errors</li>
+                <li>Accommodates both casual and expert users</li>
+                <li>Speeds up search process</li>
+                <li>Educates users about bird names</li>
+            </ul>
+            <p>Overall, it makes the bird search process more user-friendly, efficient, and informative.</p>
+        </div>
+        <div class="image-content">
+            <div class="flip-container">
+                <div class="flipper">
+                    <div class="front">
+                        <img src="pictures/search_suggestion_output.png" alt="Search Suggestion Output">
+                        <p>Click to see code</p>
+                    </div>
+                    <div class="back">
+                        <pre><code class="language-javascript">
+$(document).ready(function() {
+    const birdOccurrences = []; // This will hold all occurrences fetched from the API.
+    scientificNames = window.scientificNames; // Populate scientific names
+    commonNames = window.commonNames; // Populate common names
+
+    // Function to update the suggestions list based on the user's input.
+    function updateSuggestionsList(searchText) {
+        // Check for matches in common names first
+        let matchingNames = commonNames.filter(name => name.toLowerCase().startsWith(searchText.toLowerCase()));
+
+        // If no matches found in common names, check scientific names
+        if (matchingNames.length === 0) {
+            matchingNames = scientificNames.filter(name => name.toLowerCase().startsWith(searchText.toLowerCase()));
+        }
+
+        console.log(`User input: ${searchText}`);
+        console.log("Matching Names:", matchingNames);
+
+        const suggestionsList = $('#suggestions-List');
+        suggestionsList.empty();
+
+        matchingNames.forEach(name => {
+            suggestionsList.append(`&lt;li&gt;${name}&lt;/li&gt;`);
+        });
+        
+        // Hide suggestions if no matches found
+        if (matchingNames.length === 0) {
+            suggestionsList.hide();
+        } else {
+            suggestionsList.show();
+        }
+    }
+
+    // Event handler for when the user types in the search input.
+    $('#search-input').on('input', function() {
+        const searchText = $(this).val();
+        if (searchText.length >= 2) {
+            updateSuggestionsList(searchText);
+        } else {
+            $('#suggestions-List').empty().hide();
+        }
+    });
+
+    // Event handler for clicking on a suggestion.
+    $('#suggestions-List').on('click', 'li', function() {
+        const selectedName = $(this).text();
+        $('#search-input').val(selectedName);
+        $('#suggestions-List').empty().hide();
+        $('#search-input').focus(); // Keep focus on the search input
+    });
+
+    // Event handler to detect click outside the input and list
+    $(document).on('click', function (event) {
+        const isClickInside = $(event.target).closest('#search-input, #suggestions-list').length > 0;
+
+        if (!isClickInside) {
+            const suggestionsList = $('#suggestions-list');
+
+            // If there are items in the list, select the first one
+            if (suggestionsList.children('li').length > 0) {
+                const firstSuggestion = suggestionsList.children('li:first').text();
+                $('#search-input').val(firstSuggestion);
+            }
+            suggestionsList.empty().hide(); // Hide the suggestions list
+            $('#search-input').focus(); // Keep focus on the search input
+        }
+    });
+});
+                        </code></pre>
+                        <p>Click to see output</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+    </main>
+
+    <!-- Sticky Note Icon -->
+    <div id="sticky-note-icon">
+        <img src="pictures/write_note.jpg" alt="Write a note">
+    </div>
+
+    <!-- Popup Window -->
+    <div id="note-popup" class="hidden">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <div class="popup-left">
+                <p>Feel free to make a note:</p>
+            </div>
+            <div class="popup-right">
+                <textarea id="note-editor" rows="10" cols="50"></textarea>
+            </div>
+            <div class="popup-buttons">
+                <button id="send-to-owner">Submit Feedback to WingWatch</button>
+            <button id="send-to-me">Email Note to Myself</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="flipper.js"></script>
+    <script src="note.js"></script>
+    <script src="navigation.js"></script>
+</body>
+</html>
