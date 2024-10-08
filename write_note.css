@@ -1,10 +1,10 @@
-/* Sticky Note Icon */
+/* Sticky Note Icon Styles */
 #sticky-note-icon {
-    position: fixed;
-    bottom: 20px;
-    right: 40px;
-    cursor: pointer;
-    z-index: 1000;
+    position: fixed; /* Fixed position relative to the viewport */
+    bottom: 20px; /* 20px from the bottom of the viewport */
+    right: 40px; /* 40px from the right of the viewport */
+    cursor: pointer; /* Changes cursor to pointer on hover */
+    z-index: 1000; /* Ensures icon stays on top of other elements */
 }
 
 #sticky-note-icon img {

@@ -40,57 +40,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Interactivity for interest selector
     const topics = document.querySelectorAll('.topic');
-    const continueBtn = document.getElementById('continueBtn');
-    const selectedTopics = new Set();   
 
     topics.forEach(topic => {
         topic.addEventListener('click', () => {
             const topicName = topic.dataset.topic;
 
-            // Single selection behavior (unselect others)
+            // Unselect all topics
             topics.forEach(t => {
-                if (t !== topic) {
-                    t.classList.remove('selected');
-                }
+                t.classList.remove('selected');
             });
 
-            // Toggle selection for the clicked topic
-            topic.classList.toggle('selected');
+            // Select the clicked topic
+            topic.classList.add('selected');
 
-            // Update selectedTopics Set
-            selectedTopics.clear(); // Clear previous selection
-            if (topic.classList.contains('selected')) {
-                selectedTopics.add(topicName);
-            }
+            // Store the selected project in localStorage
+            localStorage.setItem('selectedProject', topicName);
 
-            // Update button state
-            updateContinueButtonState();
+            console.log("Stored project: ", topicName); // Debug log
+
+            // Redirect to home page after a short delay
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 300); // 300ms delay for visual feedback
         });
     });
-
-    function updateContinueButtonState() {
-        if (selectedTopics.size === 0) {
-            continueBtn.disabled = true;
-            continueBtn.title = "Please select at least one option to proceed";
-        } else {
-            continueBtn.disabled = false;
-            continueBtn.title = "";
-        }
-    }
-
-    continueBtn.addEventListener('click', () => {
-        if (!continueBtn.disabled) {
-            const selectedProject = Array.from(selectedTopics)[0];
-            // Store the selected project in localStorage
-            localStorage.setItem('selectedProject', selectedProject);
-
-            console.log("Stored project: ", selectedProject); // Debug log
-
-            // Redirect to home page
-            window.location.href = 'index.html'; 
-        }
-    });
-
-    // Initial button state
-    updateContinueButtonState();
 });

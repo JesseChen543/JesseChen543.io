@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 "to visualize bird location data, and developing algorithms to filter and enhance information, improving overall user experience. " +
                 "To learn more about our design process and development journey, check out our detailed project breakdown on the " +
                 "<a href='wingwatch_process.html' target='_blank'><strong>Wingwatch Process</strong></a> page.",
-            link: "https://deco1800teams-t03-wingwatch.uqcloud.net/",
+            link: "Wingwatch_process.html",
             image: "pictures/wingwatch.png"
         },
         'data-analyst': {
