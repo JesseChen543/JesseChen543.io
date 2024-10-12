@@ -1,3 +1,13 @@
+/*
+ * Title: Flip Card Animation with JavaScript
+ * Author: Adapted from various sources
+ * Date: 2024
+ * Availability: https://www.w3schools.com/howto/howto_css_flip_card.asp
+ * 
+ * This code implements a flip card animation by toggling a CSS class
+ * on click events for elements with the 'flip-container' class.
+ */
+
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Select all elements with the class 'flip-container'

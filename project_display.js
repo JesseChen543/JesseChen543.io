@@ -1,3 +1,13 @@
+/*
+ * Title: Dynamic Project Display using JavaScript
+ * Author: Adapted from various sources
+ * Date: 2024
+ * Availability: https://stackoverflow.com/questions/1533568/what-is-the-correct-way-to-write-html-using-javascript
+ * 
+ * This code dynamically generates HTML content for project display using JavaScript.
+ * It demonstrates best practices for creating and manipulating DOM elements.
+ */
+
 // Wait for the DOM to be fully loaded before executing the script
 document.addEventListener('DOMContentLoaded', function() {
     // Retrieve the selected project from local storage
@@ -25,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 "to visualize bird location data, and developing algorithms to filter and enhance information, improving overall user experience. " +
                 "To learn more about our design process and development journey, check out our detailed project breakdown on the " +
                 "<a href='wingwatch_process.html' target='_blank'><strong>Wingwatch Process</strong></a> page.",
-            link: "Wingwatch_process.html",
+            link: "wingwatch_process.html",
             image: "pictures/wingwatch.png"
         },
         'data-analyst': {

@@ -1,3 +1,13 @@
+/*
+ * Title: Landing Page Interactivity
+ * Author: Adapted from various sources
+ * Date: 2024
+ * Availability: https://css-tricks.com/sticky-smooth-active-nav/
+ * 
+ * This code implements smooth scrolling, active navigation highlighting,
+ * and topic selection functionality for a landing page.
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
     // Smooth scrolling for navigation links
     document.querySelectorAll('#nav-menu a').forEach(anchor => {

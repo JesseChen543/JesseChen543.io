@@ -1,3 +1,13 @@
+/*
+ * Title: Dynamic Header Creation with Project-Specific Content
+ * Author: Adapted from various sources
+ * Date: 2024
+ * Availability: https://www.w3schools.com/howto/howto_js_sticky_header.asp
+ * 
+ * This code creates a dynamic header based on the selected project,
+ * implements smooth scrolling, and handles scroll events.
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
     // Function to create the dynamic header
     function createDynamicHeader(title, description) {

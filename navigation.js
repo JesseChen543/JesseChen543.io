@@ -1,3 +1,13 @@
+/*
+ * Title: Smooth Scrolling Navigation
+ * Author: Adapted from various sources
+ * Date: 2024
+ * Availability: https://css-tricks.com/snippets/jquery/smooth-scrolling/
+ * 
+ * This code implements smooth scrolling functionality for navigation links
+ * within the side navigation menu.
+ */
+
 document.addEventListener('DOMContentLoaded', (event) => {
     // Select all anchor tags within the element with id 'side-nav'
     document.querySelectorAll('#side-nav a').forEach(anchor => {

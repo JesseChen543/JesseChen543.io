@@ -1,3 +1,14 @@
+/*
+ * Title: Interactive Sticky Note Functionality
+ * Author: Adapted from various sources
+ * Date: 2024
+ * Availability: https://www.youtube.com/watch?v=r4RQ38EoLds
+ * 
+ * This code implements an interactive sticky note feature, allowing users
+ * to write notes and send them to the website owner or to their own email.
+ * It uses vanilla JavaScript for DOM manipulation and event handling.
+ */
+
 // Wait for the DOM to be fully loaded before executing the script
 document.addEventListener('DOMContentLoaded', function() {
     // Get references to DOM elements
