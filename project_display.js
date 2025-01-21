@@ -18,15 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Define the key projects object with project details
     const key_projects = {
-        'web-design': {
-            title: "Gaming platform-GamerverseHub",
-            date: "September, 2023",
-            description: "GamerverseHub functions as a gaming platform aimed at connecting gamers worldwide. " +
-                "It fosters interaction among gamers through various features including events, streams, " +
-                "discussions, and gaming opportunities.",
-            link: "https://jessechen543.github.io/Gamerversehub/",
-            isEmbedded: true
-        },
         'deco7180': {
             title: "DECO7180 website implementation team project",
             date: "October, 2024",
@@ -34,9 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 "My responsibilities included integrating data retrieval from the Wildlife API, implementing Google Maps API " +
                 "to visualize bird location data, and developing algorithms to filter and enhance information, improving overall user experience. " +
                 "To learn more about our design process and development journey, check out our detailed project breakdown on the " +
-                "<a href='wingwatch_process.html' target='_blank'><strong>Wingwatch Process</strong></a> page.",
+                "<a href='wingwatch_process.html' target='_blank'><strong>Wingwatch development Process</strong></a> page.",
             link: "wingwatch_process.html",
-            image: "pictures/wingwatch.png"
+            image: "pictures/wingwatch.png",
+            tags: ["team", "html", "css", "javascript", "API", "data processing", "website implementation"]
         },
         'data-analyst': {
             title: "Real Estate Analysis with python",
@@ -44,13 +36,24 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "The goal of this project is to gain insight into the features that influence the length of time " +
                 "a property stays on the market, and to create predictive models for this purpose.",
             link: "https://jessechen543.github.io/ESTATE_ANALYSIS/",
-            image: "pictures/ESTATE_ANA_PIC.png"
+            image: "pictures/ESTATE_ANA_PIC.png",
+            tags: ["individual", "python", "data analysis", "predictive modeling"]
         }
     };
 
     // Combine key projects with additional projects
     const all_projects = {
         ...key_projects,
+        'web-design': {
+            title: "Gaming platform-GamerverseHub",
+            date: "September, 2023",
+            description: "GamerverseHub functions as a gaming platform aimed at connecting gamers worldwide. " +
+                "It fosters interaction among gamers through various features including events, streams, " +
+                "discussions, and gaming opportunities.",
+            link: "https://jessechen543.github.io/Gamerversehub/",
+            isEmbedded: true,
+            tags: ["individual", "web design", "gaming", "community"]
+        },
         'heart-attack-analysis': {
             title: "Heart Attack Analysis with R",
             date: "April, 2022",
@@ -58,7 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 "and 20 variables, resulting in achieving finalist status in a competition hosted by BANA and presenting findings " +
                 "to judges from Deloitte, KPMG, and UQ.",
             link: "https://jessechen543.github.io/Heart_attack_analysis_Jesse/",
-            image: "pictures/heart attack analysis.png"
+            image: "pictures/heart attack analysis.png",
+            tags: ["individual", "R", "data analytics", "predictive modeling", "competition"]
         },
         'kpmg-internship': {
             title: "KPMG Data Analytics consulting virtual internship",
@@ -67,7 +71,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 "implementing RFM analysis, and presenting my findings through a well-structured PowerPoint presentation " +
                 "and interactive Excel dashboards.",
             link: "https://jessechen543.github.io/churnrate_analysis/",
-            image: "pictures/imgae for kpmg project.png"
+            image: "pictures/imgae for kpmg project.png",
+            tags: ["internship", "data analytics", "RFM analysis", "Excel", "PowerPoint"]
         },
         'ai-career-assistance': {
             title: "Resume AI Career Assistance Wireframe Design",
@@ -76,7 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 "and requirement tickets. Using Figma, I designed a wireframe for a Resume AI Career Assistance feature " +
                 "on a recruitment platform.",
             link: "https://www.figma.com/file/K670eaQ8qW2GflPw8ClybR/JobPin-AI-career-assistance?node-id=0%3A1&t=WA7n1Cqggs2HwOUk-1",
-            image: "pictures/AI career assistance wireframe.png"
+            image: "pictures/AI career assistance wireframe.png",
+            tags: ["team", "business analysis", "Figma", "wireframe", "AI"]
         }
     };
 
@@ -95,6 +101,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Function to create HTML for tags as buttons
+    function createTags(tags) {
+        return `
+            <div class="tags">
+                ${tags.map(tag => `<button class="tag-button">${tag}</button>`).join('')}
+            </div>
+        `;
+    }
+
     // Function to create HTML for a featured post
     function createFeaturedPost(project) {
         return `
@@ -105,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>${project.description}</p>
                 </header>
                 ${createMediaContent(project, true)}
+                ${createTags(project.tags)}
                 <ul class="actions special">
                     <li><a href="${project.link}" target="_blank" class="button large">View Project</a></li>
                 </ul>
@@ -121,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h2><a href="${project.link}" target="_blank">${project.title}</a></h2>
                 </header>
                 ${createMediaContent(project)}
+                ${createTags(project.tags)}
                 <p>${project.description}</p>
                 <ul class="actions special">
                     <li><a href="${project.link}" target="_blank" class="button">VIEW PROJECT</a></li>

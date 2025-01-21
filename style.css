@@ -510,3 +510,25 @@ html {
     object-position: center; /* Center the image within its container */
 }
 
+.tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.tag-button {
+    background-color: #626d00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s ease;
+}
+
+.tag-button:hover {
+    background-color: #0056b3;
+}
+

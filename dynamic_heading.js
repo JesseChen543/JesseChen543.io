@@ -47,15 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 "clearly. My work demonstrates a commitment to accuracy, efficiency, and delivering value through " +
                 "data-driven strategies.",
         },
-        'deco7180': {
-            title: "DECO7180 TEAM PROJECT",
-            description: "In the DECO7180 team project, I led backend development for our birdwatch website. " +
-                "I integrated the Wildlife API, implemented Google Maps for bird location visualization, and " +
-                "created algorithms to enhance information display. This project honed my full-stack development " +
-                "skills and highlighted my ability to work efficiently in a team. I delivered a comprehensive " +
-                "solution that met user needs and project requirements, showcasing both technical prowess and " +
-                "collaborative skills.",
-        },
         'web-design': {
             title: "WEB DESIGN PROJECT",
             description: "As a passionate website developer, I create engaging, responsive web experiences. " +
@@ -67,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     // Get content based on selected project, or use deco7180 as default if not found
-    const content = portfolioContent[selectedProject] || portfolioContent["deco7180"];
+    const content = portfolioContent[selectedProject];
 
     createDynamicHeader(content.title, content.description);
 
