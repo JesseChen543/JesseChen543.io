@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (project.isEmbedded) {
             return `
                 <a href="${project.link}" target="_blank" class="embedded-site">
-                    <iframe src="${project.link}" title="${project.title}" width="100%" height="${isFeatured ? '500px' : '300px'}"></iframe>
+                    <iframe src="${project.link}" title="${project.title}" width="100%" height="${isFeatured ? '500px' : '300px'}" allow="autoplay; encrypted-media" allowfullscreen muted></iframe>
                 </a>`;
         } else {
             return `
