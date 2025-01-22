@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
             image: "pictures/wingwatch.png",
             tags: {
                 software: ["javascript"],
-                skills: ["data processing", "website implementation", "api", "website optimization", "user research"],
+                skills: ["data processing", "api", "website optimization", "user research"],
                 type: ["team"]
             }
         },
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             link: "https://jessechen543.github.io/churnrate_analysis/",
             image: "pictures/imgae for kpmg project.png",
             tags: {
-                software: ["Excel", "PowerPoint"],
+                software: ["Excel"],
                 skills: ["data analytics", "RFM analysis"],
                 type: ["individual"]
             }
@@ -241,6 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const regularPostsContainer = document.getElementById('regular-posts');
         regularPostsContainer.innerHTML = filteredProjects.map(([key, project]) => createRegularPost(project)).join('');
     }
+    
 
     // Event listeners for dropdowns
     document.getElementById('software-filter').addEventListener('change', filterProjects);
@@ -250,4 +251,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial population of filters and display of projects
     populateFilters();
     filterProjects();
+
+    // Get reference to the projects section and nav content
+    const projectsSection = document.getElementById('projects');
+    const navContent = document.querySelector('#portfolio-nav .nav-content');
+
+    // Function to handle scroll event
+    function handleScroll() {
+        const sectionTop = projectsSection.getBoundingClientRect().top;
+        const viewportHeight = window.innerHeight;
+
+        if (sectionTop <= viewportHeight && sectionTop >= 0) {
+            navContent.style.opacity = '0'; // Make nav-content visible
+        } else {
+            navContent.style.opacity = '1'; // Make nav-content invisible
+        }
+    }
+
+    // Add scroll event listener
+    window.addEventListener('scroll', handleScroll);
+
+    // Initial call to set the correct opacity on page load
+    handleScroll();
 });

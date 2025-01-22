@@ -40,12 +40,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const portfolioContent = {
         'data-analyst': {
             title: "JESSE THE ANALYST",
-            description: "As a dedicated data analyst, I excel at transforming complex datasets into actionable " +
-                "intelligence. With expertise in statistical analysis, data visualization, and machine learning, " +
-                "I extract meaningful insights that drive business decisions. Proficient in Python, R, SQL, and " +
-                "advanced visualization tools, I thrive on uncovering hidden trends and communicating findings " +
-                "clearly. My work demonstrates a commitment to accuracy, efficiency, and delivering value through " +
-                "data-driven strategies.",
+            description: "As a dedicated data analyst, I specialize in turning complex datasets into actionable insights. " +
+                "With skills in statistical analysis, data visualization, and machine learning, I uncover meaningful trends " +
+                "that inform business decisions. I'm proficient in Python, R, SQL, and advanced visualization tools, " +
+                "and I take pride in clearly communicating my findings. My work reflects a commitment to accuracy, efficiency, " +
+                "and delivering value through data-driven strategies.",
         },
         'web-design': {
             title: "WEB DESIGN PROJECT",
@@ -92,4 +91,5 @@ document.addEventListener('DOMContentLoaded', function() {
         smoothScrollToProjects();
         hasScrolled = true;
     });
+
 });

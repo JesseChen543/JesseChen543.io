@@ -435,9 +435,6 @@ html {
 #portfolio-nav {
     background-color: #4a4a4a;
     padding: 0;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
     width: 100%;
 }
 
@@ -445,8 +442,13 @@ html {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
+    position: fixed;
     top: 0;
+    width: 90%;
+    z-index: 1000;
+    background-color: #333;
+    opacity: 0; /* Initially invisible */
+    transition: opacity 0.3s ease; /* Smooth transition for opacity */
 }
 
 #portfolio-nav ul {
