@@ -13,35 +13,38 @@
     <!-- Main -->
     <div id="main">
         <!-- Navigation -->
-        <nav id="portfolio-nav">
-            <div class="nav-content">
-                <ul>
-                    <li><a href="#projects">My Projects</a></li>
-                </ul>
-            </div>
-        </nav>
+        <header>
+            <nav id="portfolio-nav">
+                <div class="nav-content">
+                    <ul id="nav-menu">
+                        <li><a href="#projects">My Projects</a></li>
+                        <!-- Add other navigation links here -->
+                    </ul>
+                    <div class="filter-container">
+                        <label for="software-filter">Software:</label>
+                        <select id="software-filter">
+                            <option value="">All</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+
+                        <label for="skills-filter">Skills:</label>
+                        <select id="skills-filter">
+                            <option value="">All</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+
+                        <label for="type-filter">Type:</label>
+                        <select id="type-filter">
+                            <option value="">All</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </nav>
+        </header>
         <!-- Projects Section -->
         <section id="projects">
             <h2>My Projects</h2>
-            <div class="filter-container">
-                <label for="software-filter">Software:</label>
-                <select id="software-filter">
-                    <option value="">All</option>
-                    <!-- Options will be populated dynamically -->
-                </select>
-
-                <label for="skills-filter">Skills:</label>
-                <select id="skills-filter">
-                    <option value="">All</option>
-                    <!-- Options will be populated dynamically -->
-                </select>
-
-                <label for="type-filter">Type:</label>
-                <select id="type-filter">
-                    <option value="">All</option>
-                    <!-- Options will be populated dynamically -->
-                </select>
-            </div>
 
             <!-- Featured Post -->
             <div id="featured-post"></div>
