@@ -557,3 +557,13 @@ html {
     border: 1px solid #ccc;
 }
 
+.tag-label {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: 5px;
+    background-color: #30f100; /* Light background for visibility */
+    color: #333; /* Text color */
+    cursor: default; /* Change cursor to default to indicate it's not clickable */
+}
+

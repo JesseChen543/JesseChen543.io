@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Function to create HTML for tags as buttons
+    // Function to create HTML for tags as labels
     function createTags(tags) {
         // Combine all tags into a single array
         const allTags = [
@@ -139,9 +139,9 @@ document.addEventListener('DOMContentLoaded', function() {
         return `
             <div class="tags-container">
                 ${allTags.map(tag => `
-                    <button class="tag-button ${tag.category}-tag">
+                    <span class="tag-label ${tag.category}-tag">
                         ${tag.text}
-                    </button>
+                    </span>
                 `).join('')}
             </div>
         `;
