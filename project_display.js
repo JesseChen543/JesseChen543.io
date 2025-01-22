@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Define the key projects object with project details
     const key_projects = {
         'deco7180': {
-            title: "DECO7180 website implementation team project",
+            title: "Birdwatching website",
             date: "October, 2024",
             description: "As a key team member in the Wingwatch website project, I spearheaded the backend development. " +
                 "My responsibilities included integrating data retrieval from the Wildlife API, implementing Google Maps API " +
@@ -28,7 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 "<a href='wingwatch_process.html' target='_blank'><strong>Wingwatch development Process</strong></a> page.",
             link: "wingwatch_process.html",
             image: "pictures/wingwatch.png",
-            tags: ["team", "html", "css", "javascript", "API", "data processing", "website implementation"]
+            tags: {
+                software: ["javascript"],
+                skills: ["data processing", "website implementation", "api", "website optimization", "user research"],
+                type: ["team"]
+            }
         },
         'data-analyst': {
             title: "Real Estate Analysis with python",
@@ -37,7 +41,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 "a property stays on the market, and to create predictive models for this purpose.",
             link: "https://jessechen543.github.io/ESTATE_ANALYSIS/",
             image: "pictures/ESTATE_ANA_PIC.png",
-            tags: ["individual", "python", "data analysis", "predictive modeling"]
+            tags: {
+                software: ["python"],
+                skills: ["data analysis", "predictive modeling"],
+                type: ["individual"]
+            }
         }
     };
 
@@ -52,7 +60,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 "discussions, and gaming opportunities.",
             link: "https://jessechen543.github.io/Gamerversehub/",
             isEmbedded: true,
-            tags: ["individual", "web design", "gaming", "community"]
+            tags: {
+                software: ["html", "css", "javascript"],
+                skills: ["api"],
+                type: ["individual"]
+            }
         },
         'heart-attack-analysis': {
             title: "Heart Attack Analysis with R",
@@ -62,7 +74,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 "to judges from Deloitte, KPMG, and UQ.",
             link: "https://jessechen543.github.io/Heart_attack_analysis_Jesse/",
             image: "pictures/heart attack analysis.png",
-            tags: ["individual", "R", "data analytics", "predictive modeling", "competition"]
+            tags: {
+                software: ["R"],
+                skills: ["data analytics", "predictive modeling"],
+                type: ["individual"]
+            }
         },
         'kpmg-internship': {
             title: "KPMG Data Analytics consulting virtual internship",
@@ -72,7 +88,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 "and interactive Excel dashboards.",
             link: "https://jessechen543.github.io/churnrate_analysis/",
             image: "pictures/imgae for kpmg project.png",
-            tags: ["internship", "data analytics", "RFM analysis", "Excel", "PowerPoint"]
+            tags: {
+                software: ["Excel", "PowerPoint"],
+                skills: ["data analytics", "RFM analysis"],
+                type: ["individual"]
+            }
         },
         'ai-career-assistance': {
             title: "Resume AI Career Assistance Wireframe Design",
@@ -82,7 +102,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 "on a recruitment platform.",
             link: "https://www.figma.com/file/K670eaQ8qW2GflPw8ClybR/JobPin-AI-career-assistance?node-id=0%3A1&t=WA7n1Cqggs2HwOUk-1",
             image: "pictures/AI career assistance wireframe.png",
-            tags: ["team", "business analysis", "Figma", "wireframe", "AI"]
+            tags: {
+                software: ["Figma"],
+                skills: ["business analysis", "wireframe"],
+                type: ["individual"]
+            }
         }
     };
 
@@ -91,7 +115,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (project.isEmbedded) {
             return `
                 <a href="${project.link}" target="_blank" class="embedded-site">
-                    <iframe src="${project.link}" title="${project.title}" width="100%" height="${isFeatured ? '500px' : '300px'}" allow="autoplay; encrypted-media" allowfullscreen muted></iframe>
+                    <iframe src="${project.link}" title="${project.title}" width="100%" 
+                    height="${isFeatured ? '500px' : '300px'}" allow="autoplay; 
+                    encrypted-media" allowfullscreen muted></iframe>
                 </a>`;
         } else {
             return `
@@ -103,9 +129,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to create HTML for tags as buttons
     function createTags(tags) {
+        // Combine all tags into a single array
+        const allTags = [
+            ...tags.software.map(tag => ({ text: tag, category: 'software' })),
+            ...tags.skills.map(tag => ({ text: tag, category: 'skills' })),
+            ...tags.type.map(tag => ({ text: tag, category: 'type' }))
+        ];
+
         return `
-            <div class="tags">
-                ${tags.map(tag => `<button class="tag-button">${tag}</button>`).join('')}
+            <div class="tags-container">
+                ${allTags.map(tag => `
+                    <button class="tag-button ${tag.category}-tag">
+                        ${tag.text}
+                    </button>
+                `).join('')}
             </div>
         `;
     }
@@ -118,9 +155,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <span class="date">${project.date}</span>
                     <h2><a href="${project.link}" target="_blank">${project.title}</a></h2>
                     <p>${project.description}</p>
+                    ${createTags(project.tags)}
                 </header>
                 ${createMediaContent(project, true)}
-                ${createTags(project.tags)}
+
                 <ul class="actions special">
                     <li><a href="${project.link}" target="_blank" class="button large">View Project</a></li>
                 </ul>
@@ -137,8 +175,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h2><a href="${project.link}" target="_blank">${project.title}</a></h2>
                 </header>
                 ${createMediaContent(project)}
-                ${createTags(project.tags)}
                 <p>${project.description}</p>
+                ${createTags(project.tags)}
                 <ul class="actions special">
                     <li><a href="${project.link}" target="_blank" class="button">VIEW PROJECT</a></li>
                 </ul>
@@ -146,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
-    // Set featured post based on user selection or default to 'deco7180'
+    // Set featured post based on user selection
     const featuredProject = key_projects[selectedProject] || key_projects['deco7180'];
     featuredPostContainer.innerHTML = createFeaturedPost(featuredProject);
 
@@ -157,4 +195,59 @@ document.addEventListener('DOMContentLoaded', function() {
         .join('');
 
     regularPostsContainer.innerHTML = regularPosts;
+
+    // Populate filter dropdowns
+    function populateFilters() {
+        const softwareSet = new Set();
+        const skillsSet = new Set();
+        const typeSet = new Set();
+
+        Object.values(all_projects).forEach(project => {
+            project.tags.software.forEach(tag => softwareSet.add(tag));
+            project.tags.skills.forEach(tag => skillsSet.add(tag));
+            project.tags.type.forEach(tag => typeSet.add(tag));
+        });
+
+        const softwareFilter = document.getElementById('software-filter');
+        const skillsFilter = document.getElementById('skills-filter');
+        const typeFilter = document.getElementById('type-filter');
+
+        softwareSet.forEach(tag => softwareFilter.add(new Option(tag, tag)));
+        skillsSet.forEach(tag => skillsFilter.add(new Option(tag, tag)));
+        typeSet.forEach(tag => typeFilter.add(new Option(tag, tag)));
+    }
+
+    // Filter projects based on selected tags
+    function filterProjects() {
+        const selectedSoftware = document.getElementById('software-filter').value;
+        const selectedSkills = document.getElementById('skills-filter').value;
+        const selectedType = document.getElementById('type-filter').value;
+
+        // Get the featured project
+        const featuredProject = key_projects[selectedProject] || key_projects['deco7180'];
+
+        const filteredProjects = Object.entries(all_projects).filter(([key, project]) => {
+            // Exclude the featured project from regular posts
+            if (project === featuredProject) {
+                return false;
+            }
+
+            const matchesSoftware = !selectedSoftware || project.tags.software.includes(selectedSoftware);
+            const matchesSkills = !selectedSkills || project.tags.skills.includes(selectedSkills);
+            const matchesType = !selectedType || project.tags.type.includes(selectedType);
+            return matchesSoftware && matchesSkills && matchesType;
+        });
+
+        const regularPostsContainer = document.getElementById('regular-posts');
+        regularPostsContainer.innerHTML = filteredProjects.map(([key, project]) => createRegularPost(project)).join('');
+    }
+
+    // Event listeners for dropdowns
+    document.getElementById('software-filter').addEventListener('change', filterProjects);
+    document.getElementById('skills-filter').addEventListener('change', filterProjects);
+    document.getElementById('type-filter').addEventListener('change', filterProjects);
+
+    // Initial population of filters and display of projects
+    populateFilters();
+    filterProjects();
 });
