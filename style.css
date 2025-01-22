@@ -433,11 +433,11 @@ html {
 
 /* Navigation styles */
 #portfolio-nav {
-    position: relative;
-    z-index: 1000;
     background-color: #4a4a4a;
     padding: 0;
+    position: sticky;
     top: 0;
+    z-index: 1000;
     width: 100%;
 }
 
@@ -447,7 +447,6 @@ html {
     align-items: center;
     position: sticky;
     top: 0;
-    background-color: #4a4a4a;
 }
 
 #portfolio-nav ul {
@@ -527,6 +526,7 @@ html {
     cursor: pointer;
     font-size: 0.9em;
     transition: background-color 0.3s ease;
+    margin-top: 8px;
 }
 
 .tag-button:hover {
