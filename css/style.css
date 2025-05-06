@@ -567,3 +567,26 @@ html {
     cursor: default; /* Change cursor to default to indicate it's not clickable */
 }
 
+.vibe-coded {
+    display: block; /* Ensures it starts on a new line */
+    font-family: 'Courier New', Courier, monospace; /* Monospace for a coding vibe */
+    font-size: 1.1em; /* Slightly larger than body text */
+    font-weight: bold; /* Bold for emphasis */
+    color: #00ff88; /* Vibrant neon green for a techy, modern feel */
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5); /* Subtle glow effect */
+    margin-top: 1rem; /* Space above the phrase */
+    text-align: center; /* Centered for visual impact */
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.vibe-coded:hover {
+    color: #00cc70; /* Slightly darker green on hover for interactivity */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .vibe-coded {
+        font-size: 1em; /* Slightly smaller on mobile */
+        margin-top: 0.8rem;
+    }
+}
