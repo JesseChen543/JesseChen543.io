@@ -40,19 +40,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const portfolioContent = {
         'data-analyst': {
             title: "JESSE THE ANALYST",
-            description: "As a dedicated data analyst, I specialize in turning complex datasets into actionable insights. " +
-                "With skills in statistical analysis, data visualization, and machine learning, I uncover meaningful trends " +
-                "that inform business decisions. I'm proficient in Python, R, SQL, and advanced visualization tools, " +
-                "and I take pride in clearly communicating my findings. My work reflects a commitment to accuracy, efficiency, " +
-                "and delivering value through data-driven strategies.",
+            description: "I’m a data analyst who loves digging into numbers to find stories that help businesses make smart moves. " +
+                "Whether it’s crunching data with Python, R, or SQL, or creating clear visuals to show what’s going on, " +
+                "I focus on making insights easy to understand and act on. I enjoy the challenge of spotting trends and patterns, " +
+                "and I’m all about getting things right while keeping it practical and useful. Oh, and this website? It’s vibe-coded.",
         },
         'web-design': {
-            title: "WEB DESIGN PROJECT",
-            description: "As a passionate website developer, I create engaging, responsive web experiences. " +
-                "My expertise covers HTML, CSS, JavaScript, and React, combined with a keen eye for UI/UX design. " +
-                "I craft visually appealing, intuitive interfaces that perform optimally across devices. " +
-                "My approach blends creativity with technical proficiency, pushing web design boundaries to " +
-                "deliver innovative solutions that engage users and meet business objectives.",
+            title: "JESSE THE WEB DEVELOPER",
+            description: "I’m a web developer who gets a kick out of building websites that look great and work smoothly. " +
+                "Using HTML, CSS, JavaScript, and React, I create sites that are easy to use and feel just right on any device. " +
+                "I love blending clean design with solid code to make something that not only pops visually but also gets the job done. " +
+                "My goal is to create web experiences that users enjoy and businesses can count on. And yeah, this website is vibe-coded.",
         }
     };
 
