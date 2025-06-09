@@ -93,20 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 skills: ["data analytics", "RFM analysis"],
                 type: ["individual"]
             }
-        },
-        'ai-career-assistance': {
-            title: "Resume AI Career Assistance Wireframe Design",
-            date: "January, 2023",
-            description: "As the business analyst for this project, I analyzed the demand and created a logic flow chart " +
-                "and requirement tickets. Using Figma, I designed a wireframe for a Resume AI Career Assistance feature " +
-                "on a recruitment platform.",
-            link: "https://www.figma.com/file/K670eaQ8qW2GflPw8ClybR/JobPin-AI-career-assistance?node-id=0%3A1&t=WA7n1Cqggs2HwOUk-1",
-            image: "pictures/AI career assistance wireframe.png",
-            tags: {
-                software: ["Figma"],
-                skills: ["business analysis", "wireframe"],
-                type: ["individual"]
-            }
         }
     };
 
