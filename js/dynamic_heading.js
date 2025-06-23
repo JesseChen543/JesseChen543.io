@@ -43,16 +43,14 @@ document.addEventListener('DOMContentLoaded', function() {
             description: "I’m a data analyst who loves digging into numbers to find stories that help businesses make smart moves. " +
                 "Whether it’s crunching data with Python, R, or SQL, or creating clear visuals to show what’s going on, " +
                 "I focus on making insights easy to understand and act on. I enjoy the challenge of spotting trends and patterns, " +
-                "and I’m all about getting things right while keeping it practical and useful. " +
-                "<span class='vibe-coded'>And yeah, this website is vibe-coded.</span>",
+                "and I’m all about getting things right while keeping it practical and useful. "
         },
         'web-design': {
             title: "JESSE THE WEB DEVELOPER",
             description: "I’m a web developer who gets a kick out of building websites that look great and work smoothly. " +
                 "Using HTML, CSS, JavaScript, and React, I create sites that are easy to use and feel just right on any device. " +
                 "I love blending clean design with solid code to make something that not only pops visually but also gets the job done. " +
-                "My goal is to create web experiences that users enjoy and businesses can count on. " +
-                "<span class='vibe-coded'>And yeah, this website is vibe-coded.</span>",
+                "My goal is to create web experiences that users enjoy and businesses can count on. "
         }
     };
     // Get content based on selected project, or use deco7180 as default if not found
