@@ -1,0 +1,57 @@
+/* Hero section styling from dynamic heading */
+.hero-content h1 {
+    font-size: 4em;
+    font-weight: 700;
+    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 20px;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+    letter-spacing: 2px;
+    animation: fadeIn 1.5s ease-out;
+    transition: all 0.5s ease;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+}
+
+.hero-content h1:hover {
+    background: linear-gradient(45deg, #fc466b 0%, #3f5efb 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    transform: scale(1.05);
+    text-shadow: 0 0 15px rgba(106, 17, 203, 0.5);
+    letter-spacing: 3px;
+}
+
+.hero-content h1::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    bottom: -5px;
+    left: 50%;
+    background: linear-gradient(45deg, #fc466b 0%, #3f5efb 100%);
+    transition: all 0.5s ease;
+    transform: translateX(-50%);
+}  
+
+.hero-content h1:hover::after {
+    width: 80%;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content p {
+    font-size: 1.6em;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+}

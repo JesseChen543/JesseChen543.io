@@ -13,9 +13,57 @@ document.addEventListener('DOMContentLoaded', function() {
     function createDynamicHeader(title, description) {
         const headerHtml = `
             <style>
+                .hero-content h1 {
+                    font-size: 4em;
+                    font-weight: 700;
+                    background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    margin-bottom: 20px;
+                    text-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+                    letter-spacing: 2px;
+                    animation: fadeIn 1.5s ease-out;
+                    transition: all 0.5s ease;
+                    cursor: pointer;
+                    display: inline-block;
+                    position: relative;
+                }
+                
+                .hero-content h1:hover {
+                    background: linear-gradient(45deg, #fc466b 0%, #3f5efb 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    transform: scale(1.05);
+                    text-shadow: 0 0 15px rgba(106, 17, 203, 0.5);
+                    letter-spacing: 3px;
+                }
+                
+                .hero-content h1::after {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 3px;
+                    bottom: -5px;
+                    left: 50%;
+                    background: linear-gradient(45deg, #fc466b 0%, #3f5efb 100%);
+                    transition: all 0.5s ease;
+                    transform: translateX(-50%);
+                }  
+                
+                .hero-content h1:hover::after {
+                    width: 80%;
+                }
+                
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
                 .hero-content p {
-                    font-size: 1.8em;
+                    font-size: 1.6em;
                     line-height: 1.6;
+                    max-width: 800px;
+                    margin: 0 auto;
                 }
             </style>
             <header class="hero">
@@ -36,25 +84,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedProject = localStorage.getItem('selectedProject');
 
     console.log("selectedProject", selectedProject);    
-    // Define content based on the selected project
+    // Define a single heading content regardless of project selection
     const portfolioContent = {
         'data-analyst': {
-            title: "JESSE THE ANALYST",
-            description: "I’m a data analyst who loves digging into numbers to find stories that help businesses make smart moves. " +
-                "Whether it’s crunching data with Python, R, or SQL, or creating clear visuals to show what’s going on, " +
-                "I focus on making insights easy to understand and act on. I enjoy the challenge of spotting trends and patterns, " +
-                "and I’m all about getting things right while keeping it practical and useful. "
+            title: "JESSE CHEN",
+            description: "Recent IT graduate with a passion for solving complex problems. I find satisfaction in working through challenges and creating effective solutions. Excited to start my career in technology and continue developing my skills as a programmer."
         },
         'web-design': {
-            title: "JESSE THE WEB DEVELOPER",
-            description: "I’m a web developer who gets a kick out of building websites that look great and work smoothly. " +
-                "Using HTML, CSS, JavaScript, and React, I create sites that are easy to use and feel just right on any device. " +
-                "I love blending clean design with solid code to make something that not only pops visually but also gets the job done. " +
-                "My goal is to create web experiences that users enjoy and businesses can count on. "
+            title: "JESSE CHEN",
+            description: "Recent IT graduate with a passion for solving complex problems. I find satisfaction in working through challenges and creating effective solutions. Excited to start my career in technology and continue developing my skills as a programmer."
         }
     };
-    // Get content based on selected project, or use deco7180 as default if not found
-    const content = portfolioContent[selectedProject];
+    // Get content based on selected project, or use a default if not found
+    const content = portfolioContent[selectedProject] || portfolioContent['data-analyst'];
 
     createDynamicHeader(content.title, content.description);
 
