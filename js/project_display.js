@@ -83,20 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 skills: ["data analytics", "predictive modeling"],
                 type: ["individual"]
             }
-        },
-        'kpmg-internship': {
-            title: "KPMG Data Analytics consulting virtual internship",
-            date: "January, 2022",
-            description: "I participated in the KPMG Virtual Experience Program, completing data quality assessments, " +
-                "implementing RFM analysis, and presenting my findings through a well-structured PowerPoint presentation " +
-                "and interactive Excel dashboards.",
-            link: "https://jessechen543.github.io/churnrate_analysis/",
-            image: "pictures/imgae for kpmg project.png",
-            tags: {
-                software: ["Excel"],
-                skills: ["data analytics", "RFM analysis"],
-                type: ["individual"]
-            }
         }
     };
 
