@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     regularPostsContainer.innerHTML = regularPosts;
 
-    // Populate filter dropdowns
+    // Initialize multi-select dropdowns
     function populateFilters() {
         const softwareSet = new Set();
         const skillsSet = new Set();
@@ -184,20 +184,132 @@ document.addEventListener('DOMContentLoaded', function() {
             project.tags.type.forEach(tag => typeSet.add(tag));
         });
 
-        const softwareFilter = document.getElementById('software-filter');
-        const skillsFilter = document.getElementById('skills-filter');
-        const typeFilter = document.getElementById('type-filter');
-
-        softwareSet.forEach(tag => softwareFilter.add(new Option(tag, tag)));
-        skillsSet.forEach(tag => skillsFilter.add(new Option(tag, tag)));
-        typeSet.forEach(tag => typeFilter.add(new Option(tag, tag)));
+        // Convert regular dropdowns to multi-select
+        convertToMultiSelect('software-filter', Array.from(softwareSet));
+        convertToMultiSelect('skills-filter', Array.from(skillsSet));
+        convertToMultiSelect('type-filter', Array.from(typeSet));
+    }
+    
+    // Function to convert a regular dropdown to a custom multi-select element
+    function convertToMultiSelect(selectId, options) {
+        const originalSelect = document.getElementById(selectId);
+        if (!originalSelect) return;
+        
+        const parentElement = originalSelect.parentElement;
+        
+        // Create container for the multi-select
+        const container = document.createElement('div');
+        container.className = 'multi-select-container';
+        container.id = `${selectId}-container`;
+        
+        // Create the dropdown button/display
+        const dropdownDisplay = document.createElement('div');
+        dropdownDisplay.className = 'multi-select-dropdown';
+        dropdownDisplay.innerHTML = `<span>All</span><span class="arrow-down">▼</span>`;
+        container.appendChild(dropdownDisplay);
+        
+        // Create dropdown list
+        const dropdownList = document.createElement('div');
+        dropdownList.className = 'multi-select-options';
+        dropdownList.style.display = 'none';
+        
+        // Add "All" option
+        const allOption = document.createElement('div');
+        allOption.className = 'multi-select-option selected';
+        allOption.setAttribute('data-value', '');
+        allOption.textContent = 'All';
+        allOption.addEventListener('click', function() {
+            // Deselect all other options and select only "All"
+            const options = dropdownList.querySelectorAll('.multi-select-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+            updateDropdownDisplay(dropdownDisplay, []);
+            filterProjects();
+        });
+        dropdownList.appendChild(allOption);
+        
+        // Add all other options
+        options.forEach(option => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'multi-select-option';
+            optionElement.setAttribute('data-value', option);
+            optionElement.textContent = option;
+            
+            optionElement.addEventListener('click', function() {
+                // Toggle selected state
+                this.classList.toggle('selected');
+                
+                // If any option is selected, deselect "All"
+                const allOpt = dropdownList.querySelector('[data-value=""]');
+                const selectedOptions = dropdownList.querySelectorAll('.multi-select-option.selected:not([data-value=""])');
+                
+                if (selectedOptions.length > 0) {
+                    allOpt.classList.remove('selected');
+                } else {
+                    allOpt.classList.add('selected');
+                }
+                
+                // Update the dropdown display text
+                const selectedValues = Array.from(selectedOptions).map(opt => opt.getAttribute('data-value'));
+                updateDropdownDisplay(dropdownDisplay, selectedValues);
+                
+                // Filter projects based on selected options
+                filterProjects();
+            });
+            
+            dropdownList.appendChild(optionElement);
+        });
+        
+        container.appendChild(dropdownList);
+        
+        // Show/hide dropdown list when clicking on the dropdown display
+        dropdownDisplay.addEventListener('click', function() {
+            const isVisible = dropdownList.style.display === 'block';
+            dropdownList.style.display = isVisible ? 'none' : 'block';
+            dropdownDisplay.querySelector('.arrow-down').textContent = isVisible ? '▼' : '▲';
+            
+            // Close other open dropdowns
+            const allDropdowns = document.querySelectorAll('.multi-select-options');
+            allDropdowns.forEach(dropdown => {
+                if (dropdown !== dropdownList) {
+                    dropdown.style.display = 'none';
+                    const arrow = dropdown.previousElementSibling.querySelector('.arrow-down');
+                    if (arrow) arrow.textContent = '▼';
+                }
+            });
+        });
+        
+        // Add new container and remove the original select element
+        parentElement.insertBefore(container, originalSelect);
+        originalSelect.style.display = 'none';
+    }
+    
+    // Function to update the dropdown display text
+    function updateDropdownDisplay(displayElement, selectedValues) {
+        const displayText = displayElement.querySelector('span');
+        if (selectedValues.length === 0) {
+            displayText.textContent = 'All';
+        } else if (selectedValues.length === 1) {
+            displayText.textContent = selectedValues[0];
+        } else {
+            displayText.textContent = `${selectedValues.length} selected`;
+        }
+    }
+    
+    // Function to get selected values from a multi-select dropdown
+    function getMultiSelectValues(selectId) {
+        const container = document.getElementById(`${selectId}-container`);
+        if (!container) return [];
+        
+        const selectedOptions = container.querySelectorAll('.multi-select-option.selected:not([data-value=""])');
+        return Array.from(selectedOptions).map(opt => opt.getAttribute('data-value'));
     }
 
     // Filter projects based on selected tags
     function filterProjects() {
-        const selectedSoftware = document.getElementById('software-filter').value;
-        const selectedSkills = document.getElementById('skills-filter').value;
-        const selectedType = document.getElementById('type-filter').value;
+        const selectedSoftwareValues = getMultiSelectValues('software-filter');
+        const selectedSkillsValues = getMultiSelectValues('skills-filter');
+        const selectedTypeValues = getMultiSelectValues('type-filter');
 
         // Get the featured project
         const featuredProject = key_projects[selectedProject] || key_projects['deco7180'];
@@ -208,9 +320,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 return false;
             }
 
-            const matchesSoftware = !selectedSoftware || project.tags.software.includes(selectedSoftware);
-            const matchesSkills = !selectedSkills || project.tags.skills.includes(selectedSkills);
-            const matchesType = !selectedType || project.tags.type.includes(selectedType);
+            // Match if either no selection or any of the project's tags match any selected value
+            const matchesSoftware = selectedSoftwareValues.length === 0 || 
+                project.tags.software.some(tag => selectedSoftwareValues.includes(tag));
+                
+            const matchesSkills = selectedSkillsValues.length === 0 || 
+                project.tags.skills.some(tag => selectedSkillsValues.includes(tag));
+                
+            const matchesType = selectedTypeValues.length === 0 || 
+                project.tags.type.some(tag => selectedTypeValues.includes(tag));
+                
             return matchesSoftware && matchesSkills && matchesType;
         });
 
@@ -219,10 +338,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 
-    // Event listeners for dropdowns
-    document.getElementById('software-filter').addEventListener('change', filterProjects);
-    document.getElementById('skills-filter').addEventListener('change', filterProjects);
-    document.getElementById('type-filter').addEventListener('change', filterProjects);
+    // Close multi-select dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.multi-select-container')) {
+            const dropdowns = document.querySelectorAll('.multi-select-options');
+            dropdowns.forEach(dropdown => {
+                dropdown.style.display = 'none';
+                const arrow = dropdown.previousElementSibling.querySelector('.arrow-down');
+                if (arrow) arrow.textContent = '▼';
+            });
+        }
+    });
 
     // Initial population of filters and display of projects
     populateFilters();
