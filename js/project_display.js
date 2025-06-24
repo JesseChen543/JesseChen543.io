@@ -57,12 +57,16 @@ document.addEventListener('DOMContentLoaded', function() {
             date: "September, 2023",
             description: "GamerverseHub functions as a gaming platform aimed at connecting gamers worldwide. " +
                 "It fosters interaction among gamers through various features including events, streams, " +
-                "discussions, and gaming opportunities.",
+                "discussions, and gaming opportunities. " +
+                "<br><br>" +
+                "This was my first project after learning basic HTML, CSS, and JavaScript, where I polished my skills in " +
+                "styling techniques including flexbox (and I leant how to center a div), responsive web design, " +
+                "learned how APIs work, and implemented 'post' functionality.",
             link: "https://jessechen543.github.io/Gamerversehub/",
             isEmbedded: true,
             tags: {
                 software: ["html", "css", "javascript"],
-                skills: ["api"],
+                skills: ["api", "responsive design", "get", "post"],
                 type: ["individual"]
             }
         },
