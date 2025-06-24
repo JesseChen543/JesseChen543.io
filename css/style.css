@@ -98,7 +98,7 @@ footer {
 
 .hero-content {
     max-width: 1200px;
-    width: 90%;
+    width: 100%;
     padding: 40px;
 }
 
@@ -166,7 +166,7 @@ html {
 
 /* New styles for your portfolio */
 #main {
-    width: 90%;
+    width: 100%;
     margin: 0 auto;
     background-color: #f4f4f4;
 }
@@ -226,7 +226,7 @@ html {
 /* Ensure the description text in the featured post is centered */
 .post.featured p {
     text-align: center;
-    max-width: 90%;
+    max-width: 100%;
     margin: 1rem auto;
 }
 
@@ -444,7 +444,9 @@ html {
     align-items: center;
     position: fixed;
     top: 0;
-    width: 90%;
+    width: 100%;
+    padding-right: 20px;
+    box-sizing: border-box;
     z-index: 1000;
     background-color: #333;
     opacity: 0; /* Initially invisible */

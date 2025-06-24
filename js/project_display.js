@@ -353,23 +353,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial population of filters and display of projects
     populateFilters();
     filterProjects();
-
+    
     // Get reference to the projects section and nav content
     const projectsSection = document.getElementById('projects');
     const navContent = document.querySelector('#portfolio-nav .nav-content');
 
-    // Function to handle scroll event
+    // Function to handle scroll event - always keep the filter visible
     function handleScroll() {
-        const sectionTop = projectsSection.getBoundingClientRect().top;
-        const viewportHeight = window.innerHeight;
-
-        if (sectionTop <= viewportHeight && sectionTop >= 0) {
-            navContent.style.opacity = '0'; // Make nav-content visible
-        } else {
-            navContent.style.opacity = '1'; // Make nav-content invisible
-        }
+        // Always keep the nav-content (filter) visible regardless of scroll position
+        navContent.style.opacity = '1'; // Make nav-content always visible
     }
 
+    // Close multi-select dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.multi-select-container')) {
+            const dropdowns = document.querySelectorAll('.multi-select-options');
+            dropdowns.forEach(dropdown => {
+                dropdown.style.display = 'none';
+                const arrow = dropdown.previousElementSibling.querySelector('.arrow-down');
+                if (arrow) arrow.textContent = '▼';
+            });
+        }
+    });
+    
     // Add scroll event listener
     window.addEventListener('scroll', handleScroll);
 
