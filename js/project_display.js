@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 "To learn more about our design process and development journey, check out our detailed project breakdown on the " +
                 "<a href='wingwatch_process.html' target='_blank'><strong>Wingwatch development Process</strong></a> page.",
             link: "https://jessechen543.github.io/wingwatch_portfolio/",
-            image: "pictures/wingwatch.png",
+            isEmbedded: true,
             tags: {
                 software: ["javascript"],
                 skills: ["data processing", "api", "website optimization", "user research"],
