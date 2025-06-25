@@ -1,0 +1,66 @@
+{
+  "urls": {
+    "portfolio": "https://jesse-chen543-io.vercel.app/",
+    "projects": [
+      "https://jessechen543.github.io/wingwatch_portfolio/",
+      "https://jessechen543.github.io/ESTATE_ANALYSIS/"
+    ]
+  },
+  "faqs": [
+    {
+      "id": 1,
+      "question": "Tell me about yourself. What's your background and what led you to pursue this field?",
+      "answer": "I'm a recent IT graduate with a passion for solving complex problems. I find genuine satisfaction in working through challenges and creating effective solutions. I'm excited to begin my professional journey in technology and continue developing my skills as a programmer, particularly in web development and data analysis."
+    },
+    {
+      "id": 3,
+      "question": "What technical skills or tools do you feel strongest in?",
+      "answer": "Based on my portfolio projects, my technical proficiencies include: JavaScript (8/10), HTML/CSS (8/10), Python (7/10), Data Processing (8/10), API Integration (7/10), Responsive Design (7/10), R (6/10), and User Research (7/10). I continue to build on these foundations while exploring new technologies."
+    },
+    {
+      "id": 4,
+      "question": "How do you typically approach problem-solving when you are given a new task or unfamiliar challenge?",
+      "answer": "I'd like to highlight a project that isn't featured in my portfolio - a physical prototype for a family calendar we built as a team. I led the UI development for the Raspberry Pi interface and handled database and sensor data integration. During development, I faced debugging challenges as closing the app would also terminate the IDE, making error tracking difficult. I implemented a creative solution by creating a file that captured and stored error codes for later analysis. This experience taught me the importance of thinking outside conventional problem-solving frameworks. You can view our project overview video at https://www.youtube.com/watch?v=y29mrG8imNg, created by my team member."
+    },
+    {
+      "id": 5,
+      "question": "If you could describe your ideal work environment or team, what would it look like?",
+      "answer": "My ideal workplace is one where team members are genuinely connected and aligned toward common goals. I thrive in collaborative environments where knowledge-sharing is encouraged and everyone is committed to delivering high-quality work while supporting each other's professional growth."
+    },
+    {
+      "id": 6,
+      "question": "Are there any achievements — academic, technical, or personal — that you think set you apart from other candidates?",
+      "answer": "I received the Dean's Commendation for Academic Excellence (2022), which is awarded for achieving an average of higher than 85% across all subjects in a semester. Additionally, I'm currently preparing for the AWS Certified Machine Learning-Associate exam to enhance my cloud and ML capabilities."
+    },
+    {
+      "id": 7,
+      "question": "What are you looking for in your next opportunity, and where do you hope to grow professionally in the next 2–3 years?",
+      "answer": "I'm seeking an opportunity that allows me to apply my technical skills while continuing to learn and grow. In the next 2-3 years, I aspire to develop deeper expertise in full-stack development and data analytics, eventually taking on projects that combine both areas to create data-driven web applications that solve meaningful problems."
+    },
+    {
+      "id": 8,
+      "question": "Do you have experience working independently or remotely? How do you manage your time and stay organized?",
+      "answer": "I work as a remote Tutor with HD Education, where I have the flexibility to accept or decline tutor requests. Since most requests come during exam periods, I've developed strong time management skills by starting early with my own assignments and revision, creating dedicated blocks for tutoring sessions. This proactive approach has helped me balance my responsibilities while delivering quality assistance to students."
+    },
+    {
+      "id": 9,
+      "question": "How do you stay updated with trends or changes in your field?",
+      "answer": "I actively connect with industry professionals to discuss emerging tools and technologies. I'm particularly interested in following AI developments that have transformative potential in our field. These conversations not only keep me informed about current trends but also provide valuable insights into practical applications of new technologies."
+    },
+    {
+      "id": 10,
+      "question": "What would you consider your greatest weakness?",
+      "answer": "I previously struggled with video interviews due to anxiety caused by the lack of immediate feedback. To address this, I developed a practice technique where I invite friends to simulate interviews, providing the real-time facial cues and responses that help me communicate more naturally. This approach has significantly improved my interview performance, and I recently passed my first online interview using these strategies."
+    },
+    {
+      "id": 11,
+      "question": "What's your perspective on AI-assisted coding or 'vibe-coding'?",
+      "answer": "I believe AI-assisted coding can significantly enhance productivity when used strategically. However, for larger projects, over-reliance can lead to debugging challenges or architectural confusion. My approach is to use AI to generate an initial project roadmap, then manually create the structure to ensure each component is modular and maintainable. In my experience, AI struggles with generating coherent code for projects exceeding 2,000 lines. For optimal results, I establish clear guidelines to ensure AI-generated code meets readability and maintainability standards. Additionally, the nature of generative AI is to produce the most likely output that will be accepted by users, which limits its effectiveness for creative tasks. As a creative person who enjoys developing new ideas, I find this distinction important. For example, I conceptualized the terminal-style chatbot for my portfolio as an innovative interface that aligns well with the tech industry aesthetic—an idea that required human creativity rather than algorithmic prediction."
+    },
+    {
+      "id": 12,
+      "question": "What are your hobbies or interests outside of work?",
+      "answer": "I enjoy tennis, board games, and cooperative video gaming. I particularly value the collaborative problem-solving experience in team games, where we work together to overcome challenging levels. These activities reflect my appreciation for both strategic thinking and teamwork in recreational settings."
+    }
+  ]
+}
