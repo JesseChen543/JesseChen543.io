@@ -59,7 +59,14 @@ document.addEventListener('DOMContentLoaded', function() {
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            smoothScroll(this.getAttWribute('href'));
+            const href = this.getAttribute('href');
+            // Only use smoothScroll for internal links starting with #
+            if (href.startsWith('#')) {
+                smoothScroll(href);
+            } else {
+                // For external links or downloads, follow the link normally
+                window.location.href = href;
+            }
         });
     });
 
