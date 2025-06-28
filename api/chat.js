@@ -1,6 +1,4 @@
 // This is a serverless function for Vercel
-import fs from 'fs';
-import path from 'path';
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -16,20 +14,83 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Message is required' });
     }
     
-    // Load FAQ data
-    let faqData;
-    try {
-      const faqPath = path.join(process.cwd(), 'data', 'faq.json');
-      const faqContent = fs.readFileSync(faqPath, 'utf8');
-      faqData = JSON.parse(faqContent);
-    } catch (error) {
-      console.error('Error loading FAQ data:', error);
-      // Continue even if we can't load the FAQ data
-      faqData = { faqs: [] };
-    }
+    // Define FAQs directly in the API to avoid filesystem issues in serverless environment
+    const faqData = {
+      "faqs": [
+        {
+          "id": 1,
+          "question": "Tell me about yourself. What's your background and what led you to pursue this field?",
+          "answer": "BACKGROUND: Recent IT graduate. INTERESTS: Solving complex problems, creating effective solutions. CAREER GOALS: Professional growth in technology, specifically in web development and data analysis. MOTIVATION: I find genuine satisfaction in working through technical challenges and implementing solutions that make a difference."
+        },
+        {
+          "id": 3,
+          "question": "What technical skills or tools do you feel strongest in?",
+          "answer": "PRIMARY SKILLS: JavaScript (8/10), HTML/CSS (8/10), Data Processing (8/10). SECONDARY SKILLS: Python (7/10), API Integration (7/10), Responsive Design (7/10), User Research (7/10). DEVELOPING SKILLS: R (6/10). APPROACH: I continuously build on these foundations while exploring new technologies. PORTFOLIO: My projects demonstrate practical applications of these skills."
+        },
+        {
+          "id": 4,
+          "question": "How do you typically approach problem-solving when you are given a new task or unfamiliar challenge?",
+          "answer": "PROJECT EXAMPLE: Family calendar prototype with Raspberry Pi interface. ROLE: UI development lead and database/sensor integration. CHALLENGE: Debugging was difficult because closing the app terminated the IDE, preventing error tracking. SOLUTION: Created a file system to capture and store error codes for later analysis. LESSON LEARNED: Think beyond conventional problem-solving frameworks. DEMONSTRATION: Project overview video available at https://www.youtube.com/watch?v=y29mrG8imNg."
+        },
+        {
+          "id": 5,
+          "question": "If you could describe your ideal work environment or team, what would it look like?",
+          "answer": "My ideal workplace is one where team members are genuinely connected and aligned toward common goals. I thrive in collaborative environments where knowledge-sharing is encouraged and everyone is committed to delivering high-quality work while supporting each other's professional growth."
+        },
+        {
+          "id": 6,
+          "question": "Are there any achievements — academic, technical, or personal — that you think set you apart from other candidates?",
+          "answer": "I received the Dean's Commendation for Academic Excellence (2022), which is awarded for achieving an average of higher than 85% across all subjects in a semester. Additionally, I'm currently preparing for the AWS Certified Machine Learning-Associate exam to enhance my cloud and ML capabilities."
+        },
+        {
+          "id": 7,
+          "question": "What are you looking for in your next opportunity, and where do you hope to grow professionally in the next 2–3 years?",
+          "answer": "I'm seeking an opportunity that allows me to apply my technical skills while continuing to learn and grow. In the next 2-3 years, I aspire to develop deeper expertise in full-stack development and data analytics, eventually taking on projects that combine both areas to create data-driven web applications that solve meaningful problems."
+        },
+        {
+          "id": 8,
+          "question": "Do you have experience working independently or remotely? How do you manage your time and stay organized?",
+          "answer": "I work as a remote Tutor with HD Education, where I have the flexibility to accept or decline tutor requests. Since most requests come during exam periods, I've developed strong time management skills by starting early with my own assignments and revision, creating dedicated blocks for tutoring sessions. This proactive approach has helped me balance my responsibilities while delivering quality assistance to students."
+        },
+        {
+          "id": 9,
+          "question": "How do you stay updated with trends or changes in your field?",
+          "answer": "I actively connect with industry professionals to discuss emerging tools and technologies. I'm particularly interested in following AI developments that have transformative potential in our field. These conversations not only keep me informed about current trends but also provide valuable insights into practical applications of new technologies."
+        },
+        {
+          "id": 10,
+          "question": "What would you consider your greatest weakness?",
+          "answer": "I previously struggled with video interviews due to anxiety caused by the lack of immediate feedback. To address this, I developed a practice technique where I invite friends to simulate interviews, providing the real-time facial cues and responses that help me communicate more naturally. This approach has significantly improved my interview performance, and I recently passed my first online interview using these strategies."
+        },
+        {
+          "id": 11,
+          "question": "What's your perspective on AI-assisted coding or 'vibe-coding'?",
+          "answer": "I believe AI-assisted coding can significantly enhance productivity when used strategically. However, for larger projects, over-reliance can lead to debugging challenges or architectural confusion. My approach is to use AI to generate an initial project roadmap, then manually create the structure to ensure each component is modular and maintainable. In my experience, AI struggles with generating coherent code for projects exceeding 2,000 lines. For optimal results, I establish clear guidelines to ensure AI-generated code meets readability and maintainability standards. Additionally, the nature of generative AI is to produce the most likely output that will be accepted by users, which limits its effectiveness for creative tasks. As a creative person who enjoys developing new ideas, I find this distinction important. For example, I conceptualized the terminal-style chatbot for my portfolio as an innovative interface that aligns well with the tech industry aesthetic—an idea that required human creativity rather than algorithmic prediction."
+        },
+        {
+          "id": 12,
+          "question": "What are your hobbies or interests outside of work?",
+          "answer": "I enjoy tennis, board games, and cooperative video gaming. I particularly value the collaborative problem-solving experience in team games, where we work together to overcome challenging levels. These activities reflect my appreciation for both strategic thinking and teamwork in recreational settings."
+        },
+        {
+          "id": 13,
+          "question": "Can you tell me about your professional experience?",
+          "answer": "EXPERIENCE 1 - TUTOR AT HD ACADEMIC: Conducted one-on-one tutoring for bachelor students in courses where I excelled academically. HIGHLIGHT: Student feedback - 'Jesse can explain complicated concepts in simple terms.' BENEFITS: Built industry connections and reinforced technical knowledge. EXPERIENCE 2 - BUSINESS ANALYST AT JR ACADEMY: Gathered stakeholder requirements and created developer tickets. SKILLS GAINED: Agile workflow experience, improved communication through meetings, project progress oversight. TECHNICAL KNOWLEDGE: Writing effective Jira tickets, using dependency labels to prevent merge conflicts, identifying module conflicts through early communication."
+        },
+        {
+          "id": 14,
+          "question": "How do you handle challenging situations or setbacks in your projects?",
+          "answer": "PHILOSOPHY: 'We've always defined ourselves by the ability to overcome the impossible' (Interstellar quote). MINDSET: Positive approach to challenges. PROJECT EXAMPLE: WingWatch group project. CRISIS: Several severe bugs during final testing, including Google Maps API limit reached before submission deadline. ACTION: Volunteered to create separate branch to resolve issues when team was discouraged. SOLUTION: Successfully migrated from Google Maps API to Leaflet (free alternative) and fixed all bugs one night before deadline. KEY LESSONS: 1) Never give up on seemingly impossible challenges. 2) Clean, well-documented, structured code is essential for effective debugging under pressure."
+        },
+        {
+          "id": 15,
+          "question": "Can I see your resume or CV?",
+          "answer": "RESUME: My detailed resume is available for download at https://jesse-chen543-io.vercel.app/data/Jesse_Resume.docx. DOWNLOAD: You can also click the 'Download Resume' button in the navigation menu of my portfolio website. CONTENTS: My resume includes comprehensive details about my educational background, technical skills, professional experience, and relevant projects."
+        }
+      ]
+    };
 
     // The OpenAI API key is automatically loaded from environment variables
-    // Make sure you've set OPENAI_API_KEY in your Vercel project settings
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -41,20 +102,17 @@ export default async function handler(req, res) {
         messages: [
           {
             role: 'system',
-            content: `You are Jesse Chen's personal assistant AI for his portfolio website. 
-            ONLY respond based on information contained in Jesse's faq.json file, which I'll provide below. 
-            If the user's question doesn't relate to information in the faq.json file, 
-            politely explain that you can only answer questions related to Jesse's background, 
-            skills, projects, and professional experience.
+            content: `You are Jesse Chen's personal assistant AI for his portfolio website.
             
-            Be professional yet conversational, and structure responses clearly using the same section headers 
-            found in the faq.json answers (like BACKGROUND:, SKILLS:, PROJECT EXAMPLE:, etc.).
+            ONLY respond based on the following FAQ information about Jesse. If the user's question doesn't relate to this information, politely explain that you can only answer questions about Jesse's background, skills, projects, and professional experience.
             
-            Do NOT answer questions about topics not covered in the faq.json content or make up information.
-            If uncertain, politely suggest the user explore other sections of Jesse's portfolio.
+            Be professional yet conversational. Structure responses clearly using the same section headers found in the FAQ answers (like BACKGROUND:, SKILLS:, PROJECT EXAMPLE:, etc.).
             
-            Here is the FAQ data (JSON format):
-            ${JSON.stringify(faqData.faqs, null, 2)}`
+            FAQ INFORMATION:
+            ${faqData.faqs.map(faq => `Q: ${faq.question}
+A: ${faq.answer}`).join('\n\n')}
+            
+            Remember to introduce yourself as "Jesse's personal assistant" when appropriate. Do NOT answer questions about topics not covered in the FAQ content or make up information.`
           },
           { role: 'user', content: message }
         ],
