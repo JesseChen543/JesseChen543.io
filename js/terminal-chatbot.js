@@ -153,34 +153,37 @@ document.addEventListener('DOMContentLoaded', function() {
         addToTerminal(response, true);
     }
     
-    function simulateTypingResponse(command) {
+    async function simulateTypingResponse(command) {
         // Show thinking animation
         const loadingId = showLoading();
         
-        // Simulate AI processing delay
-        setTimeout(() => {
-            hideLoading(loadingId);
+        try {
+            // Call the OpenAI API via our serverless function
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: command })
+            });
             
-            // Generate a contextual response based on keywords
-            let response;
-            const lcCommand = command.toLowerCase();
-            
-            if (lcCommand.includes('wingwatch') || lcCommand.includes('birdwatching')) {
-                response = `Wingwatch is a birdwatching website where Jesse worked on backend development. The project involved integrating the Wildlife API and Google Maps API to visualize bird location data. Jesse developed algorithms to filter and enhance information for improved user experience.`;
-            } else if (lcCommand.includes('real estate') || lcCommand.includes('python')) {
-                response = `The Real Estate Analysis project used Python to gain insights into features influencing how long properties stay on the market. Jesse created predictive models for this purpose and demonstrated strong data analysis skills.`;
-            } else if (lcCommand.includes('gamerverse') || lcCommand.includes('gaming')) {
-                response = `GamerverseHub is a gaming platform that Jesse created to connect gamers worldwide. It includes features like events, streams, and discussions. This was Jesse's first project after learning HTML, CSS, and JavaScript.`;
-            } else if (lcCommand.includes('heart') || lcCommand.includes('r')) {
-                response = `The Heart Attack Analysis project used R for data analytics to predict heart attacks from a dataset with 300 observations and 20 variables. Jesse became a finalist in a competition judged by representatives from Deloitte, KPMG, and UQ.`;
-            } else if (lcCommand.includes('education') || lcCommand.includes('degree')) {
-                response = `Jesse is a recent IT graduate with specialized knowledge in web development and data analysis. His education provided a strong foundation in both technical skills and problem-solving methodologies.`;
-            } else {
-                response = `I'm a simple terminal assistant for Jesse's portfolio. I might not have the specific information you're looking for. Try using commands like 'help', 'projects', or 'skills' to learn more about Jesse Chen.`;
+            if (!response.ok) {
+                throw new Error('API request failed');
             }
             
-            addToTerminal(`<span class="terminal-ai-response">${response}</span>`, true);
-        }, 1500);
+            const data = await response.json();
+            hideLoading(loadingId);
+            
+            // Display the AI response
+            addToTerminal(`<span class="terminal-ai-response">${data.response}</span>`, true);
+        } catch (error) {
+            console.error('Error calling AI service:', error);
+            hideLoading(loadingId);
+            
+            // Fallback response in case of error
+            const fallbackResponse = `I'm sorry, I'm having trouble connecting to my AI services right now. Please try again later or use commands like 'help', 'projects', or 'skills' to learn more about Jesse.`;
+            addToTerminal(`<span class="terminal-ai-response">${fallbackResponse}</span>`, true);
+        }
     }
     
     function addToTerminal(content, isResponse = false) {
