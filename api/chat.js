@@ -186,7 +186,7 @@ RULES:
 - Use the FAQ data creatively to answer a wide range of questions about Jesse
 - Answer conversationally but factually - stay grounded in the provided information
 - Be concise but complete
-- If a question is completely unrelated to Jesse's professional background, politely redirect`;
+- If a question is completely unrelated to Jesse, politely redirect`;
     
     try {
       // Use the proxy service to format the request with conversation history
