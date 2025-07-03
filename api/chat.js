@@ -12,6 +12,9 @@ export default async function handler(req, res) {
 
   try {
     console.log('API handler called with request:', req.body);
+    // Log all environment variables (excluding sensitive values)
+    console.log('Available environment variables:', Object.keys(process.env).join(', '));
+    
     // Get the user's message and conversation history from the request body
     const { message, history = [] } = req.body;
     
@@ -32,16 +35,27 @@ export default async function handler(req, res) {
       ? `Key exists (length: ${apiKey.length})` 
       : 'Key missing';
     console.log('Using Google AI API key:', keyStatus);
+    console.log('GOOGLEAI_API_KEY exists:', !!process.env.GOOGLEAI_API_KEY);
+    console.log('GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
     
     // Check if API key is available
     if (!apiKey) {
-      const configApiKey = config && config.googleai && config.googleai.apiKey;
-      if (configApiKey) {
-        console.log('Using API key from config file');
-        apiKey = configApiKey;
-      } else {
-        console.error('API key not found in environment variables or config');
-        return res.status(500).json({ error: 'API key not configured' });
+      try {
+        console.log('API key not found in environment variables, checking config file');
+        console.log('Config object exists:', !!config);
+        console.log('Config googleai exists:', !!(config && config.googleai));
+        
+        const configApiKey = config && config.googleai && config.googleai.apiKey;
+        if (configApiKey) {
+          console.log('Using API key from config file');
+          apiKey = configApiKey;
+        } else {
+          console.error('API key not found in environment variables or config');
+          return res.status(500).json({ error: 'API key not configured' });
+        }
+      } catch (configError) {
+        console.error('Error accessing config:', configError);
+        return res.status(500).json({ error: 'Error accessing config file', details: configError.message });
       }
     }
     
