@@ -24,11 +24,26 @@ export default async function handler(req, res) {
       console.log(`Received ${history.length} previous messages in conversation`);
     }
     
+    // Get API key directly from environment variables
+    let apiKey = process.env.GOOGLEAI_API_KEY;
+    
     // Log API key status - for debug only
-    const keyStatus = process.env.GOOGLEAI_API_KEY 
-      ? `Key exists (length: ${process.env.GOOGLEAI_API_KEY.length})` 
+    const keyStatus = apiKey 
+      ? `Key exists (length: ${apiKey.length})` 
       : 'Key missing';
     console.log('Using Google AI API key:', keyStatus);
+    
+    // Check if API key is available
+    if (!apiKey) {
+      const configApiKey = config && config.googleai && config.googleai.apiKey;
+      if (configApiKey) {
+        console.log('Using API key from config file');
+        apiKey = configApiKey;
+      } else {
+        console.error('API key not found in environment variables or config');
+        return res.status(500).json({ error: 'API key not configured' });
+      }
+    }
     
     // Define FAQs directly in the API to avoid filesystem issues in serverless environment
     const faqData = {
@@ -107,17 +122,6 @@ export default async function handler(req, res) {
     };
 
     console.log('Preparing Google AI API request');
-    
-    // Try to get API key from environment variables first, then fallback to config file
-    let apiKey = process.env.GOOGLEAI_API_KEY || config.googleApiKey;
-    
-    if (!apiKey) {
-      console.error('Google AI API key not found in environment variables or config.js');
-      return res.status(500).json({ 
-        error: 'API configuration error - missing API key', 
-        help: 'Please add your Google AI API key to api/config.js for local development or set GOOGLEAI_API_KEY environment variable for production.'
-      });
-    }
     
     return runWithApiKey(apiKey, message, faqData, res, history);
   } catch (error) {

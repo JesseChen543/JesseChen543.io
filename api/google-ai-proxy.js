@@ -4,9 +4,18 @@
 const fs = require('fs');
 const path = require('path');
 
-// Load environment variables from .env.local
+// Load environment variables from .env.local for local development
+// In production (Vercel), environment variables are loaded automatically
 function loadEnvironmentVariables() {
   try {
+    // Check if we already have the API key in environment variables
+    // This will be true in Vercel production environment
+    if (process.env.GOOGLEAI_API_KEY) {
+      console.log('Google AI API Key already available in environment variables');
+      return;
+    }
+    
+    // If not in environment variables, try to load from .env.local (for local development)
     // Go up one level from /api to root directory
     const rootDir = path.resolve(__dirname, '..');
     const envPath = path.join(rootDir, '.env.local');
@@ -38,12 +47,13 @@ function loadEnvironmentVariables() {
       
       // Verify key was loaded
       if (process.env.GOOGLEAI_API_KEY) {
-        console.log('Google AI API Key loaded successfully');
+        console.log('Google AI API Key loaded successfully from .env.local');
       } else {
         console.warn('Failed to load GOOGLEAI_API_KEY from .env.local');
       }
     } else {
       console.warn('.env.local file not found at:', envPath);
+      console.warn('Make sure GOOGLEAI_API_KEY is set in your environment variables or .env.local file');
     }
   } catch (error) {
     console.error('Error loading environment variables:', error);
