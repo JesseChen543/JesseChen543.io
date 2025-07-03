@@ -1,8 +1,15 @@
 // This is a serverless function for Vercel
 // Import the Google AI proxy service
 const { callGoogleAI, formatGeminiRequest, extractResponseText } = require('./google-ai-proxy');
-// Import config (for local development)
-const config = require('./config');
+// Import config (for local development) - handle missing config file safely
+let config = {};
+try {
+  config = require('./config');
+  console.log('Loaded config file successfully');
+} catch (error) {
+  console.log('Config file not found, using environment variables only');
+  // This is expected in production environments like Vercel
+}
 
 export default async function handler(req, res) {
   // Only allow POST requests
