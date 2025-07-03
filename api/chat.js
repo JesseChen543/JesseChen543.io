@@ -24,8 +24,8 @@ export default async function handler(req, res) {
       console.log(`Received ${history.length} previous messages in conversation`);
     }
     
-    // Get API key directly from environment variables
-    let apiKey = process.env.GOOGLEAI_API_KEY;
+    // Get API key from environment variables - check multiple possible variable names
+    let apiKey = process.env.GOOGLEAI_API_KEY || process.env.GEMINI_API_KEY;
     
     // Log API key status - for debug only
     const keyStatus = apiKey 
