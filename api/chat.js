@@ -1,4 +1,8 @@
 // This is a serverless function for Vercel
+// Import the Google AI proxy service
+const { callGoogleAI, formatGeminiRequest, extractResponseText } = require('./google-ai-proxy');
+// Import config (for local development)
+const config = require('./config');
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -7,12 +11,24 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get the user's message from the request body
-    const { message } = req.body;
+    console.log('API handler called with request:', req.body);
+    // Get the user's message and conversation history from the request body
+    const { message, history = [] } = req.body;
     
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
     }
+    
+    // Log conversation history if present
+    if (history && history.length > 0) {
+      console.log(`Received ${history.length} previous messages in conversation`);
+    }
+    
+    // Log API key status - for debug only
+    const keyStatus = process.env.GOOGLEAI_API_KEY 
+      ? `Key exists (length: ${process.env.GOOGLEAI_API_KEY.length})` 
+      : 'Key missing';
+    console.log('Using Google AI API key:', keyStatus);
     
     // Define FAQs directly in the API to avoid filesystem issues in serverless environment
     const faqData = {
@@ -90,46 +106,121 @@ export default async function handler(req, res) {
       ]
     };
 
-    // The OpenAI API key is automatically loaded from environment variables
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'system',
-            content: `You are Jesse Chen's personal assistant AI for his portfolio website.
-            
-            ONLY respond based on the following FAQ information about Jesse. If the user's question doesn't relate to this information, politely explain that you can only answer questions about Jesse's background, skills, projects, and professional experience.
-            
-            Be professional yet conversational. Structure responses clearly using the same section headers found in the FAQ answers (like BACKGROUND:, SKILLS:, PROJECT EXAMPLE:, etc.).
-            
-            FAQ INFORMATION:
-            ${faqData.faqs.map(faq => `Q: ${faq.question}
-A: ${faq.answer}`).join('\n\n')}
-            
-            Remember to introduce yourself as "Jesse's personal assistant" when appropriate. Do NOT answer questions about topics not covered in the FAQ content or make up information.`
-          },
-          { role: 'user', content: message }
-        ],
-        temperature: 0.7,
-        max_tokens: 300
-      })
-    });
-
-    const data = await response.json();
+    console.log('Preparing Google AI API request');
     
-    if (data.error) {
-      console.error('OpenAI API error:', data.error);
-      return res.status(500).json({ error: 'Error from OpenAI API', details: data.error });
+    // Try to get API key from environment variables first, then fallback to config file
+    let apiKey = process.env.GOOGLEAI_API_KEY || config.googleApiKey;
+    
+    if (!apiKey) {
+      console.error('Google AI API key not found in environment variables or config.js');
+      return res.status(500).json({ 
+        error: 'API configuration error - missing API key', 
+        help: 'Please add your Google AI API key to api/config.js for local development or set GOOGLEAI_API_KEY environment variable for production.'
+      });
     }
+    
+    return runWithApiKey(apiKey, message, faqData, res, history);
+  } catch (error) {
+    console.error('Server error:', error);
+    return res.status(500).json({ error: 'Internal server error', details: error.message });
+  }
+}
 
-    const aiResponse = data.choices[0].message.content;
-    return res.status(200).json({ response: aiResponse });
+/**
+ * Runs the API call with the provided API key
+ */
+async function runWithApiKey(apiKey, message, faqData, res, history = []) {
+  try {
+    console.log('API Key found with length:', apiKey.length);
+    
+    // Function to select relevant FAQs based on user query
+    function selectRelevantFAQs(query, allFaqs, maxItems = 5) {
+      // Basic keyword matching - could be improved with more sophisticated NLP
+      const keywords = query.toLowerCase().split(/\W+/).filter(k => k.length > 2);
+      
+      // Score each FAQ
+      const scoredFaqs = allFaqs.map(faq => {
+        const text = (faq.question + ' ' + faq.answer).toLowerCase();
+        let score = 0;
+        
+        // Count keyword matches
+        keywords.forEach(keyword => {
+          if (text.includes(keyword)) {
+            score += 1;
+          }
+        });
+        
+        // Always include general background info
+        if (faq.question.toLowerCase().includes('tell me about yourself') || 
+            faq.question.toLowerCase().includes('background')) {
+          score += 1;
+        }
+        
+        return { faq, score };
+      });
+      
+      // Sort by score and take top N
+      const selectedFaqs = scoredFaqs
+        .sort((a, b) => b.score - a.score)
+        .slice(0, maxItems)
+        .map(item => item.faq);
+      
+      console.log(`Selected ${selectedFaqs.length} relevant FAQs for query: ${query}`);
+      
+      return selectedFaqs;
+    }
+    
+    // Select relevant FAQs instead of using all of them
+    const relevantFaqs = selectRelevantFAQs(message, faqData.faqs);
+    const faqContent = relevantFaqs.map(faq => `Q: ${faq.question}\nA: ${faq.answer}`).join('\n\n');
+    
+    // More flexible system instruction that allows for conversational questions
+    const systemInstructions = `ROLE: Jesse Chen's personal assistant AI
+TASK: Answer questions about Jesse based on the FAQ data below. Use section headers when relevant (BACKGROUND:, SKILLS:, etc.)
+TONE: Professional, conversational, helpful
+
+FAQ DATA:
+${faqContent}
+
+RULES:
+- Use the FAQ data creatively to answer a wide range of questions about Jesse
+- Answer conversationally but factually - stay grounded in the provided information
+- Be concise but complete
+- If a question is completely unrelated to Jesse's professional background, politely redirect`;
+    
+    try {
+      // Use the proxy service to format the request with conversation history
+      const requestBody = formatGeminiRequest(
+        systemInstructions, 
+        message, 
+        {
+          temperature: 0.7,
+          maxOutputTokens: 800, // Increased from 300 to handle longer responses
+          topK: 40,
+          topP: 0.95
+        },
+        history // Pass the conversation history
+      );
+      
+      console.log('Request body structure:', JSON.stringify(requestBody, null, 2));
+      
+      // Use the proxy service to make the API call
+      const data = await callGoogleAI('gemini-2.5-flash', requestBody, apiKey);
+      
+      // Use the proxy service to extract the response text
+      const aiResponse = extractResponseText(data);
+      
+      if (!aiResponse) {
+        console.error('No response content found in API response:', data);
+        return res.status(500).json({ error: 'No response content from AI service' });
+      }
+      
+      // Return the successful response
+      return res.status(200).json({ response: aiResponse });
+    } catch (error) {
+      console.error('Error calling Google AI service:', error);
+      return res.status(500).json({ error: `AI Service error: ${error.message}` });
+    }
   } catch (error) {
     console.error('Server error:', error);
     return res.status(500).json({ error: 'Internal server error', details: error.message });
