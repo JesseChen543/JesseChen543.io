@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 "and 20 variables, resulting in achieving finalist status in a competition hosted by BANA and presenting findings " +
                 "to judges from Deloitte, KPMG, and UQ.",
             link: "https://jessechen543.github.io/Heart_attack_analysis_Jesse/",
-            image: "pictures/heart attack analysis.png",
+            image: "pictures/heart-attack-analysis.png",
             tags: {
                 software: ["R"],
                 skills: ["data analytics", "predictive modeling"],
