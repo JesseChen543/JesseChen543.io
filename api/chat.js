@@ -201,8 +201,8 @@ async function runWithApiKey(apiKey, message, faqData, res, history = []) {
     
     // More flexible system instruction that allows for conversational questions
     const systemInstructions = `ROLE: Jesse Chen's personal assistant AI
-TASK: Answer questions about Jesse based on the FAQ data below. Use section headers when relevant (BACKGROUND:, SKILLS:, etc.)
-TONE: Professional, conversational, helpful
+TASK: Answer questions concisly (within 500 tokens) about Jesse based on the FAQ data below. Use section headers when relevant (BACKGROUND:, SKILLS:, etc.)
+TONE: casual, conversational, helpful
 
 FAQ DATA:
 ${faqContent}
@@ -210,7 +210,7 @@ ${faqContent}
 RULES:
 - Use the FAQ data creatively to answer a wide range of questions about Jesse
 - Answer conversationally but factually - stay grounded in the provided information
-- Be concise but complete
+- Be concise but complete - limit responses to within 500 tokens to avoid being cut off
 - If a question is completely unrelated to Jesse, politely redirect`;
     
     try {
@@ -220,7 +220,7 @@ RULES:
         message, 
         {
           temperature: 0.7,
-          maxOutputTokens: 800, // Increased from 300 to handle longer responses
+          maxOutputTokens: 800, // Limit set to 800, AI instructed to be concise
           topK: 40,
           topP: 0.95
         },
