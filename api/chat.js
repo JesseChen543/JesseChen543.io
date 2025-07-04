@@ -167,7 +167,7 @@ RULES:
         message, 
         {
           temperature: 0.7,
-          maxOutputTokens: 800, 
+          maxOutputTokens: 1500, 
           topK: 40,
           topP: 0.95
         },
