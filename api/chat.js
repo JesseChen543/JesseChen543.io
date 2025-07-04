@@ -22,10 +22,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
   
-  // Apply rate limiting - super strict settings for testing
+  // Apply rate limiting - 15 requests per day
   const rateLimitOptions = {
-    maxRequests: 1,  // Only 1 request allowed (for testing)
-    windowMs: 60000 // 1 minute window (for easier testing)
+    maxRequests: 15,  // Allow 15 requests per day per IP
+    windowMs: 24 * 60 * 60 * 1000 // 24 hour window (1 day)
   };
   
   // Let the rate limiter handle everything - it will do all the IP detection and validation

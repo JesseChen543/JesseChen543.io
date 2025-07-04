@@ -11,6 +11,9 @@ const DATA_FILE = path.join(process.cwd(), 'rate-limit-data.json'); // No dot pr
 // How often to save data to disk (ms)
 const SAVE_INTERVAL = 5000; // 5 seconds
 
+// Set to 24 hours for daily cleanup
+const CLEANUP_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours
+
 // Use a global variable to store rate limiting data in memory
 // This works well for development with hot reloading
 global._rateLimit = global._rateLimit || {
@@ -130,7 +133,9 @@ function getRateInfo(ip, options) {
     global._rateLimit.ipStore[normalizedIp] = {
       count: 0, // Will be incremented below
       resetTime: now + windowMs,
-      firstSeen: now
+      firstSeen: now,
+      lastMessageTime: now, // Track when last message was sent
+      messageTimestamps: [now] // Array of all message timestamps
     };
   } else {
     console.log(`👉 Found existing entry for IP: ${normalizedIp}, current count: ${global._rateLimit.ipStore[normalizedIp].count}`);
@@ -138,21 +143,42 @@ function getRateInfo(ip, options) {
   
   const ipData = global._rateLimit.ipStore[normalizedIp];
   
-  // Check if the window has expired and reset if needed
+  // Only reset if the window has expired
+  // The reset time is always 1 minute after the first message in the window
   if (now > ipData.resetTime) {
-    console.log(`🔄 Reset rate limit for IP ${normalizedIp} (window expired)`);
-    ipData.count = 0;
-    ipData.resetTime = now + windowMs;
+    console.log(`🔄 Reset rate limit for IP ${normalizedIp} (1 minute window expired)`);
+    ipData.count = 0; // Reset the count to 0
+    ipData.resetTime = now + windowMs; // Set new reset time 1 minute from now
+    console.log(`New reset time: ${new Date(ipData.resetTime).toLocaleTimeString()} (${windowMs/1000} seconds from now)`);
+  } else {
+    // Window hasn't expired yet, log the time remaining
+    const timeRemaining = Math.ceil((ipData.resetTime - now) / 1000);
+    console.log(`⏳ Time until reset: ${timeRemaining} seconds (resets at ${new Date(ipData.resetTime).toLocaleTimeString()})`);
+    
+    // If count is already at limit, log that they're rate limited
+    if (ipData.count >= maxRequests) {
+      console.log(`🚫 Rate limit in effect for IP ${normalizedIp} - Must wait ${timeRemaining} more seconds`);
+    }
   }
   
   // Calculate allowed status BEFORE incrementing the counter
   const isAllowed = ipData.count < maxRequests;
   console.log(`🔎 Checking if allowed: ${ipData.count} < ${maxRequests} = ${isAllowed}`);
-  
   // Only increment if the request is allowed
   if (isAllowed) {
+    // Update counts and timestamps
     ipData.count++;
-    console.log(`➕ Incremented count for IP ${normalizedIp} to ${ipData.count}/${maxRequests}`);
+    ipData.lastMessageTime = now;
+    
+    // Add this timestamp to the message history (limit to last 10)
+    if (!ipData.messageTimestamps) ipData.messageTimestamps = [];
+    ipData.messageTimestamps.push(now);
+    if (ipData.messageTimestamps.length > 10) {
+      ipData.messageTimestamps = ipData.messageTimestamps.slice(-10);
+    }
+    
+    console.log(`➞ Incremented count for IP ${normalizedIp} to ${ipData.count}/${maxRequests}`);
+    console.log(`📅 Updated last message time: ${new Date(now).toLocaleTimeString()}`);
   } else {
     console.log(`❌ Not incrementing count - limit already reached: ${ipData.count}/${maxRequests}`);
   }
@@ -188,6 +214,31 @@ function getStatus() {
   };
 }
 
+/**
+ * Clean all rate limit data - reset everything
+ * Runs once per day at midnight (24-hour cycle)
+ */
+function cleanAllRateLimitData() {
+  const now = Date.now();
+  const currentTime = new Date(now).toLocaleTimeString();
+  
+  console.log('🧹🧹 CLEANING ALL RATE LIMIT DATA (DAILY CLEANUP) 🧹🧹');
+  console.log(`Current time: ${currentTime}`);
+  
+  // Option 1: Clear all data completely
+  global._rateLimit.ipStore = {};
+  
+  // Option 2: Reset counts but keep IPs (alternative approach)
+  // Object.keys(global._rateLimit.ipStore).forEach(ip => {
+  //   global._rateLimit.ipStore[ip].count = 0;
+  //   global._rateLimit.ipStore[ip].resetTime = now + 60000; // 1 minute from now
+  // });
+  
+  // Save changes to disk
+  saveDataToDisk();
+  console.log(`✅ All rate limit data reset at ${currentTime}`);
+}
+
 // Force create the data file immediately
 try {
   // Try to load existing data
@@ -198,6 +249,11 @@ try {
     console.log(`⚡ Creating new rate limit data file at: ${DATA_FILE}`);
     saveDataToDisk();
   }
+  
+  // Set up periodic cleanup (every minute for testing)
+  // In production, this would be set to a much longer interval like 24 hours
+  console.log(`🕒 Setting up test cleanup every ${CLEANUP_INTERVAL/1000} seconds`);
+  setInterval(cleanAllRateLimitData, CLEANUP_INTERVAL);
 } catch (error) {
   console.error('Error during rate limiter initialization:', error);
 }
@@ -205,5 +261,6 @@ try {
 module.exports = {
   getRateInfo,
   getStatus,
-  saveDataToDisk
+  saveDataToDisk,
+  cleanAllRateLimitData
 };
