@@ -192,6 +192,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     errorData = { error: 'Unknown error', details: errorText };
                 }
                 
+                // Check if this is a rate limit error (HTTP 429)
+                if (response.status === 429 && errorData && (errorData.friendlyMessage || errorData.error)) {
+                    hideLoading(loadingId);
+                    
+                    // Use the friendly message or error message
+                    const rateLimitMessage = errorData.friendlyMessage || errorData.error;
+                    addToTerminal(`<span class="terminal-ai-response terminal-error">⚠️ ${rateLimitMessage}</span>`, true);
+                    return; // Don't throw, we've handled it
+                }
+                
                 throw new Error(`API request failed: ${errorData.error || 'Unknown error'}`);
             }
             

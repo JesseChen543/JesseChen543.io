@@ -32,6 +32,9 @@ dist/
 logs/
 *.log
 
+# Rate limiting data
+rate-limit-data.json
+
 # Editor directories and files
 .idea/
 .vscode/

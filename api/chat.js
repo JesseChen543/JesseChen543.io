@@ -1,6 +1,8 @@
 // This is a serverless function for Vercel
 // Import the Google AI proxy service
 const { callGoogleAI, formatGeminiRequest, extractResponseText } = require('./google-ai-proxy');
+// Import rate limiter to prevent abuse
+const { rateLimiter, checkRateLimit } = require('./rate-limiter');
 // Import path and fs for file operations
 const path = require('path');
 const fs = require('fs');
@@ -19,9 +21,26 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
+  
+  // Apply rate limiting - super strict settings for testing
+  const rateLimitOptions = {
+    maxRequests: 1,  // Only 1 request allowed (for testing)
+    windowMs: 60000 // 1 minute window (for easier testing)
+  };
+  
+  // Let the rate limiter handle everything - it will do all the IP detection and validation
+  // It will also return false if the request is not allowed (and send the appropriate error response)
+  if (!rateLimiter(req, res, rateLimitOptions)) {
+    console.log(`Rate limit check failed - request blocked`);
+    return;
+  }
+  // The rate limiter already logged everything we need to know about the request count
 
   try {
     console.log('API handler called with request:', req.body);
+    
+    // Client IP has already been logged above with the request count
+    
     // Log all environment variables (excluding sensitive values)
     console.log('Available environment variables:', Object.keys(process.env).join(', '));
     
@@ -102,6 +121,8 @@ export default async function handler(req, res) {
 async function runWithApiKey(apiKey, message, faqData, res, history = []) {
   try {
     console.log('API Key found with length:', apiKey.length);
+    
+    // Rate limiting is already handled in the handler function
     
     // Function to select relevant FAQs based on user query
     function selectRelevantFAQs(query, allFaqs, maxItems = 5) {
