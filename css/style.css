@@ -20,11 +20,55 @@ h1 {
   padding-bottom: 1rem;
 }
 
-/* Navigation styles */
+/* Add styles for smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Navigation styles - general first, then specific */
 nav {
   overflow-x: auto;
 }
 
+/* Button styles - base styles first */
+.button {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+/* Actions styles - base first */
+.actions {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+
+/* Icons styles - base first */
+.icons.alt {
+  list-style: none;
+  padding: 0;
+}
+
+.icons.alt li {
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.icons.alt a {
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+/* Menu styles - general first, then ids */
 #nav-menu {
   display: flex;
   list-style-type: none;
@@ -47,6 +91,41 @@ nav {
 #nav-menu a:hover,
 #nav-menu a.active {
   background-color: #ddd;
+}
+
+/* Portfolio nav - general first */
+#portfolio-nav {
+  background-color: #4a4a4a;
+  padding: 0;
+  width: 100%;
+}
+
+#portfolio-nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+#portfolio-nav li {
+  margin: 0;
+}
+
+#portfolio-nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  display: block;
+  transition: background-color 0.3s;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+#portfolio-nav a:hover,
+#portfolio-nav a.active {
+  background-color: #fff;
+  color: #4a4a4a;
 }
 
 /* Main content area styles */
@@ -75,17 +154,20 @@ footer {
   width: 100%;
 }
 
-@media (max-width: 600px) {
-  #nav-menu {
-    flex-direction: column;
-  }
-
-  #nav-menu li {
-    margin-right: 0;
-    margin-bottom: 0.5rem;
-  }
+/* Image styles - general first */
+.image.fit {
+  width: 100%; /* This ensures the image width matches the article width */
+  margin-bottom: 1rem;
 }
 
+.image.fit img {
+  width: 100%;
+  height: auto; /* This allows the image to maintain its aspect ratio */
+  object-fit: contain; /* This ensures the entire image is visible */
+  object-position: center; /* Center the image within its container */
+}
+
+/* Hero section */
 .hero {
   height: 100vh;
   display: flex;
@@ -140,28 +222,14 @@ footer {
     transform: rotate(45deg) translate(0, 0);
     opacity: 0;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     transform: rotate(45deg) translate(20px, 20px);
     opacity: 0;
-  }
-}
-
-/* Add styles for smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Added media query for responsiveness on smaller screens */
-@media (max-width: 768px) {
-  .hero h1 {
-    font-size: 3.5em;
-  }
-
-  .hero p {
-    font-size: 1.8em;
   }
 }
 
@@ -172,6 +240,16 @@ html {
   background-color: #f4f4f4;
 }
 
+/* Posts and articles - general first */
+.posts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* This creates 2 columns */
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Post styles - from general to specific */
 .post {
   background-color: #fff;
   margin-bottom: 2rem;
@@ -184,58 +262,6 @@ html {
 
 .post:hover {
   box-shadow: 0 5px 15px rgb(0 0 0 / 20%);
-}
-
-.post.featured {
-  border: 2px solid #007bff;
-  min-height: 800px;
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto 4rem auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #f8f9fa;
-  box-shadow: 0 0 20px rgb(0 0 0 / 10%);
-  box-sizing: border-box;
-}
-
-/* Adjust the content within the featured post */
-.post.featured > * {
-  width: 100%;
-  max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Adjust the embedded site and image styles */
-.post.featured .embedded-site,
-.post.featured .image.main {
-  width: 100%;
-  max-width: 100%;
-  margin: 1rem auto;
-}
-
-.post.featured .embedded-site iframe,
-.post.featured .image.main img {
-  width: 100%;
-  height: auto;
-  max-height: 600px;
-  object-fit: contain;
-}
-
-/* Ensure the description text in the featured post is centered */
-.post.featured p {
-  text-align: center;
-  max-width: 100%;
-  margin: 1rem auto;
-}
-
-/* Center the button in the featured post */
-.post.featured .actions {
-  width: 100%;
-  text-align: center;
-  margin-top: 1rem;
 }
 
 .post header {
@@ -260,6 +286,97 @@ html {
   text-decoration: underline;
 }
 
+/* Post embedded site styles */
+.post .embedded-site {
+  overflow-y: hidden;
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 16 / 9; /* This gives a slightly taller aspect ratio */
+  margin: 1rem auto;
+}
+
+.post .embedded-site iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* More specific post styles */
+.post.featured {
+  min-height: 800px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f8f9fa;
+  box-shadow: 0 0 20px rgb(0 0 0 / 10%);
+  box-sizing: border-box;
+}
+
+/* Adjust the content within the featured post */
+.post.featured > * {
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Ensure the description text in the featured post is centered */
+.post.featured p {
+  text-align: center;
+  max-width: 100%;
+  margin: 1rem auto;
+}
+
+/* Center the button in the featured post */
+.post.featured .actions {
+  width: 100%;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Specific styles for featured post */
+.post.featured .embedded-site {
+  width: 100%;
+  max-width: 1000px; /* Larger for featured posts */
+  aspect-ratio: 16 / 9; /* Maintain 16:9 aspect ratio */
+  margin: 2rem auto; /* Increased margin */
+  box-shadow: 0 0 20px rgb(0 0 0 / 20%); /* Add a shadow for emphasis */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Ensure the iframe respects the border radius */
+}
+
+.post.featured .embedded-site iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block; /* Removes any potential inline spacing */
+}
+
+.post.featured .embedded-site:hover {
+  transform: scale(1.02); /* Slightly enlarge on hover */
+  transition: transform 0.3s ease;
+}
+
+/* Adjust the embedded site and image styles */
+.post.featured .embedded-site,
+.post.featured .image.main {
+  width: 100%;
+  max-width: 100%;
+  margin: 1rem auto;
+}
+
+.post.featured .embedded-site iframe,
+.post.featured .image.main img {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  object-fit: contain;
+}
+
+/* Posts article styles */
 .posts article {
   background-color: #fff;
   margin-bottom: 2rem;
@@ -305,86 +422,7 @@ html {
   color: inherit; /* This will keep the color consistent with other headings */
 }
 
-.post .embedded-site {
-  overflow-y: hidden;
-  width: 100%;
-  max-width: 800px;
-  aspect-ratio: 16 / 9; /* This gives a slightly taller aspect ratio */
-  margin: 1rem auto;
-}
-
-.post .embedded-site iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-/* Specific styles for featured post */
-.post.featured .embedded-site {
-  width: 100%;
-  max-width: 1000px; /* Larger for featured posts */
-  aspect-ratio: 16 / 9; /* Maintain 16:9 aspect ratio */
-  margin: 2rem auto; /* Increased margin */
-  box-shadow: 0 0 20px rgb(0 0 0 / 20%); /* Add a shadow for emphasis */
-  border-radius: 8px; /* Rounded corners */
-  overflow: hidden; /* Ensure the iframe respects the border radius */
-}
-
-.post.featured .embedded-site iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block; /* Removes any potential inline spacing */
-}
-
-/* Add a responsive design for smaller screens */
-@media (max-width: 768px) {
-  .post.featured .embedded-site {
-    max-width: 100%; /* Full width on smaller screens */
-    aspect-ratio: 16 / 10; /* Slightly taller on mobile for better visibility */
-  }
-}
-
-.post.featured .embedded-site:hover {
-  transform: scale(1.02); /* Slightly enlarge on hover */
-  transition: transform 0.3s ease;
-}
-
-.actions {
-  list-style: none;
-  padding: 0;
-  text-align: center;
-}
-
-.button {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-.button:hover {
-  background-color: #0056b3;
-}
-
-.posts {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* This creates 2 columns */
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Adjust for smaller screens */
-@media (max-width: 768px) {
-  .posts {
-    grid-template-columns: 1fr;
-  }
-}
-
+/* Footer styles */
 #footer {
   background-color: #333;
   color: #fff;
@@ -400,86 +438,6 @@ html {
 
 .split.contact section {
   margin-bottom: 1rem;
-}
-
-.icons.alt {
-  list-style: none;
-  padding: 0;
-}
-
-.icons.alt li {
-  display: inline-block;
-  margin-right: 1rem;
-}
-
-.icons.alt a {
-  color: #fff;
-  font-size: 1.5rem;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  #main {
-    padding: 1rem;
-  }
-
-  .post {
-    padding: 1rem;
-  }
-
-  .posts {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Navigation styles */
-#portfolio-nav {
-  background-color: #4a4a4a;
-  padding: 0;
-  width: 100%;
-}
-
-#portfolio-nav .nav-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  padding-right: 20px;
-  box-sizing: border-box;
-  z-index: 1000;
-  background-color: #333;
-  opacity: 0; /* Initially invisible */
-  transition: opacity 0.3s ease; /* Smooth transition for opacity */
-}
-
-#portfolio-nav ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-}
-
-#portfolio-nav li {
-  margin: 0;
-}
-
-#portfolio-nav a {
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
-  padding: 1rem 2rem;
-  display: block;
-  transition: background-color 0.3s;
-  text-transform: uppercase;
-  font-size: 0.9em;
-}
-
-#portfolio-nav a:hover,
-#portfolio-nav a.active {
-  background-color: #fff;
-  color: #4a4a4a;
 }
 
 .social-icon {
@@ -503,17 +461,44 @@ html {
   border-radius: 8px;
 }
 
-/* Add this to the end of your CSS file */
-.image.fit {
-  width: 100%; /* This ensures the image width matches the article width */
-  margin-bottom: 1rem;
+/* Media queries - always at the end */
+@media (max-width: 600px) {
+  #nav-menu {
+    flex-direction: column;
+  }
+
+  #nav-menu li {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
 }
 
-.image.fit img {
-  width: 100%;
-  height: auto; /* This allows the image to maintain its aspect ratio */
-  object-fit: contain; /* This ensures the entire image is visible */
-  object-position: center; /* Center the image within its container */
+/* Added media query for responsiveness on smaller screens */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 3.5em;
+  }
+
+  .hero p {
+    font-size: 1.8em;
+  }
+
+  .posts {
+    grid-template-columns: 1fr;
+  }
+
+  #main {
+    padding: 1rem;
+  }
+
+  .post {
+    padding: 1rem;
+  }
+
+  .post.featured .embedded-site {
+    max-width: 100%; /* Full width on smaller screens */
+    aspect-ratio: 16 / 10; /* Slightly taller on mobile for better visibility */
+  }
 }
 
 /* Filter styles moved to filter.css */
