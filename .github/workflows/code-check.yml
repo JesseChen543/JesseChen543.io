@@ -1,15 +1,11 @@
-name: CI/CD Pipeline
+name: Code Quality Check
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:  # Allows manual triggering
+  workflow_dispatch:  # Manual trigger only
 
 jobs:
   lint:
-    name: Lint Code
+    name: Check Code Quality
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -35,19 +31,3 @@ jobs:
           VALIDATE_PHP: false
           # Adjust error level to prevent pipeline failure on warnings
           ERROR_ON_MISSING_EXEC_BIT: false
-
-  deploy:
-    name: Deploy to Vercel
-    needs: lint
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v20
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
