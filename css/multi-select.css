@@ -1,4 +1,4 @@
-/* 
+/*
  * Multi-Select Filter Styling
  * Designed to match Jesse Chen's portfolio theme
  */
@@ -94,11 +94,11 @@
   .multi-select-container {
     margin: 0.3rem 0;
   }
-  
+
   .multi-select-dropdown {
     padding: 6px 10px;
   }
-  
+
   .multi-select-options {
     max-height: 150px;
   }
@@ -126,4 +126,3 @@
   min-width: 150px;
   max-width: 250px;
 }
-
