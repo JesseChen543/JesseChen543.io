@@ -525,7 +525,3 @@ footer {
     aspect-ratio: 16 / 10; /* Slightly taller on mobile for better visibility */
   }
 }
-
-/* Filter styles moved to filter.css */
-
-/* Responsive adjustments for other components moved to their respective CSS files */
