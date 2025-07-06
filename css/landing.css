@@ -122,7 +122,7 @@ button:disabled {
   90% {
     transform: translate3d(-1px, 0, 0);
   }
-  
+
   20%,
   80% {
     transform: translate3d(2px, 0, 0);
@@ -153,12 +153,6 @@ button:disabled {
   border-radius: 4px;
   font-size: 14px;
   white-space: nowrap;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.3s;
 }
-
-/* Tooltip visible state - using a class instead of duplicate selector */
-#continue-btn:disabled:hover::after {
-  opacity: 1;
-}
-
