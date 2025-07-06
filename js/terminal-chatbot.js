@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create chatbot icon
     const chatbotIcon = document.createElement('div');
     chatbotIcon.id = 'chatbot-icon';
-    chatbotIcon.innerHTML = '<i class="fas fa-terminal"></i>';
+    chatbotIcon.innerHTML = '<i class="fas fa-robot"></i>';
     document.body.appendChild(chatbotIcon);
     
     // Create terminal container
@@ -39,7 +39,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(terminalContainer);
     
     // Event Listeners
-    chatbotIcon.addEventListener('click', toggleTerminal);
+    chatbotIcon.addEventListener('click', function(e) {
+        // Stop propagation to prevent the document click handler from firing
+        e.stopPropagation();
+        toggleTerminal();
+    });
     
     const closeButton = terminalContainer.querySelector('.terminal-button.close');
     closeButton.addEventListener('click', hideTerminal);
@@ -61,6 +65,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Make terminal draggable
     makeDraggable(terminalContainer);
     
+    // Close terminal when clicking outside of it
+    let clickOutsideEnabled = true;
+    document.addEventListener('click', function(e) {
+        // Only if terminal is visible and click-outside is enabled
+        if (!terminalContainer.classList.contains('hidden') && clickOutsideEnabled) {
+            // Check if click is outside both the terminal and the chatbot icon
+            if (!terminalContainer.contains(e.target) && e.target !== chatbotIcon && !chatbotIcon.contains(e.target)) {
+                hideTerminal();
+            }
+        }
+    });
+    
+    // Prevent click-through on terminal container
+    terminalContainer.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
     // Functions
     function toggleTerminal() {
         if (terminalContainer.classList.contains('hidden')) {
@@ -71,9 +92,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function showTerminal() {
+        // Temporarily disable click-outside to prevent immediate closing
+        clickOutsideEnabled = false;
         terminalContainer.classList.remove('hidden', 'minimized');
         setTimeout(() => {
             document.getElementById('terminal-input').focus();
+            // Re-enable click-outside after a short delay
+            clickOutsideEnabled = true;
         }, 300);
     }
     
