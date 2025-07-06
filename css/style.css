@@ -74,14 +74,14 @@ nav {
   color: inherit;
 }
 
-.post.featured h2 a {
-  text-decoration: none;
-  color: inherit;
-}
-
 .icons.alt a {
   color: #fff;
   font-size: 1.5rem;
+}
+
+.post.featured h2 a {
+  text-decoration: none;
+  color: inherit;
 }
 
 .post h2 a:hover {
