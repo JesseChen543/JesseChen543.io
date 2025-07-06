@@ -104,23 +104,7 @@
   }
 }
 
-/* Styling for filter container */
-.filter-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin: 1rem 0;
-  align-items: center;
-}
-
-.filter-container label {
-  margin-right: 0.3rem;
-  color: #fff;
-  font-weight: 500;
-  text-shadow: 0 0 2px rgb(0 0 0 / 70%);
-}
-
-/* Make the dropdown container take appropriate width */
+/* Multi-select container within filter */
 .filter-container .multi-select-container {
   flex: 1;
   min-width: 150px;

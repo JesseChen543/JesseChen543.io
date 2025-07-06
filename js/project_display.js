@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 "To learn more about our design process and development journey, check out our detailed project breakdown on the " +
                 "<a href='wingwatch_process.html' target='_blank'><strong>Wingwatch development Process</strong></a> page.",
             link: "https://jessechen543.github.io/wingwatch_portfolio/",
-            isEmbedded: true,
+            image: "images/wingwatch.png",
+            isEmbedded: false,
             tags: {
                 software: ["javascript"],
                 skills: ["data processing", "api", "website optimization", "user research"],
@@ -52,6 +53,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Combine key projects with additional projects
     const all_projects = {
         ...key_projects,
+        'heart-attack-analysis': {
+            title: "Heart Attack Analysis with R",
+            date: "April, 2022",
+            description: "This project involved using data analytics to predict heart attacks using a dataset of 300 observations " +
+                "and 20 variables, resulting in achieving finalist status in a competition hosted by BANA and presenting findings " +
+                "to judges from Deloitte, KPMG, and UQ.",
+            link: "https://jessechen543.github.io/Heart_attack_analysis_Jesse/",
+            image: "pictures/heart-attack-analysis.png",
+            tags: {
+                software: ["R"],
+                skills: ["data analytics", "predictive modeling"],
+                type: ["individual"]
+            }
+        },
         'web-design': {
             title: "Gaming platform-GamerverseHub",
             date: "September, 2023",
@@ -69,32 +84,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 skills: ["api", "responsive design", "get", "post"],
                 type: ["individual"]
             }
-        },
-        'heart-attack-analysis': {
-            title: "Heart Attack Analysis with R",
-            date: "April, 2022",
-            description: "This project involved using data analytics to predict heart attacks using a dataset of 300 observations " +
-                "and 20 variables, resulting in achieving finalist status in a competition hosted by BANA and presenting findings " +
-                "to judges from Deloitte, KPMG, and UQ.",
-            link: "https://jessechen543.github.io/Heart_attack_analysis_Jesse/",
-            image: "pictures/heart-attack-analysis.png",
-            tags: {
-                software: ["R"],
-                skills: ["data analytics", "predictive modeling"],
-                type: ["individual"]
-            }
         }
+
     };
 
     // Function to create media content (embedded site or image) for a project
     function createMediaContent(project, isFeatured = false) {
         if (project.isEmbedded) {
-            return `
-                <a href="${project.link}" target="_blank" class="embedded-site">
-                    <iframe src="${project.link}" title="${project.title}" width="100%" 
-                    height="${isFeatured ? '500px' : '300px'}" allow="autoplay; 
-                    encrypted-media" allowfullscreen muted></iframe>
-                </a>`;
+            // Special handling for WingWatch project
+            if (project.title.toLowerCase().includes("bird") || 
+                project.link.includes("wingwatch")) {
+                return `
+                <div class="wingwatch-container">
+                    <iframe src="${project.link}" title="${project.title}" 
+                    allow="autoplay; encrypted-media" allowfullscreen scrolling="yes" frameborder="0"></iframe>
+                </div>`;
+            } else {
+                return `
+                <div class="embedded-site">
+                    <iframe src="${project.link}" title="${project.title}" 
+                    allow="autoplay; encrypted-media" allowfullscreen scrolling="yes" frameborder="0"></iframe>
+                    <a href="${project.link}" target="_blank" class="site-overlay"></a>
+                </div>`;
+            }
         } else {
             return `
                 <a href="${project.link}" target="_blank" class="${isFeatured ? 'image main' : 'image fit'}">
@@ -125,8 +137,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to create HTML for a featured post
     function createFeaturedPost(project) {
+        // Check if this is the WingWatch project
+        const isWingWatch = project.title.toLowerCase().includes('bird') || 
+                           project.title.toLowerCase().includes('wingwatch') || 
+                           (project.link && project.link.includes('wingwatch'));
+                           
+        const projectClass = isWingWatch ? 'post featured wingwatch-project' : 'post featured';
+        
         return `
-            <article class="post featured">
+            <article class="${projectClass}">
                 <header class="major">
                     <span class="date">${project.date}</span>
                     <h2><a href="${project.link}" target="_blank">${project.title}</a></h2>
@@ -144,17 +163,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to create HTML for a regular post
     function createRegularPost(project) {
+        // Check if this is the WingWatch project
+        const isWingWatch = project.title.toLowerCase().includes('bird') || 
+                           project.title.toLowerCase().includes('wingwatch') || 
+                           (project.link && project.link.includes('wingwatch'));
+                           
+        const projectClass = isWingWatch ? 'post wingwatch-project' : 'post';
+        
         return `
-            <article>
+            <article class="${projectClass}">
                 <header>
                     <span class="date">${project.date}</span>
                     <h2><a href="${project.link}" target="_blank">${project.title}</a></h2>
+                    ${createTags(project.tags)}
                 </header>
                 ${createMediaContent(project)}
                 <p>${project.description}</p>
-                ${createTags(project.tags)}
                 <ul class="actions special">
-                    <li><a href="${project.link}" target="_blank" class="button">VIEW PROJECT</a></li>
+                    <li><a href="${project.link}" target="_blank" class="button">View Project</a></li>
                 </ul>
             </article>
         `;
