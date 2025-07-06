@@ -197,7 +197,7 @@
             <p>Some of the critical features that require attention in our next development phase include:</p>
             <ul>
                 <li><strong>Search Suggestions and Time Frame Filter Integration:</strong> While these 
-                features work perfectly independently (with <a href="#search-suggestion" class="smooth-scroll">search suggestions</a> 
+                features work perfectly independently (with <a href="#search-suggestion" class="smooth-scroll"&gt;search suggestions</a> 
                 assigned to me and the time frame filter to James), we've encountered issues when integrating them. 
                 Our next steps involve resolving these conflicts to ensure seamless functionality.</li>
                 
@@ -293,7 +293,7 @@ function fetchOccurrences(map, centralLocation, radius) {
             success: function (response) {
                 console.log(`Fetched ${response.occurrences.length} occurrences from index ${startIndex}.`);
                 allOccurrences = allOccurrences.concat(response.occurrences);
-                if (startIndex + pageSize < Math.min(response.totalRecords, maxResults)) {
+                if (startIndex + pageSize &lt; Math.min(response.totalRecords, maxResults)) {
                     startIndex += pageSize;
                     fetchPage();
                 } else {
@@ -329,7 +329,7 @@ function fetchOccurrences(map, centralLocation, radius) {
             and most pertinent data points are presented to the user.</p>
             <p>This approach strikes a balance between providing comprehensive data and 
             maintaining a clean, user-friendly interface. By focusing on the most relevant 
-            markers, I enhance the map's readability and reduce cognitive load for our users, 
+            markers, I enhance the map 's readability and reduce cognitive load for our users, 
             allowing them to quickly identify and interact with the most significant bird 
             sightings in their area of interest.</p>
         </div>
@@ -392,7 +392,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
                     </div>
                     <div class="back">
                         <pre><code class="language-javascript">
-(config => {
+(config =&gt; {
   // Declare variables for later use
   var apiLoadPromise, scriptElement, paramKey, 
       errorMessage = "The Google Maps JavaScript API",  // Descriptive string for error messages
@@ -407,8 +407,8 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   var mapsNamespace = win.maps || (win.maps = {}),
       librarySet = new Set(),                          // Set to store requested library names
       queryParams = new URLSearchParams,               // Create URLSearchParams object to build query string
-      loadGoogleMapsAPI = () =>                        // Function to load the Google Maps JavaScript API
-          apiLoadPromise || (apiLoadPromise = new Promise(async (resolve, reject) => {
+      loadGoogleMapsAPI = () =&gt;                        // Function to load the Google Maps JavaScript API
+          apiLoadPromise || (apiLoadPromise = new Promise(async (resolve, reject) =&gt; {
               await (scriptElement = doc.createElement("script"));  // Create a new script element
 
               // Add library names to the URL parameters
@@ -416,7 +416,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
               
               // Add additional configuration options to the URL parameters
               for (paramKey in config) 
-                  queryParams.set(paramKey.replace(/[A-Z]/g, match => "_" + match[0].toLowerCase()), config[paramKey]);
+                  queryParams.set(paramKey.replace(/[A-Z]/g, match =&gt; "_" + match[0].toLowerCase()), config[paramKey]);
 
               // Set the callback parameter to the global callback function
               queryParams.set("callback", googleNamespace + ".maps." + callbackName);
@@ -428,7 +428,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
               mapsNamespace[callbackName] = resolve;
 
               // Handle script loading error
-              scriptElement.onerror = () => apiLoadPromise = reject(Error(errorMessage + " could not load."));
+              scriptElement.onerror = () =&gt; apiLoadPromise = reject(Error(errorMessage + " could not load."));
 
               // Set a nonce attribute if a script with a nonce exists in the document
               scriptElement.nonce = doc.querySelector("script[nonce]")?.nonce || "";
@@ -439,7 +439,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
   // Check if the importLibrary function is already defined and warn if so; otherwise, define it
   mapsNamespace[importLibraryFn] ? console.warn(errorMessage + " only loads once. Ignoring:", config) :
-         mapsNamespace[importLibraryFn] = (libraryName, ...rest) => librarySet.add(libraryName) && loadGoogleMapsAPI().then(() => mapsNamespace[importLibraryFn](libraryName, ...rest));
+         mapsNamespace[importLibraryFn] = (libraryName, ...rest) =&gt; librarySet.add(libraryName) &amp;&amp; loadGoogleMapsAPI().then(() =&gt; mapsNamespace[importLibraryFn](libraryName, ...rest));
 })
                         </code></pre>
                         <p>Click to see output</p>
@@ -569,11 +569,11 @@ $(document).ready(function() {
     // Function to update the suggestions list based on the user's input.
     function updateSuggestionsList(searchText) {
         // Check for matches in common names first
-        let matchingNames = commonNames.filter(name => name.toLowerCase().startsWith(searchText.toLowerCase()));
+        let matchingNames = commonNames.filter(name =&gt; name.toLowerCase().startsWith(searchText.toLowerCase()));
 
         // If no matches found in common names, check scientific names
         if (matchingNames.length === 0) {
-            matchingNames = scientificNames.filter(name => name.toLowerCase().startsWith(searchText.toLowerCase()));
+            matchingNames = scientificNames.filter(name =&gt; name.toLowerCase().startsWith(searchText.toLowerCase()));
         }
 
         console.log(`User input: ${searchText}`);
@@ -582,8 +582,8 @@ $(document).ready(function() {
         const suggestionsList = $('#suggestions-List');
         suggestionsList.empty();
 
-        matchingNames.forEach(name => {
-            suggestionsList.append(`&lt;li&gt;${name}&lt;/li&gt;`);
+        matchingNames.forEach(name =&gt; {
+            suggestionsList.append(`<li>${name}</li>`);
         });
         
         // Hide suggestions if no matches found
@@ -597,7 +597,7 @@ $(document).ready(function() {
     // Event handler for when the user types in the search input.
     $('#search-input').on('input', function() {
         const searchText = $(this).val();
-        if (searchText.length >= 2) {
+        if (searchText.length &gt;= 2) {
             updateSuggestionsList(searchText);
         } else {
             $('#suggestions-List').empty().hide();
@@ -614,13 +614,13 @@ $(document).ready(function() {
 
     // Event handler to detect click outside the input and list
     $(document).on('click', function (event) {
-        const isClickInside = $(event.target).closest('#search-input, #suggestions-list').length > 0;
+        const isClickInside = $(event.target).closest('#search-input, #suggestions-list').length &gt; 0;
 
         if (!isClickInside) {
             const suggestionsList = $('#suggestions-list');
 
             // If there are items in the list, select the first one
-            if (suggestionsList.children('li').length > 0) {
+            if (suggestionsList.children('li').length &gt; 0) {
                 const firstSuggestion = suggestionsList.children('li:first').text();
                 $('#search-input').val(firstSuggestion);
             }
@@ -699,14 +699,15 @@ $(document).ready(function() {
     <div class="paper-review">
         <h3>Paper 2: Gamification in Educational Web Platforms</h3>
         <p><strong>Paper:</strong> "Gamification in Web-based Learning Environments: A Systematic Review"</p>
-        <p><strong>Authors:</strong> Dicheva, D., Dichev, C., Agre, G., & Angelova, G.</p>
-        <p><strong>Journal:</strong> Educational Technology & Society, 18(3), 75-88, 2015</p>
+        <p><strong>Authors:</strong> Dicheva, D., Dichev, C., Agre, G., &amp; Angelova, G.</p>
+        <p><strong>Journal:</strong> Educational Technology &amp; Society, 18(3), 75-88, 2015</p>
         <p><strong>DOI:</strong> <a href="https://www.jstor.org/stable/jeductechsoci.18.3.75" target="_blank">JSTOR: jeductechsoci.18.3.75</a></p>
         
         <h4>Critical Evaluation:</h4>
         <p>This paper provides a comprehensive review of gamification techniques used in web-based learning environments. The authors conducted a systematic mapping study of 34 empirical research papers, analyzing the application of game elements in educational contexts.</p>
         
         <h4>Current Implementation and Future Possibilities:</h4>
+        <p>In our current version of WingWatch, we've implemented a basic form of gamification through our 'collect' feature, which allows users to view their previous uploads. This aligns with what Dicheva et al. (2015) describe as "visible status," providing users with a sense of progress and achievement. However, the paper suggests numerous other gamification elements that could significantly enhance user engagement and learning in our platform.</p>
         <p>In our current version of WingWatch, we've implemented a basic form of gamification through our 'collect' feature, which allows users to view their previous uploads. This aligns with what Dicheva et al. (2015) describe as "visible status," providing users with a sense of progress and achievement. However, the paper suggests numerous other gamification elements that could significantly enhance user engagement and learning in our platform.</p>
         
         <h4>Potential Future Enhancements:</h4>
@@ -804,7 +805,7 @@ $(document).ready(function() {
             </div>
             <div class="popup-buttons">
                 <button id="send-to-owner">Submit Feedback to WingWatch</button>
-            <button id="send-to-me">Email Note to Myself</button>
+                <button id="send-to-me">Email Note to Myself</button>
             </div>
         </div>
     </div>
@@ -813,18 +814,6 @@ $(document).ready(function() {
     <script src="js/note.js"></script>
     <script src="js/navigation.js"></script>
     <script src="js/smooth_scroll.js"></script>
-
-    <script>
-    document.querySelectorAll('a.smooth-scroll').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-    </script>
 
 </body>
 </html>

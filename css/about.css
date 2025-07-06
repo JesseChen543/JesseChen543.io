@@ -14,8 +14,7 @@
     transition: all 0.5s ease;
     cursor: pointer;
     display: inline-block;
-    position: relative;
-}
+    position: relative;}
 
 .hero-content h1:hover {
     background: linear-gradient(45deg, #fc466b 0%, #3f5efb 100%);
@@ -25,8 +24,7 @@
     color: transparent;
     transform: scale(1.05);
     text-shadow: 0 0 15px rgba(106, 17, 203, 0.5);
-    letter-spacing: 3px;
-}
+    letter-spacing: 3px;}
 
 .hero-content h1::after {
     content: '';
@@ -37,21 +35,18 @@
     left: 50%;
     background: linear-gradient(45deg, #fc466b 0%, #3f5efb 100%);
     transition: all 0.5s ease;
-    transform: translateX(-50%);
-}  
+    transform: translateX(-50%);}  
 
 .hero-content h1:hover::after {
-    width: 80%;
-}
+    width: 80%;}
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(-20px);}
+    to { opacity: 1; transform: translateY(0);}
 }
 
 .hero-content p {
     font-size: 1.6em;
     line-height: 1.6;
     max-width: 800px;
-    margin: 0 auto;
-}
+    margin: 0 auto;}
