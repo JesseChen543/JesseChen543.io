@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create chatbot icon
     const chatbotIcon = document.createElement('div');
     chatbotIcon.id = 'chatbot-icon';
-    chatbotIcon.innerHTML = '<i class="fas fa-terminal"></i>';
+    chatbotIcon.innerHTML = '<i class="fas fa-robot"></i>';
     document.body.appendChild(chatbotIcon);
     
     // Create terminal container
