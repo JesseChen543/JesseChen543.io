@@ -104,7 +104,6 @@
 
 .terminal-title {
   margin-left: 20px;
-  color: #ddd;
   font-size: 14px;
   font-weight: bold;
   background: linear-gradient(135deg, #6e8efb, #a777e3);
@@ -174,7 +173,8 @@
 }
 
 @keyframes blink-caret {
-  0%, 100% { border-color: transparent; }
+  0%,
+  100% { border-color: transparent; }
   50% { border-color: #6e8efb; }
 }
 
@@ -212,7 +212,9 @@
   font-weight: bold;
 }
 
-.skill-category, .project-item, .contact-item {
+.skill-category,
+.project-item,
+.contact-item {
   display: block;
   margin-left: 15px;
   margin-bottom: 3px;
