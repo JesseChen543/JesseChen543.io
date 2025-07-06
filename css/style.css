@@ -68,6 +68,74 @@ nav {
   font-size: 1.5rem;
 }
 
+/* Link styles - ordered by specificity from lowest to highest */
+.icons.alt a {
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+#nav-menu a {
+  text-decoration: none;
+  color: #333;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+#portfolio-nav a {
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  display: block;
+  transition: background-color 0.3s;
+  text-transform: uppercase;
+  font-size: 0.9em;
+}
+
+/* Link hover states */
+#nav-menu a:hover,
+#nav-menu a.active {
+  background-color: #ddd;
+}
+
+#portfolio-nav a:hover,
+#portfolio-nav a.active {
+  background-color: #fff;
+  color: #4a4a4a;
+}
+
+/* Post title links */
+.post h2 a {
+  text-decoration: none;
+  color: inherit; /* Keep color consistent with other headings */
+}
+
+.post h2 a:hover {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.posts article h2 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.posts article h2 a:hover {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.post.featured h2 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.post.featured h2 a:hover {
+  color: #007bff;
+  text-decoration: none;
+}
+
 /* Menu styles - general first, then ids */
 #nav-menu {
   display: flex;
@@ -80,18 +148,7 @@ nav {
   margin-right: 1rem;
 }
 
-#nav-menu a {
-  text-decoration: none;
-  color: #333;
-  padding: 0.5rem;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-#nav-menu a:hover,
-#nav-menu a.active {
-  background-color: #ddd;
-}
+/* Nav link styles moved to the top of the file */
 
 /* Portfolio nav - general first */
 #portfolio-nav {
@@ -111,22 +168,7 @@ nav {
   margin: 0;
 }
 
-#portfolio-nav a {
-  text-decoration: none;
-  color: #fff;
-  font-weight: bold;
-  padding: 1rem 2rem;
-  display: block;
-  transition: background-color 0.3s;
-  text-transform: uppercase;
-  font-size: 0.9em;
-}
-
-#portfolio-nav a:hover,
-#portfolio-nav a.active {
-  background-color: #fff;
-  color: #4a4a4a;
-}
+/* Portfolio nav links moved to the top of the file */
 
 /* Main content area styles */
 main {
@@ -260,6 +302,8 @@ footer {
   transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
 }
 
+
+
 .post:hover {
   box-shadow: 0 5px 15px rgb(0 0 0 / 20%);
 }
@@ -277,14 +321,7 @@ footer {
   margin: 0.5rem 0;
 }
 
-.post h2 a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.post h2 a:hover {
-  text-decoration: underline;
-}
+/* These selectors were moved to resolve specificity issues */
 
 /* Post embedded site styles */
 .post .embedded-site {
@@ -330,7 +367,16 @@ footer {
   margin: 1rem auto;
 }
 
-/* Center the button in the featured post */
+/* Actions styles for all posts */
+.posts article .actions {
+  position: absolute;
+  bottom: 0;  /* Position from the bottom */
+  left: 0;  /* Align to the left edge of the article */
+  right: 0;  /* Align to the right edge of the article */
+  text-align: center;  /* Center the button horizontally */
+}
+
+/* Center the button in the featured post - more specific selector */
 .post.featured .actions {
   width: 100%;
   text-align: center;
@@ -355,6 +401,7 @@ footer {
   display: block; /* Removes any potential inline spacing */
 }
 
+/* Featured post embedded site styles */
 .post.featured .embedded-site:hover {
   transform: scale(1.02); /* Slightly enlarge on hover */
   transition: transform 0.3s ease;
@@ -393,13 +440,7 @@ footer {
   box-shadow: 0 5px 15px rgb(0 0 0 / 20%);
 }
 
-.posts article .actions {
-  position: absolute;
-  bottom: 0;  /* Position from the bottom */
-  left: 0;  /* Align to the left edge of the article */
-  right: 0;  /* Align to the right edge of the article */
-  text-align: center;  /* Center the button horizontally */
-}
+
 
 .posts article .button {
   display: inline-block;
@@ -415,12 +456,7 @@ footer {
   background-color: #0056b3;
 }
 
-/* Remove underline from all title links */
-.posts article h2 a,
-.post.featured h2 a {
-  text-decoration: none;
-  color: inherit; /* This will keep the color consistent with other headings */
-}
+
 
 /* Footer styles */
 #footer {

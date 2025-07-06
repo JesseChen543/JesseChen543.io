@@ -32,7 +32,6 @@ main {
   background-color: #f4f4f4;
   box-sizing: border-box;
   overflow-x: hidden;
-  padding-bottom: 80px; /* Add padding to the bottom */
 }
 
 /* Side navigation styles */
@@ -151,6 +150,7 @@ img:hover {
   overflow: hidden;
 }
 
+/* Basic pre style - placed before more specific selectors */
 pre {
   margin: 0;
   height: 100%;
@@ -281,12 +281,12 @@ footer {
   .content-wrapper {
     flex-direction: column;
   }
-  
+
   .text-content,
   .image-content {
     width: 100%;
   }
-  
+
   .text-content {
     padding-right: 0;
     margin-bottom: 20px;

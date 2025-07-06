@@ -60,31 +60,31 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .filter-container {
-      flex-direction: column;
-      align-items: flex-end;
-    }
+  .filter-container {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 
-    .filter-container select {
-      width: 100%;
-      max-width: 200px;
-    }
+  .filter-container select {
+    width: 100%;
+    max-width: 200px;
+  }
 }
 
 @media (max-width: 600px) {
-    .filter-container {
-      align-items: center;
-      justify-content: center;
-      margin-right: 0;
-      width: 100%;
-    }
+  .filter-container {
+    align-items: center;
+    justify-content: center;
+    margin-right: 0;
+    width: 100%;
+  }
 
-    .tags {
-      justify-content: center;
-    }
+  .tags {
+    justify-content: center;
+  }
 
-    .tag-label {
-      font-size: 0.9em;
-      padding: 4px 8px;
-    }
-  } 
+  .tag-label {
+    font-size: 0.9em;
+    padding: 4px 8px;
+  }
+}
