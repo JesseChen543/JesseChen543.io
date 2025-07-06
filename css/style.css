@@ -144,6 +144,9 @@ nav {
 
 /* Nav link styles moved to the top of the file */
 
+/* Embedded website styles moved to embedded-projects.css */
+/* This section intentionally left empty to avoid style conflicts */
+
 /* Portfolio nav - general first */
 #portfolio-nav {
   background-color: #4a4a4a;
@@ -315,19 +318,26 @@ footer {
 
 /* These selectors were moved to resolve specificity issues */
 
-/* Post embedded site styles */
-.post .embedded-site {
-  overflow-y: hidden;
+/* Post embedded site styles - managed by iframe-scaler.js */
+.post .embedded-site,
+.post .wingwatch-container {
   width: 100%;
   max-width: 800px;
-  aspect-ratio: 16 / 9; /* This gives a slightly taller aspect ratio */
   margin: 1rem auto;
+  height: 450px; /* Fixed height for regular posts */
+  overflow: hidden; /* Ensure the iframe respects container boundaries */
+  position: relative; /* For proper iframe positioning */
 }
 
-.post .embedded-site iframe {
-  width: 100%;
-  height: 100%;
+/* Regular post iframe styling */
+.post .embedded-site iframe,
+.post .wingwatch-container iframe {
+  width: 100%; /* Full width to avoid horizontal scrollbar */
+  height: 100%; /* Fill the container */
   border: none;
+  display: block; /* Removes any potential inline spacing */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  overflow-y: auto; /* Enable vertical scrollbar when needed */
 }
 
 /* More specific post styles */
@@ -393,22 +403,18 @@ footer {
   display: block; /* Removes any potential inline spacing */
 }
 
-/* Featured post embedded site styles */
-
 /* Adjust the embedded site and image styles */
 .post.featured .embedded-site,
+.post.featured .wingwatch-container,
 .post.featured .image.main {
   width: 100%;
-  max-width: 100%;
-  margin: 1rem auto;
+  max-width: 1000px;
+  margin: 1.5rem auto;
 }
 
-.post.featured .embedded-site:hover {
-  transform: scale(1.02); /* Slightly enlarge on hover */
-  transition: transform 0.3s ease;
-}
+/* Hover effect is now handled in embedded-projects.css for consistency */
 
-.post.featured .embedded-site iframe,
+/* Image styles - iframe styles are handled by iframe-scaler.js */
 .post.featured .image.main img {
   width: 100%;
   height: auto;
