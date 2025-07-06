@@ -4,6 +4,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Store conversation history
+    let conversationHistory = [];
     // Create chatbot icon
     const chatbotIcon = document.createElement('div');
     chatbotIcon.id = 'chatbot-icon';
@@ -95,6 +97,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add user command to output
         addToTerminal(`<span class="terminal-prompt">jesse@portfolio:~$</span> ${command}`);
         
+        // Add user message to conversation history
+        conversationHistory.push({ role: 'user', content: command });
+        
+        // Keep history to a reasonable length (last 6 messages)
+        if (conversationHistory.length > 10) {
+            conversationHistory = conversationHistory.slice(-10);
+        }
+        
         // Process commands
         let response;
         
@@ -158,17 +168,41 @@ document.addEventListener('DOMContentLoaded', function() {
         const loadingId = showLoading();
         
         try {
-            // Call the OpenAI API via our serverless function
+            // Call chat API
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ message: command })
+                body: JSON.stringify({ 
+                    message: command,
+                    history: conversationHistory.slice(0, -1) // Send previous messages (excluding current)
+                })
             });
             
+            // Get detailed error information if available
             if (!response.ok) {
-                throw new Error('API request failed');
+                const errorText = await response.text();
+                console.error('API error response:', errorText);
+                
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch (e) {
+                    errorData = { error: 'Unknown error', details: errorText };
+                }
+                
+                // Check if this is a rate limit error (HTTP 429)
+                if (response.status === 429 && errorData && (errorData.friendlyMessage || errorData.error)) {
+                    hideLoading(loadingId);
+                    
+                    // Use the friendly message or error message
+                    const rateLimitMessage = errorData.friendlyMessage || errorData.error;
+                    addToTerminal(`<span class="terminal-ai-response terminal-error">⚠️ ${rateLimitMessage}</span>`, true);
+                    return; // Don't throw, we've handled it
+                }
+                
+                throw new Error(`API request failed: ${errorData.error || 'Unknown error'}`);
             }
             
             const data = await response.json();
@@ -176,6 +210,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Display the AI response
             addToTerminal(`<span class="terminal-ai-response">${data.response}</span>`, true);
+            
+            // Add AI response to conversation history
+            conversationHistory.push({ role: 'assistant', content: data.response });
         } catch (error) {
             console.error('Error calling AI service:', error);
             hideLoading(loadingId);

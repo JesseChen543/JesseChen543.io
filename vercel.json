@@ -5,8 +5,5 @@
       "src": "/api/chat",
       "dest": "/api/chat.js"
     }
-  ],
-  "env": {
-    "OPENAI_API_KEY": "@openai_api_key"
-  }
+  ]
 }
