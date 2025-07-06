@@ -63,12 +63,37 @@ nav {
   margin-right: 1rem;
 }
 
-.icons.alt a {
-  color: #fff;
-  font-size: 1.5rem;
+/* Link styles - ordered by specificity from lowest to highest */
+.post h2 a {
+  text-decoration: none;
+  color: inherit; /* Keep color consistent with other headings */
 }
 
-/* Link styles - ordered by specificity from lowest to highest */
+.post h2 a:hover {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.posts article h2 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.posts article h2 a:hover {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.post.featured h2 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.post.featured h2 a:hover {
+  color: #007bff;
+  text-decoration: none;
+}
+
 .icons.alt a {
   color: #fff;
   font-size: 1.5rem;
@@ -103,37 +128,6 @@ nav {
 #portfolio-nav a.active {
   background-color: #fff;
   color: #4a4a4a;
-}
-
-/* Post title links */
-.post h2 a {
-  text-decoration: none;
-  color: inherit; /* Keep color consistent with other headings */
-}
-
-.post h2 a:hover {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.posts article h2 a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.posts article h2 a:hover {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.post.featured h2 a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.post.featured h2 a:hover {
-  color: #007bff;
-  text-decoration: none;
 }
 
 /* Menu styles - general first, then ids */
@@ -301,13 +295,9 @@ footer {
   border: 1px solid #ddd;
   transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
 }
-
-
-
 .post:hover {
   box-shadow: 0 5px 15px rgb(0 0 0 / 20%);
 }
-
 .post header {
   margin-bottom: 1rem;
 }
@@ -402,17 +392,17 @@ footer {
 }
 
 /* Featured post embedded site styles */
-.post.featured .embedded-site:hover {
-  transform: scale(1.02); /* Slightly enlarge on hover */
-  transition: transform 0.3s ease;
-}
-
 /* Adjust the embedded site and image styles */
 .post.featured .embedded-site,
 .post.featured .image.main {
   width: 100%;
   max-width: 100%;
   margin: 1rem auto;
+}
+
+.post.featured .embedded-site:hover {
+  transform: scale(1.02); /* Slightly enlarge on hover */
+  transition: transform 0.3s ease;
 }
 
 .post.featured .embedded-site iframe,
@@ -440,8 +430,6 @@ footer {
   box-shadow: 0 5px 15px rgb(0 0 0 / 20%);
 }
 
-
-
 .posts article .button {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -455,8 +443,6 @@ footer {
 .posts article .button:hover {
   background-color: #0056b3;
 }
-
-
 
 /* Footer styles */
 #footer {
