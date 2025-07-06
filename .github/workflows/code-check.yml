@@ -25,9 +25,7 @@ jobs:
           VALIDATE_HTML: true
           VALIDATE_CSS: true
           VALIDATE_JSON: true
-          # Disable linters for languages you don't use
-          VALIDATE_PYTHON: false
-          VALIDATE_RUBY: false
-          VALIDATE_PHP: false
+          # Exclude assets directory from linting
+          FILTER_REGEX_EXCLUDE: .*assets/.*
           # Adjust error level to prevent pipeline failure on warnings
           ERROR_ON_MISSING_EXEC_BIT: false

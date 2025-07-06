@@ -6,240 +6,241 @@
 
 /* Chatbot Icon - Sticky at bottom right */
 #chatbot-icon {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #6e8efb, #a777e3); /* Gradient matching portfolio style */
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 24px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-    z-index: 9998;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #6e8efb, #a777e3); /* Gradient matching portfolio style */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  box-shadow: 0 4px 15px rgb(0 0 0 / 15%);
+  cursor: pointer;
+  z-index: 9998;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 #chatbot-icon:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 20%);
 }
 
 /* Terminal Container */
 #terminal-container {
-    position: fixed;
-    bottom: 100px;
-    right: 30px;
-    width: 400px;
-    height: 500px;
-    background-color: rgba(30, 30, 30, 0.95);
-    border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    z-index: 9999;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-family: 'Courier New', monospace;
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 400px;
+  height: 500px;
+  background-color: rgb(30 30 30 / 95%);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgb(0 0 0 / 30%);
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-family: "Courier New", monospace;
 }
 
 #terminal-container.hidden {
-    transform: translateY(20px);
-    opacity: 0;
-    pointer-events: none;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
 }
 
 #terminal-container.minimized {
-    height: 38px;
-    overflow: hidden;
+  height: 38px;
+  overflow: hidden;
 }
 
 #terminal-container.maximized {
-    width: 80%;
-    height: 80%;
-    bottom: 10%;
-    right: 10%;
-    transition: all 0.3s ease;
+  width: 80%;
+  height: 80%;
+  bottom: 10%;
+  right: 10%;
+  transition: all 0.3s ease;
 }
 
 /* Terminal Header */
 .terminal-header {
-    height: 38px;
-    background: linear-gradient(90deg, #434343, #2c2c2c);
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-    cursor: move;
-    user-select: none;
+  height: 38px;
+  background: linear-gradient(90deg, #434343, #2c2c2c);
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  cursor: move;
+  user-select: none;
 }
 
 .terminal-buttons {
-    display: flex;
-    gap: 8px;
+  display: flex;
+  gap: 8px;
 }
 
 .terminal-button {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    display: inline-block;
-    cursor: pointer;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
 }
 
 .terminal-button.close {
-    background-color: #ff5f57;
+  background-color: #ff5f57;
 }
 
 .terminal-button.minimize {
-    background-color: #ffbd2e;
+  background-color: #ffbd2e;
 }
 
 .terminal-button.maximize {
-    background-color: #28c940;
+  background-color: #28c940;
 }
 
 .terminal-title {
-    margin-left: 20px;
-    color: #ddd;
-    font-size: 14px;
-    font-weight: bold;
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+  margin-left: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  background-clip: text;
+  color: transparent;
 }
 
 /* Terminal Body */
 .terminal-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding: 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 15px;
 }
 
 .terminal-output {
-    flex: 1;
-    overflow-y: auto;
-    margin-bottom: 15px;
-    color: #e0e0e0;
-    line-height: 1.5;
-    font-size: 14px;
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  color: #e0e0e0;
+  line-height: 1.5;
+  font-size: 14px;
 }
 
 .terminal-output p {
-    margin: 8px 0;
-    white-space: pre-wrap;
-    word-break: break-word;
+  margin: 8px 0;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .terminal-prompt {
-    color: #6e8efb; /* Match gradient start color */
-    font-weight: bold;
-    padding-right: 8px;
+  color: #6e8efb; /* Match gradient start color */
+  font-weight: bold;
+  padding-right: 8px;
 }
 
 .terminal-input-line {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 #terminal-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: #e0e0e0;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    padding: 0 0 0 8px;
-    caret-color: #6e8efb;
-    outline: none;
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  padding: 0 0 0 8px;
+  caret-color: #6e8efb;
+  outline: none;
 }
 
 /* Special styling for terminal responses */
 .typing-animation {
-    overflow: hidden;
-    border-right: 2px solid #6e8efb;
-    white-space: nowrap;
-    animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
-    display: inline-block;
+  overflow: hidden;
+  border-right: 2px solid #6e8efb;
+  white-space: nowrap;
+  animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+  display: inline-block;
 }
 
 @keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
+  0% { width: 0; }
+  100% { width: 100%; }
 }
 
 @keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: #6e8efb }
+  0%,
+  100% { border-color: transparent; }
+  50% { border-color: #6e8efb; }
 }
 
 /* Loading animation */
 .loading-dots span {
-    animation: loading 1.4s infinite;
-    display: inline-block;
-    opacity: 0;
+  animation: loading 1.4s infinite;
+  display: inline-block;
+  opacity: 0;
 }
 
 .loading-dots span:nth-child(2) {
-    animation-delay: 0.2s;
+  animation-delay: 0.2s;
 }
 
 .loading-dots span:nth-child(3) {
-    animation-delay: 0.4s;
+  animation-delay: 0.4s;
 }
 
 @keyframes loading {
-    0% { opacity: 0; }
-    50% { opacity: 1; }
-    100% { opacity: 0; }
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* Command output styling */
 .command-help {
-    color: #a777e3;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
+  color: #a777e3;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
 }
 
 .command-list {
-    color: #6e8efb;
-    font-weight: bold;
+  color: #6e8efb;
+  font-weight: bold;
 }
 
-.skill-category, .project-item, .contact-item {
-    display: block;
-    margin-left: 15px;
-    margin-bottom: 3px;
+.skill-category,
+.project-item,
+.contact-item {
+  display: block;
+  margin-left: 15px;
+  margin-bottom: 3px;
 }
 
 .skill-category {
-    color: #ffbd2e;
+  color: #ffbd2e;
 }
 
 .terminal-ai-response {
-    color: #28c940;
-    display: block;
-    animation: fade-in 0.5s ease;
+  color: #28c940;
+  display: block;
+  animation: fade-in 0.5s ease;
 }
 
 @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {
-    #terminal-container {
-        width: calc(100% - 40px);
-        height: 400px;
-        bottom: 90px;
-        right: 20px;
-    }
+  #terminal-container {
+    width: calc(100% - 40px);
+    height: 400px;
+    bottom: 90px;
+    right: 20px;
+  }
 }

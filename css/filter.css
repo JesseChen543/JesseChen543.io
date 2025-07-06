@@ -1,0 +1,90 @@
+/* Filter Component Styles */
+
+/* Tags container */
+.tags {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* Tag button styles */
+.tag-button {
+  background-color: #0ea800;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s ease;
+  margin-top: 8px;
+}
+
+.tag-button:hover {
+  background-color: #0056b3;
+}
+
+/* Filter container */
+.filter-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-right: 20px;
+  top: 0;
+  z-index: 1000;
+  padding: 10px 0;
+}
+
+.filter-container label {
+  margin-right: 5px;
+  color: #fff;
+}
+
+.filter-container select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* Tag labels */
+.tag-label {
+  display: inline-block;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 5px;
+  background-color: #30f100; /* Light background for visibility */
+  color: #333; /* Text color */
+  cursor: default; /* Change cursor to default to indicate it's not clickable */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .filter-container select {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 600px) {
+  .filter-container {
+    align-items: center;
+    justify-content: center;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .tags {
+    justify-content: center;
+  }
+
+  .tag-label {
+    font-size: 0.9em;
+    padding: 4px 8px;
+  }
+}

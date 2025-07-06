@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
@@ -29,10 +29,8 @@ jobs:
           VALIDATE_HTML: true
           VALIDATE_CSS: true
           VALIDATE_JSON: true
-          # Disable linters for languages you don't use
-          VALIDATE_PYTHON: false
-          VALIDATE_RUBY: false
-          VALIDATE_PHP: false
+          # Exclude assets directory and Git folder from linting
+          FILTER_REGEX_EXCLUDE: (.*assets/.*|.*Git/.*)
           # Adjust error level to prevent pipeline failure on warnings
           ERROR_ON_MISSING_EXEC_BIT: false
 
