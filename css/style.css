@@ -64,19 +64,9 @@ nav {
 }
 
 /* Link styles - ordered by specificity from lowest to highest */
-.icons.alt a {
-  color: #fff;
-  font-size: 1.5rem;
-}
-
 .post h2 a {
   text-decoration: none;
   color: inherit; /* Keep color consistent with other headings */
-}
-
-.post h2 a:hover {
-  color: #007bff;
-  text-decoration: none;
 }
 
 .posts article h2 a {
@@ -84,14 +74,24 @@ nav {
   color: inherit;
 }
 
-.posts article h2 a:hover {
+.post.featured h2 a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.icons.alt a {
+  color: #fff;
+  font-size: 1.5rem;
+}
+
+.post h2 a:hover {
   color: #007bff;
   text-decoration: none;
 }
 
-.post.featured h2 a {
+.posts article h2 a:hover {
+  color: #007bff;
   text-decoration: none;
-  color: inherit;
 }
 
 .post.featured h2 a:hover {
@@ -393,8 +393,8 @@ footer {
   display: block; /* Removes any potential inline spacing */
 }
 
-
 /* Featured post embedded site styles */
+
 /* Adjust the embedded site and image styles */
 .post.featured .embedded-site,
 .post.featured .image.main {
