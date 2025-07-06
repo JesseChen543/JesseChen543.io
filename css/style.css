@@ -64,6 +64,11 @@ nav {
 }
 
 /* Link styles - ordered by specificity from lowest to highest */
+.icons.alt a {
+  color: #fff;
+  font-size: 1.5rem;
+}
+
 .post h2 a {
   text-decoration: none;
   color: inherit; /* Keep color consistent with other headings */
@@ -92,11 +97,6 @@ nav {
 .post.featured h2 a:hover {
   color: #007bff;
   text-decoration: none;
-}
-
-.icons.alt a {
-  color: #fff;
-  font-size: 1.5rem;
 }
 
 #nav-menu a {
@@ -295,9 +295,11 @@ footer {
   border: 1px solid #ddd;
   transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
 }
+
 .post:hover {
   box-shadow: 0 5px 15px rgb(0 0 0 / 20%);
 }
+
 .post header {
   margin-bottom: 1rem;
 }
@@ -390,6 +392,7 @@ footer {
   border: none;
   display: block; /* Removes any potential inline spacing */
 }
+
 
 /* Featured post embedded site styles */
 /* Adjust the embedded site and image styles */
