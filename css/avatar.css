@@ -38,7 +38,7 @@
   z-index: 2;
   border: 5px solid white;
   transition: transform 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 10%);
+  box-shadow: 0 5px 15px rgb(0 0 0 / 10%);
   background-color: white;
 }
 
