@@ -5,8 +5,10 @@
   // This will be initialized once the script loads
   const initEmailJS = () => {
     if (typeof emailjs !== 'undefined') {
-      // Replace with your actual EmailJS user ID when you create an account
-      emailjs.init("YsR_1Ave_sEtBkq74");
+      // Updated initialization method for EmailJS v3
+      emailjs.init({
+        publicKey: "Y88cQ4BFSgiHhYzpt",
+      });
     } else {
       console.error("EmailJS library not loaded");
     }
@@ -79,24 +81,70 @@
     const subject = document.getElementById('subject').value;
     const message = document.getElementById('message').value;
     
-    // Prepare template parameters for EmailJS
-    const templateParams = {
-      from_name: name,
-      from_email: email,
-      subject: subject,
+    // Debug form input values
+    console.log('Form data collected:', { 
+      name, 
+      email, 
+      subject, 
+      message 
+    });
+    
+    // 1. Auto-reply parameters - matches your template shown in the screenshot
+    const autoReplyParams = {
+      to_name: name, // Person's name for greeting in the template
+      from_name: "Jesse Chen",
       message: message,
-      to_email: 'jessechen959@gmail.com'
+      email: email, // Recipient email (the person who filled out the form)
+      subject: subject // Adding subject as it might be needed by the template
     };
     
-    // Send the email using EmailJS
-    emailjs.send('service_q2r2twm', 'template_contact_form', templateParams)
+    // Debug auto-reply parameters
+    console.log('Auto-reply parameters:', JSON.stringify(autoReplyParams, null, 2));
+    
+    // 2. Notification parameters - sends you an email with their contact info
+    // Using the same template but with your email as recipient
+    const notificationParams = {
+      to_name: "Jesse", 
+      from_name: "Portfolio Contact Form",
+      email: "jessechen959@gmail.com", // YOUR email address as recipient
+      subject: `[Portfolio Contact] ${subject}`,
+      message: `Hi Jesse,\n\nSomeone sent you an email via https://jesse-chen543-io.vercel.app/\n\nSender's Name: ${name}\nSender's Email: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`,
+      reply_to: email // So you can easily reply to them
+    };
+    
+    // Debug notification parameters
+    console.log('Notification parameters:', JSON.stringify(notificationParams, null, 2));
+    
+    console.log('Sending auto-reply email to:', email);
+    // First send the auto-reply
+    emailjs.send("service_q2r2twm", "template_etb3h1t", autoReplyParams)
       .then((response) => {
-        console.log('Email sent successfully!', response);
+        console.log('Auto-reply sent successfully!', response);
+        console.log('Auto-reply status:', response.status);
+        console.log('Auto-reply text:', response.text);
+        
+        // Log which template parameters might be missing
+        console.log('Checking your EmailJS template parameters:');
+        console.log('- to_name present:', autoReplyParams.hasOwnProperty('to_name'));
+        console.log('- from_name present:', autoReplyParams.hasOwnProperty('from_name'));
+        console.log('- email present:', autoReplyParams.hasOwnProperty('email'));
+        console.log('- message present:', autoReplyParams.hasOwnProperty('message'));
+        console.log('- subject present:', autoReplyParams.hasOwnProperty('subject'));
+        
+        // Then send you the notification - without using the template
+        // service_q2r2twm is your EmailJS service ID
+        return emailjs.send("service_q2r2twm", "template_150s0n3", notificationParams);
+      })
+      .then((response) => {
+        console.log('Notification email sent to Jesse successfully!', response);
+        console.log('Notification status:', response.status);
+        console.log('Notification text:', response.text);
         showStatus('Your message has been sent. Thank you!', 'success');
         clearForm();
       })
       .catch((error) => {
         console.error('Error sending email:', error);
+        console.error('Error details:', error.text || 'No additional error details');
         showStatus('Failed to send message. Please try again later.', 'error');
       });
   }
