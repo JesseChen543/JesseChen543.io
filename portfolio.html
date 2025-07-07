@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/embedded-projects.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/terminal-chatbot.css">
+    <link rel="stylesheet" href="css/contact.css">
 </head>
 <body>
     <div id="dynamic-header"></div>
@@ -24,6 +25,7 @@
                 <div class="nav-content">
                     <ul id="nav-menu">
                         <li><a href="#projects">My Projects</a></li>
+                        <li><a href="#contact">Contact Me</a></li>
                         <li><a href="data/Jesse_Resume.docx" download="Jesse_Chen_Resume.docx"><i class="fas fa-file-download"></i> Download Resume</a></li>
                         <!-- Add other navigation links here -->
                     </ul>
@@ -59,6 +61,40 @@
             <!-- Regular Posts -->
             <section class="posts" id="regular-posts"></section>
         </section>
+        
+        <!-- Contact Section -->
+        <section id="contact">
+            <div class="title-container">
+                <h2>Contact Me</h2>
+            </div>
+            <p>Have a question or want to work together? Fill out the form below and I'll get back to you as soon as possible.</p>
+            
+            <form id="contact-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                
+                <div id="form-status"></div>
+                
+                <button type="submit" class="button">Send Message</button>
+            </form>
+        </section>
 
     </div>  
     <script src="js/dynamic_heading.js"></script>
@@ -67,5 +103,8 @@
     <script src="js/terminal-chatbot.js"></script>
     <!-- iframe Scaler for Embedded Sites -->
     <script src="js/iframe-scaler.js"></script>
+    <!-- Contact Form Script -->
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script src="js/contact.js"></script>
 </body>
 </html>
