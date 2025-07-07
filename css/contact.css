@@ -180,36 +180,4 @@
   }
 }
 
-/* Header styling to match user's preference */
-header h1 {
-  background: linear-gradient(45deg, #0070f3, #00c9ff);
-  background-clip: text;
-  color: transparent;
-  font-size: 2.5rem;
-  font-weight: bold;
-  text-align: center;
-  padding: 1rem 0;
-  position: relative;
-  transition: transform 0.3s ease;
-}
-
-header h1:hover {
-  transform: scale(1.05);
-}
-
-header h1::after {
-  content: "";
-  position: absolute;
-  left: 25%;
-  bottom: 5px;
-  height: 3px;
-  width: 50%;
-  background: linear-gradient(45deg, #0070f3, #00c9ff);
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-  transform-origin: center;
-}
-
-header h1:hover::after {
-  transform: scaleX(1);
-}
+/* Header styling moved to about.css */
