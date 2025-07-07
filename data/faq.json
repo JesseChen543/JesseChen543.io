@@ -4,7 +4,7 @@
       "id": 1,
       "question": "Tell me about yourself. What's your background and what led you to pursue this field?",
       "answer": "BACKGROUND: Recent IT graduate.\nINTERESTS: Solving complex problems, creating effective solutions.\nCAREER GOALS: Professional growth in technology, specifically in web development and data analysis.\nMOTIVATION: I find genuine satisfaction in working through technical challenges and implementing solutions that make a difference.",
-      "skills": ["IT", "web development", "data analysis", "problem solving", "technical challenges", "solutions", "background", "career goals"]
+      "skills": ["web development", "data analysis", "problem solving", "technical challenges", "solutions", "background", "career goals"]
     },
     {
       "id": 2,
