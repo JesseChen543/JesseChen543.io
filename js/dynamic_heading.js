@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const headerHtml = `
             <header class="hero">
                 <div class="hero-content">
+                    <div class="avatar-container">
+                        <img src="images/avatar.jpg" alt="Jesse Chen" class="avatar-image">
+                    </div>
                     <h1>${title}</h1>
                     <p>${description}</p>
                     <div class="scroll-down">

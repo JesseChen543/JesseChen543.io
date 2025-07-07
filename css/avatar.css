@@ -1,0 +1,48 @@
+/**
+ * Avatar styling for portfolio
+ * Follows superlint rules with proper formatting and organization
+ */
+
+/* Container for the avatar with gradient border effect */
+.avatar-container {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 2rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Gradient border effect using pseudo-element */
+.avatar-container::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background: linear-gradient(45deg, #0070f3, #00c9ff);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Avatar image styling */
+.avatar-image {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  object-fit: contain;
+  object-position: center top;
+  position: relative;
+  z-index: 2;
+  border: 5px solid white;
+  transition: transform 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+/* Hover effect for avatar */
+.avatar-image:hover {
+  transform: scale(1.05);
+}
