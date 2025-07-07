@@ -4,18 +4,18 @@
   padding: 4rem 2rem;
   position: relative;
   margin-top: 6rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgb(0 0 0 / 10%);
 }
 
 /* Add separator and visual distinction between sections */
 #contact::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -3rem;
   left: 0;
   right: 0;
   height: 3rem;
-  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.05));
+  background: linear-gradient(to bottom, transparent, rgb(0 0 0 / 5%));
   pointer-events: none;
 }
 
@@ -26,7 +26,7 @@
   padding: 3.5rem;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 15px rgb(0 0 0 / 10%);
 }
 
 /* Title container for better centering */
@@ -42,9 +42,8 @@
   position: relative;
   display: inline-block;
   background: linear-gradient(45deg, #0070f3, #00c9ff);
-  -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: transparent;
   padding-bottom: 0.5rem;
   border-bottom: none;
   transform-origin: center;
@@ -53,7 +52,7 @@
 
 /* Dynamic underline effect */
 #contact h2::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: 0;
@@ -117,7 +116,7 @@
 .form-group textarea:focus {
   outline: none;
   border-color: #0070f3;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+  box-shadow: 0 0 0 3px rgb(0 123 255 / 20%);
   background-color: #fff;
 }
 
@@ -133,18 +132,18 @@
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
 }
 
 #contact button:hover {
   background: linear-gradient(45deg, #0056b3, #00a2d6);
   transform: translateY(-3px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 8px rgb(0 0 0 / 15%);
 }
 
 #contact button:active {
   transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
 /* Form status messages */
@@ -184,9 +183,8 @@
 /* Header styling to match user's preference */
 header h1 {
   background: linear-gradient(45deg, #0070f3, #00c9ff);
-  -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: transparent;
   font-size: 2.5rem;
   font-weight: bold;
   text-align: center;
@@ -200,7 +198,7 @@ header h1:hover {
 }
 
 header h1::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 25%;
   bottom: 5px;
