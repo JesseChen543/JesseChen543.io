@@ -2,7 +2,7 @@
 .hero-content h1 {
   font-size: 4em;
   font-weight: 700;
-  background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+  background: linear-gradient(45deg, #0070f3, #00c9ff);
   background-clip: text;
   color: transparent;
   margin-bottom: 20px;
@@ -16,28 +16,27 @@
 }
 
 .hero-content h1:hover {
-  background: linear-gradient(45deg, #fc466b 0%, #3f5efb 100%);
-  background-clip: text;
-  color: transparent;
   transform: scale(1.05);
-  text-shadow: 0 0 15px rgb(106 17 203 / 50%);
+  text-shadow: 0 0 15px rgb(0 112 243 / 30%);
   letter-spacing: 3px;
 }
 
 .hero-content h1::after {
   content: "";
   position: absolute;
-  width: 0;
-  height: 3px;
+  left: 0;
+  right: 0;
   bottom: -5px;
-  left: 50%;
-  background: linear-gradient(45deg, #fc466b 0%, #3f5efb 100%);
-  transition: all 0.5s ease;
-  transform: translateX(-50%);
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(45deg, #0070f3, #00c9ff);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  transform-origin: left;
 }
 
 .hero-content h1:hover::after {
-  width: 80%;
+  transform: scaleX(1);
 }
 
 @keyframes fade-in {

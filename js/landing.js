@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Redirect to home page after a short delay
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = 'portfolio.html';
             }, 300); // 300ms delay for visual feedback
         });
     });
