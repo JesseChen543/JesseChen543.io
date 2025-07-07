@@ -3,69 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Permissions-Policy" content="accelerometer=*, gyroscope=*">
-    <title>Jesse|Web Developer</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/filter.css">
-    <link rel="stylesheet" href="css/about.css">
-    <link rel="stylesheet" href="css/multi-select.css">
-    <link rel="stylesheet" href="css/embedded-projects.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="css/terminal-chatbot.css">
+    <title>Welcome to My Portfolio</title>
+    <!-- Link to external CSS file for styling -->
+    <link rel="stylesheet" href="css/landing.css">
 </head>
 <body>
-    <div id="dynamic-header"></div>
+    <!-- Header section -->
+    <header>
+        <h1>My Portfolio</h1>
+    </header>
 
-    <!-- Main -->
-    <div id="main">
-        <!-- Navigation -->
-        <header>
-            <nav id="portfolio-nav">
-                <div class="nav-content">
-                    <ul id="nav-menu">
-                        <li><a href="#projects">My Projects</a></li>
-                        <li><a href="data/Jesse_Resume.docx" download="Jesse_Chen_Resume.docx"><i class="fas fa-file-download"></i> Download Resume</a></li>
-                        <!-- Add other navigation links here -->
-                    </ul>
-                    <div class="filter-container">
-                        <label for="software-filter">Software:</label>
-                        <select id="software-filter">
-                            <option value="">All</option>
-                            <!-- Options will be populated dynamically -->
-                        </select>
+    <!-- Main content area -->
+    <main>
+        <!-- Interest selector section -->
+        <div class="interest-selector">
+            <h2>Choose a topic</h2>
+            <p>This helps me showcase projects you'll enjoy most.</p>
 
-                        <label for="skills-filter">Skills:</label>
-                        <select id="skills-filter">
-                            <option value="">All</option>
-                            <!-- Options will be populated dynamically -->
-                        </select>
-
-                        <label for="type-filter">Type:</label>
-                        <select id="type-filter">
-                            <option value="">All</option>
-                            <!-- Options will be populated dynamically -->
-                        </select>
-                    </div>
+            <!-- Topics container -->
+            <div class="topics">
+                <!-- Data Analyst Project topic -->
+                <div class="topic" data-topic="data-analyst">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71" alt="Graphs of performance analytics on a laptop screen">
+                    <h3>Data Analyst Project</h3>
                 </div>
-            </nav>
-        </header>
-        <!-- Projects Section -->
-        <section id="projects">
-            <h2>My Projects</h2>
+                <!-- Image citation: Stephen Dawson on Unsplash (https://unsplash.com/photos/qwtCeJ5cLYs) -->
 
-            <!-- Featured Post -->
-            <div id="featured-post"></div>
-
-            <!-- Regular Posts -->
-            <section class="posts" id="regular-posts"></section>
-        </section>
-
-    </div>  
-    <script src="js/dynamic_heading.js"></script>
-    <script src="js/project_display.js"></script>
-    <!-- Terminal Chatbot -->
-    <script src="js/terminal-chatbot.js"></script>
-    <!-- iframe Scaler for Embedded Sites -->
-    <script src="js/iframe-scaler.js"></script>
+                <div class="topic" data-topic="web-design">
+                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&q=80&w=400" alt="Web Design icon">
+                    <h3>Web Design Project</h3>
+                </div>
+                <!-- Image citation: Hal Gatewood on Unsplash (https://unsplash.com/photos/tZc3vjPCk-Q) -->
+            </div>
+        </div>
+    </main>
+    <script src="js/landing.js"></script>
 </body>
 </html>
