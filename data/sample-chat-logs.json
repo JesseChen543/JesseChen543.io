@@ -1,0 +1,25 @@
+{
+  "logs": [
+    {
+      "userMessage": "Tell me about your skills",
+      "aiResponse": "Jesse is skilled in JavaScript, React, Node.js, and MongoDB. He also has experience with data analysis using Python, and machine learning.",
+      "anonymizedIp": "dXNlcjE=",
+      "page": "/",
+      "createdAt": "2025-07-08T15:08:13.413Z"
+    },
+    {
+      "userMessage": "What projects have you worked on?",
+      "aiResponse": "Jesse has worked on several projects including: Wingwatch (bird watching app), Real Estate Analysis tool, GamerverseHub (gaming community platform), and Heart Attack Analysis using machine learning.",
+      "anonymizedIp": "dXNlcjI=",
+      "page": "/projects",
+      "createdAt": "2025-07-07T15:08:13.413Z"
+    },
+    {
+      "userMessage": "How can I contact you?",
+      "aiResponse": "You can contact Jesse via email at jesse.chen@example.com or through the contact form on this website.",
+      "anonymizedIp": "dXNlcjE=",
+      "page": "/contact",
+      "createdAt": "2025-07-07T15:08:13.413Z"
+    }
+  ]
+}
