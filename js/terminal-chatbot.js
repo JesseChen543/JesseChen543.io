@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="terminal-body">
             <div class="terminal-output" id="terminal-output">
                 <p><span class="terminal-prompt">jesse@portfolio:~$</span> <span class="typing-animation">Welcome to Jesse Chen's interactive terminal.</span></p>
-                <p><span class="terminal-prompt">jesse@portfolio:~$</span> <span class="typing-animation">Type 'help' for available commands or ask me anything about Jesse's projects and skills.</span></p>
+                <p><span class="terminal-prompt">jesse@portfolio:~$</span> <span class="multiline-message">Feel free to ask me questions about Jesse's<br>background, skills, or projects.<br>I'm here to help you get to know him better!</span></p>
             </div>
             <div class="terminal-input-line">
                 <span class="terminal-prompt">jesse@portfolio:~$</span>
@@ -238,6 +238,30 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add AI response to conversation history
             conversationHistory.push({ role: 'assistant', content: data.response });
+            
+            // Save conversation to database
+            try {
+                await fetch('/api/save-chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userMessage: command,
+                        aiResponse: data.response,
+                        userInfo: {
+                            referrer: document.referrer,
+                            page: window.location.pathname,
+                            timestamp: new Date().toISOString()
+                        }
+                    })
+                });
+                console.log('Chat conversation saved to database');
+            } catch (saveError) {
+                console.error('Error saving conversation:', saveError);
+                // Continue even if saving fails - this is a non-critical operation
+            }
+            
         } catch (error) {
             console.error('Error calling AI service:', error);
             hideLoading(loadingId);

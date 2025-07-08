@@ -167,6 +167,14 @@
   display: inline-block;
 }
 
+/* Special class for multiline welcome messages */
+.multiline-message {
+  overflow: visible;
+  white-space: pre-wrap;
+  animation: fade-in 1.5s ease;
+  display: inline-block;
+}
+
 @keyframes typing {
   0% { width: 0; }
   100% { width: 100%; }
