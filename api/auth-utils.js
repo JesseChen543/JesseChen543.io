@@ -3,6 +3,9 @@ const jwt = require('jsonwebtoken');
 
 // Secret key for JWT signing - should be in environment variables
 const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  throw new Error('Environment variable JWT_SECRET is required but not defined.');
+}
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h'; // Default 24 hours
 
 /**
