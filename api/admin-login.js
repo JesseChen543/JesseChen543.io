@@ -28,7 +28,6 @@ export default async function handler(req, res) {
     const token = generateToken({
       username,
       role: 'admin',
-      // Add any additional claims you want in the token
     });
 
     // Return success response with token
