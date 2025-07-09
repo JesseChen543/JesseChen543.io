@@ -188,90 +188,74 @@ document.addEventListener('DOMContentLoaded', function() {
         addToTerminal(response, true);
     }
     
-    async function simulateTypingResponse(command) {
-        // Show thinking animation
-        const loadingId = showLoading();
-        
+    // terminal-chatbot.js (partial update in simulateTypingResponse)
+    async function saveChatWithRetry(data, maxRetries = 3) {
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
-            // Call chat API
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ 
-                    message: command,
-                    history: conversationHistory.slice(0, -1) // Send previous messages (excluding current)
-                })
+            const response = await fetch('/api/save-chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
             });
-            
-            // Get detailed error information if available
             if (!response.ok) {
-                const errorText = await response.text();
-                console.error('API error response:', errorText);
-                
-                let errorData;
-                try {
-                    errorData = JSON.parse(errorText);
-                } catch (e) {
-                    errorData = { error: 'Unknown error', details: errorText };
-                }
-                
-                // Check if this is a rate limit error (HTTP 429)
-                if (response.status === 429 && errorData && (errorData.friendlyMessage || errorData.error)) {
-                    hideLoading(loadingId);
-                    
-                    // Use the friendly message or error message
-                    const rateLimitMessage = errorData.friendlyMessage || errorData.error;
-                    addToTerminal(`<span class="terminal-ai-response terminal-error">⚠️ ${rateLimitMessage}</span>`, true);
-                    return; // Don't throw, we've handled it
-                }
-                
-                throw new Error(`API request failed: ${errorData.error || 'Unknown error'}`);
+            const errorText = await response.text();
+            throw new Error(`Attempt ${attempt} failed: ${errorText}`);
             }
-            
-            const data = await response.json();
-            hideLoading(loadingId);
-            
-            // Display the AI response
-            addToTerminal(`<span class="terminal-ai-response">${data.response}</span>`, true);
-            
-            // Add AI response to conversation history
-            conversationHistory.push({ role: 'assistant', content: data.response });
-            
-            // Save conversation to database
-            try {
-                await fetch('/api/save-chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        userMessage: command,
-                        aiResponse: data.response,
-                        userInfo: {
-                            referrer: document.referrer,
-                            page: window.location.pathname,
-                            timestamp: new Date().toISOString()
-                        }
-                    })
-                });
-                console.log('Chat conversation saved to database');
-            } catch (saveError) {
-                console.error('Error saving conversation:', saveError);
-                // Continue even if saving fails - this is a non-critical operation
-            }
-            
+            console.log('Chat conversation saved to database');
+            return;
         } catch (error) {
-            console.error('Error calling AI service:', error);
-            hideLoading(loadingId);
-            
-            // Fallback response in case of error
-            const fallbackResponse = `I'm sorry, I'm having trouble connecting to my AI services right now. Please try again later or use commands like 'help', 'projects', or 'skills' to learn more about Jesse.`;
-            addToTerminal(`<span class="terminal-ai-response">${fallbackResponse}</span>`, true);
+            console.error(`Retry ${attempt}/${maxRetries}:`, error);
+            if (attempt === maxRetries) {
+            throw error;
+            }
+            await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
+        }
         }
     }
     
+    async function simulateTypingResponse(command) {
+        const loadingId = showLoading();
+        try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+            message: command,
+            history: conversationHistory.slice(0, -1),
+            }),
+        });
+    
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`API request failed: ${errorText}`);
+        }
+    
+        const data = await response.json();
+        hideLoading(loadingId);
+        addToTerminal(`<span class="terminal-ai-response">${data.response}</span>`, true);
+        conversationHistory.push({ role: 'assistant', content: data.response });
+    
+        await saveChatWithRetry({
+            userMessage: command,
+            aiResponse: data.response,
+            userInfo: {
+            referrer: document.referrer,
+            page: window.location.pathname,
+            timestamp: new Date().toISOString(),
+            },
+        });
+        } catch (error) {
+        console.error('Error calling AI service or saving chat:', error);
+        hideLoading(loadingId);
+        const fallbackResponse = `I'm sorry, I'm having trouble connecting to my AI services right now. Please try again later or use commands like 'help', 'projects', or 'skills' to learn more about Jesse.`;
+        addToTerminal(`<span class="terminal-ai-response">${fallbackResponse}</span>`, true);
+        }
+    }
+
     function addToTerminal(content, isResponse = false) {
         const outputContainer = document.getElementById('terminal-output');
         const newLine = document.createElement('p');

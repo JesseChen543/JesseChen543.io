@@ -1,23 +1,8 @@
-// MongoDB connection utility
+// api/mongodb.js
 const { MongoClient } = require('mongodb');
 
-// Load environment variables - for local development
-let config = {};
-try {
-  config = require('./config');
-} catch (error) {
-  console.log('Config file not found, using environment variables only');
-}
-
-// Connection URI - first check environment variables, then config file
-const uri = process.env.MONGODB_URI || (config && config.mongodb && config.mongodb.uri);
-const dbName = process.env.MONGODB_DB_NAME || (config && config.mongodb && config.mongodb.dbName) || 'portfolio';
-
-// Connection options
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
+const uri = process.env.MONGODB_URI;
+const dbName = process.env.MONGODB_DB_NAME || 'Portfolio';
 
 // Connection cache
 let cachedClient = null;
@@ -36,11 +21,13 @@ async function connectToDatabase() {
 
   // Check if URI is defined
   if (!uri) {
-    throw new Error('MongoDB URI not found in environment variables or config file');
+    throw new Error('MongoDB URI not defined in environment variable (MONGODB_URI)');
   }
 
   // Create a new MongoClient
-  const client = new MongoClient(uri, options);
+  const client = new MongoClient(uri, {
+    serverSelectionTimeoutMS: 5000, // Timeout after 5 seconds
+  });
 
   try {
     // Connect to the MongoDB server

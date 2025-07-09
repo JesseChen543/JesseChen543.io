@@ -1,16 +1,21 @@
 // Admin API to retrieve chat logs
 const { connectToDatabase } = require('./mongodb');
+const { verifyToken, extractTokenFromRequest } = require('./auth-utils');
 
-// Simple auth check - IMPROVE THIS IN PRODUCTION!
+// JWT-based authentication check for admin access
 function checkAdminAuth(req) {
-  // Get the admin token from query parameters or headers
-  const adminToken = req.query.token || req.headers['x-admin-token'];
+  // Extract the JWT token from the request
+  const token = extractTokenFromRequest(req);
   
-  // In production, use a proper authentication system and store tokens securely
-  // This is just for demonstration - replace with your own secure method
-  const validToken = process.env.ADMIN_TOKEN || 'admin-token-replace-me';
+  if (!token) {
+    return false;
+  }
   
-  return adminToken === validToken;
+  // Verify the JWT token
+  const decoded = verifyToken(token);
+  
+  // Check if token is valid and has admin role
+  return decoded && decoded.role === 'admin';
 }
 
 export default async function handler(req, res) {
