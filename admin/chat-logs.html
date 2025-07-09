@@ -182,10 +182,10 @@
         </header>
         
         <div class="auth-container" id="auth-container">
-            <h2>Authentication Required</h2>
-            <p>Please enter your admin token to access the chat logs:</p>
+            <h2>Admin Authentication</h2>
             <div>
-                <input type="password" id="admin-token" placeholder="Admin Token">
+                <input type="text" id="admin-username" placeholder="Username">
+                <input type="password" id="admin-password" placeholder="Password">
                 <button id="login-btn">Login</button>
             </div>
         </div>
@@ -239,7 +239,7 @@
     <script>
         // Global state
         const state = {
-            token: '',
+            jwt: '',
             currentPage: 1,
             totalPages: 1,
             logs: [],
@@ -250,9 +250,10 @@
         
         // DOM elements
         const authContainer = document.getElementById('auth-container');
-        const contentContainer = document.getElementById('content');
-        const adminTokenInput = document.getElementById('admin-token');
+        const usernameInput = document.getElementById('admin-username');
+        const passwordInput = document.getElementById('admin-password');
         const loginBtn = document.getElementById('login-btn');
+        const contentDiv = document.getElementById('content');
         const logsContainer = document.getElementById('logs-container');
         const paginationContainer = document.getElementById('pagination');
         const searchInput = document.getElementById('search-input');
@@ -265,10 +266,10 @@
         const todayChatsElement = document.getElementById('today-chats');
         const uniqueUsersElement = document.getElementById('unique-users');
         
-        // Check if token is already stored
-        const storedToken = localStorage.getItem('admin_token');
+        // Check if JWT is already stored
+        const storedToken = localStorage.getItem('admin_jwt');
         if (storedToken) {
-            state.token = storedToken;
+            state.jwt = storedToken;
             checkAuth();
         }
         
@@ -279,33 +280,74 @@
         filterDateBtn.addEventListener('click', filterByDate);
         
         // Login function
-        function login() {
-            const token = adminTokenInput.value.trim();
-            if (!token) return;
+        async function login() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
             
-            state.token = token;
-            localStorage.setItem('admin_token', token);
-            checkAuth();
+            if (!username || !password) {
+                alert('Please enter both username and password');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin-login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+                
+                state.jwt = data.token;
+                localStorage.setItem('admin_jwt', data.token);
+                checkAuth();
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+            }
         }
         
         // Check authentication
         function checkAuth() {
-            // Verify the token by trying to fetch logs
-            fetchLogs(1)
+            const token = state.jwt;
+            if (!token) {
+                authContainer.classList.remove('hidden');
+                contentDiv.classList.add('hidden');
+                return;
+            }
+            
+            fetch(`/api/admin-chat-logs`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
                 .then(result => {
                     if (result.success) {
                         authContainer.classList.add('hidden');
-                        contentContainer.classList.remove('hidden');
+                        contentDiv.classList.remove('hidden');
+                        fetchLogs();
                         loadStats();
                     } else {
-                        localStorage.removeItem('admin_token');
-                        alert('Invalid admin token');
+                        alert('Authentication failed: ' + (result.error || 'Invalid token'));
+                        localStorage.removeItem('admin_jwt');
+                        state.jwt = '';
+                        authContainer.classList.remove('hidden');
+                        contentDiv.classList.add('hidden');
                     }
                 })
                 .catch(error => {
-                    localStorage.removeItem('admin_token');
-                    console.error('Auth check failed:', error);
-                    alert('Authentication failed');
+                    console.error('Auth check error:', error);
+                    alert('Authentication error: ' + error.message);
+                    localStorage.removeItem('admin_jwt');
+                    state.jwt = '';
+                    authContainer.classList.remove('hidden');
+                    contentDiv.classList.add('hidden');
                 });
         }
         
@@ -314,27 +356,31 @@
             state.currentPage = page;
             logsContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading chat logs...</div>';
             
+            const params = new URLSearchParams({
+                page: page,
+                limit: 10
+            });
+            
+            // Add search query if present
+            if (state.searchQuery) {
+                params.append('query', state.searchQuery);
+            }
+            
+            // Add date filters if present
+            if (state.dateFrom) {
+                params.append('dateFrom', state.dateFrom);
+            }
+            
+            if (state.dateTo) {
+                params.append('dateTo', state.dateTo);
+            }
+            
             try {
-                // Build the query params
-                const params = new URLSearchParams({
-                    token: state.token,
-                    page,
-                    limit: 10
+                const response = await fetch(`/api/admin-chat-logs?${params.toString()}`, {
+                    headers: {
+                        'Authorization': `Bearer ${state.jwt}`
+                    }
                 });
-                
-                if (state.searchQuery) {
-                    params.append('query', state.searchQuery);
-                }
-                
-                if (state.dateFrom) {
-                    params.append('dateFrom', state.dateFrom);
-                }
-                
-                if (state.dateTo) {
-                    params.append('dateTo', state.dateTo);
-                }
-                
-                const response = await fetch(`/api/admin-chat-logs?${params.toString()}`);
                 const result = await response.json();
                 
                 if (result.success) {
@@ -440,11 +486,14 @@
         async function loadStats() {
             try {
                 const params = new URLSearchParams({
-                    token: state.token,
                     stats: true
                 });
                 
-                const response = await fetch(`/api/admin-chat-logs?${params.toString()}`);
+                const response = await fetch(`/api/admin-chat-logs?${params.toString()}`, {
+                    headers: {
+                        'Authorization': `Bearer ${state.jwt}`
+                    }
+                });
                 const result = await response.json();
                 
                 if (result.success && result.data.stats) {
