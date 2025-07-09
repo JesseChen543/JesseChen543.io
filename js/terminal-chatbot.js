@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Save conversation to database
             try {
-                await fetch('/api/save-chat', {
+                const saveResponse = await fetch('/api/save-chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -256,7 +256,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     })
                 });
-                console.log('Chat conversation saved to database');
+
+                if (saveResponse.ok) {
+                    console.log('Chat conversation saved to database');
+                } else if (saveResponse.status === 500) {
+                    console.error('Failed to save chat conversation due to internal server error.');
+                } else {
+                    console.error('Failed to save chat conversation. Status:', saveResponse.status);
+                }
             } catch (saveError) {
                 console.error('Error saving conversation:', saveError);
                 // Continue even if saving fails - this is a non-critical operation
