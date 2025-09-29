@@ -116,6 +116,45 @@ export default async function handler(req, res) {
 }
 
 /**
+ * Function to select relevant FAQs based on user query
+ */
+function selectRelevantFAQs(query, allFaqs, maxItems = 5) {
+  // Basic keyword matching - could be improved with more sophisticated NLP
+  const keywords = query.toLowerCase().split(/\W+/).filter(k => k.length > 2);
+
+  // Score each FAQ
+  const scoredFaqs = allFaqs.map(faq => {
+    const text = (faq.question + ' ' + faq.answer).toLowerCase();
+    let score = 0;
+
+    // Count keyword matches
+    keywords.forEach(keyword => {
+      if (text.includes(keyword)) {
+        score += 1;
+      }
+    });
+
+    // Always include general background info
+    if (faq.question.toLowerCase().includes('tell me about yourself') ||
+        faq.question.toLowerCase().includes('background')) {
+      score += 1;
+    }
+
+    return { faq, score };
+  });
+
+  // Sort by score and take top N
+  const selectedFaqs = scoredFaqs
+    .sort((a, b) => b.score - a.score)
+    .slice(0, maxItems)
+    .map(item => item.faq);
+
+  console.log(`Selected ${selectedFaqs.length} relevant FAQs for query: ${query}`);
+
+  return selectedFaqs;
+}
+
+/**
  * Runs the API call with the provided API key
  */
 async function runWithApiKey(apiKey, message, faqData, res, history = []) {
@@ -123,43 +162,6 @@ async function runWithApiKey(apiKey, message, faqData, res, history = []) {
     console.log('API Key found with length:', apiKey.length);
 
     // Rate limiting is already handled in the handler function
-
-    // Function to select relevant FAQs based on user query
-    function selectRelevantFAQs(query, allFaqs, maxItems = 5) {
-      // Basic keyword matching - could be improved with more sophisticated NLP
-      const keywords = query.toLowerCase().split(/\W+/).filter(k => k.length > 2);
-
-      // Score each FAQ
-      const scoredFaqs = allFaqs.map(faq => {
-        const text = (faq.question + ' ' + faq.answer).toLowerCase();
-        let score = 0;
-
-        // Count keyword matches
-        keywords.forEach(keyword => {
-          if (text.includes(keyword)) {
-            score += 1;
-          }
-        });
-
-        // Always include general background info
-        if (faq.question.toLowerCase().includes('tell me about yourself') ||
-            faq.question.toLowerCase().includes('background')) {
-          score += 1;
-        }
-
-        return { faq, score };
-      });
-
-      // Sort by score and take top N
-      const selectedFaqs = scoredFaqs
-        .sort((a, b) => b.score - a.score)
-        .slice(0, maxItems)
-        .map(item => item.faq);
-
-      console.log(`Selected ${selectedFaqs.length} relevant FAQs for query: ${query}`);
-
-      return selectedFaqs;
-    }
 
     // Select relevant FAQs instead of using all of them
     const relevantFaqs = selectRelevantFAQs(message, faqData.faqs);
