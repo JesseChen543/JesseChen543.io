@@ -170,7 +170,7 @@
 }
 
 /* Responsive styles */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   #contact {
     padding: 1.5rem;
   }

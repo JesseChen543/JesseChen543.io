@@ -265,7 +265,7 @@ footer {
   height: auto;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   header,
   main {
     margin-left: 0;
@@ -363,7 +363,7 @@ a.smooth-scroll:hover {
   height: 60px; /* Adjust this value as needed */
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   main {
     margin-left: 0;
     width: 100%;

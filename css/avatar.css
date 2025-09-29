@@ -18,10 +18,7 @@
 .avatar-container::before {
   content: "";
   position: absolute;
-  top: -5px;
-  left: -5px;
-  right: -5px;
-  bottom: -5px;
+  inset: -5px;
   background: linear-gradient(45deg, #0070f3, #00c9ff);
   border-radius: 50%;
   z-index: 1;

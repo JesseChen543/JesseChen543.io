@@ -94,7 +94,7 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .filter-container {
     flex-direction: column;
     align-items: flex-end;
@@ -108,7 +108,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (width <= 600px) {
   /* Hide the filter container completely on mobile devices */
   .filter-container {
     display: none;
