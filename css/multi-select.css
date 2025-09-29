@@ -90,7 +90,7 @@
 }
 
 /* Mobile responsiveness */
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
   .multi-select-container {
     margin: 0.3rem 0;
   }

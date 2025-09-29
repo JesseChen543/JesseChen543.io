@@ -488,7 +488,7 @@ footer {
 }
 
 /* Media queries - always at the end */
-@media (max-width: 600px) {
+@media (width <= 600px) {
   #nav-menu {
     flex-direction: column;
   }
@@ -500,7 +500,7 @@ footer {
 }
 
 /* Added media query for responsiveness on smaller screens */
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .hero h1 {
     font-size: 3.5em;
   }

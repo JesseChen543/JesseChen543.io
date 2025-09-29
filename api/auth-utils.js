@@ -44,17 +44,17 @@ function extractTokenFromRequest(req) {
   if (authHeader && authHeader.startsWith('Bearer ')) {
     return authHeader.substring(7); // Remove 'Bearer ' prefix
   }
-  
+
   // Check query parameters
   if (req.query && req.query.token) {
     return req.query.token;
   }
-  
+
   // Check cookies if available
   if (req.cookies && req.cookies.jwt) {
     return req.cookies.jwt;
   }
-  
+
   return null;
 }
 
