@@ -12,23 +12,23 @@ console.log(`Attempting to connect to: ${redactedUri}`);
 
 async function testConnection() {
   const client = new MongoClient(uri);
-  
+
   try {
     // Connect to the MongoDB server
     await client.connect();
     console.log('✅ Connected successfully to MongoDB server');
-    
+
     // Try to access the database
     const db = client.db(dbName);
     console.log(`✅ Successfully accessed database: ${dbName}`);
-    
+
     // Try to list collections to verify full access
     const collections = await db.listCollections().toArray();
     console.log(`✅ Successfully listed collections. Found ${collections.length} collections:`);
     collections.forEach(collection => {
       console.log(` - ${collection.name}`);
     });
-    
+
   } catch (err) {
     console.error('❌ MongoDB Connection Error:', err);
     console.log('\nTroubleshooting tips:');
