@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     node: true,
+    browser: true,
     es2022: true
   },
   extends: [
@@ -11,10 +12,11 @@ module.exports = {
     sourceType: 'module'
   },
   globals: {
-    fetch: 'readonly'
+    fetch: 'readonly',
+    emailjs: 'readonly'
   },
   rules: {
-    'no-unused-vars': 'error',
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_|^key$' }],
     'no-undef': 'error',
     'semi': ['error', 'always'],
     'quotes': ['error', 'single'],

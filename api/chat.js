@@ -1,20 +1,16 @@
 // This is a serverless function for Vercel
 // Import the Google AI proxy service
-const { callGoogleAI, formatGeminiRequest, extractResponseText } = require('./google-ai-proxy');
+import { callGoogleAI, formatGeminiRequest, extractResponseText } from './google-ai-proxy.js';
 // Import rate limiter to prevent abuse
-const { rateLimiter } = require('./rate-limiter');
+import { rateLimiter } from './rate-limiter.js';
 // Import path and fs for file operations
-const path = require('path');
-const fs = require('fs');
-// Import config (for local development) - handle missing config file safely
-let config = {};
-try {
-  config = require('./config');
-  console.log('Loaded config file successfully');
-} catch {
-  console.log('Config file not found, using environment variables only');
-  // This is expected in production environments like Vercel
-}
+import path from 'path';
+import fs from 'fs';
+// Import intent recognition and action dispatcher
+import { recognizeIntent } from './intent-recognition.js';
+import { executeAction, formatActionResponse } from './actions/action-dispatcher.js';
+// Import rate limit configuration
+import { DEFAULT_RATE_LIMIT_OPTIONS } from './rate-limit-config.js';
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -22,15 +18,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Apply rate limiting - 15 requests per day
-  const rateLimitOptions = {
-    maxRequests: 15,  // Allow 15 requests per day per IP
-    windowMs: 24 * 60 * 60 * 1000 // 24 hour window (1 day)
-  };
-
-  // Let the rate limiter handle everything - it will do all the IP detection and validation
-  // It will also return false if the request is not allowed (and send the appropriate error response)
-  if (!rateLimiter(req, res, rateLimitOptions)) {
+  // Apply rate limiting using global configuration
+  if (!rateLimiter(req, res, DEFAULT_RATE_LIMIT_OPTIONS)) {
     console.log('Rate limit check failed - request blocked');
     return;
   }
@@ -44,8 +33,8 @@ export default async function handler(req, res) {
     // Log all environment variables (excluding sensitive values)
     console.log('Available environment variables:', Object.keys(process.env).join(', '));
 
-    // Get the user's message and conversation history from the request body
-    const { message, history = [] } = req.body;
+    // Get the user's message, conversation history, and session context from the request body
+    const { message, history = [], sessionContext = {} } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: 'Message is required' });
@@ -57,7 +46,7 @@ export default async function handler(req, res) {
     }
 
     // Get API key from environment variables - check multiple possible variable names
-    let apiKey = process.env.GOOGLEAI_API_KEY || process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GOOGLEAI_API_KEY || process.env.GEMINI_API_KEY;
 
     // Log API key status - for debug only
     const keyStatus = apiKey
@@ -69,23 +58,8 @@ export default async function handler(req, res) {
 
     // Check if API key is available
     if (!apiKey) {
-      try {
-        console.log('API key not found in environment variables, checking config file');
-        console.log('Config object exists:', !!config);
-        console.log('Config googleai exists:', !!(config && config.googleai));
-
-        const configApiKey = config && config.googleai && config.googleai.apiKey;
-        if (configApiKey) {
-          console.log('Using API key from config file');
-          apiKey = configApiKey;
-        } else {
-          console.error('API key not found in environment variables or config');
-          return res.status(500).json({ error: 'API key not configured' });
-        }
-      } catch (configError) {
-        console.error('Error accessing config:', configError);
-        return res.status(500).json({ error: 'Error accessing config file', details: configError.message });
-      }
+      console.error('API key not found in environment variables');
+      return res.status(500).json({ error: 'API key not configured' });
     }
 
     // Load FAQ data from JSON file
@@ -108,7 +82,7 @@ export default async function handler(req, res) {
 
     console.log('Preparing Google AI API request');
 
-    return runWithApiKey(apiKey, message, faqData, res, history);
+    return runWithApiKey(apiKey, message, faqData, res, history, sessionContext);
   } catch (error) {
     console.error('Server error:', error);
     return res.status(500).json({ error: 'Internal server error', details: error.message });
@@ -157,19 +131,47 @@ function selectRelevantFAQs(query, allFaqs, maxItems = 5) {
 /**
  * Runs the API call with the provided API key
  */
-async function runWithApiKey(apiKey, message, faqData, res, history = []) {
+async function runWithApiKey(apiKey, message, faqData, res, history = [], sessionContext = {}) {
   try {
     console.log('API Key found with length:', apiKey.length);
 
-    // Rate limiting is already handled in the handler function
+    // Step 1: Recognize intent from user message
+    console.log('Recognizing intent from message');
+    const intentResult = await recognizeIntent(message, apiKey, history);
+    console.log('Intent recognized:', intentResult.intent, 'with confidence:', intentResult.confidence);
 
-    // Select relevant FAQs instead of using all of them
-    const relevantFaqs = selectRelevantFAQs(message, faqData.faqs);
-    const faqContent = relevantFaqs.map(faq => `Q: ${faq.question}\nA: ${faq.answer}`).join('\n\n');
+    // Step 2: Execute action if intent is actionable
+    const actionResult = await executeAction(intentResult, message, sessionContext, apiKey);
 
-    // More flexible system instruction that allows for conversational questions
-    const systemInstructions = `ROLE: Jesse Chen's personal assistant AI
-TASK: Answer questions concisly about Jesse based on the FAQ data below. 
+    // Step 3: If action requires AI response, generate it; otherwise use action response
+    let aiResponse = null;
+    if (actionResult.requiresAiResponse) {
+      // Generate AI response using existing FAQ-based logic
+      aiResponse = await generateFAQResponse(message, faqData, apiKey, history);
+    }
+
+    // Step 4: Format and return response
+    const finalResponse = formatActionResponse(actionResult, aiResponse);
+
+    return res.status(200).json(finalResponse);
+
+  } catch (error) {
+    console.error('Server error:', error);
+    return res.status(500).json({ error: 'Internal server error', details: error.message });
+  }
+}
+
+/**
+ * Generate FAQ-based AI response
+ */
+async function generateFAQResponse(message, faqData, apiKey, history) {
+  // Select relevant FAQs instead of using all of them
+  const relevantFaqs = selectRelevantFAQs(message, faqData.faqs);
+  const faqContent = relevantFaqs.map(faq => `Q: ${faq.question}\nA: ${faq.answer}`).join('\n\n');
+
+  // More flexible system instruction that allows for conversational questions
+  const systemInstructions = `ROLE: Jesse Chen's personal assistant AI
+TASK: Answer questions concisly about Jesse based on the FAQ data below.
 TONE: casual, conversational, helpful
 
 FAQ DATA:
@@ -179,45 +181,39 @@ RULES:
 - Use the FAQ data creatively to answer a wide range of questions about Jesse
 - Answer conversationally but factually - stay grounded in the provided information
 - Be concise but complete - limit responses to within 200 words to avoid being cut off
-- If a question is completely unrelated to Jesse, politely redirect 
-- do not answer things that is irrelevent to the question`
-;
+- If a question is completely unrelated to Jesse, politely redirect
+- do not answer things that is irrelevent to the provided data`;
 
-    try {
-      // Use the proxy service to format the request with conversation history
-      const requestBody = formatGeminiRequest(
-        systemInstructions,
-        message,
-        {
-          temperature: 0.7,
-          maxOutputTokens: 1500,
-          topK: 40,
-          topP: 0.95
-        },
-        history // Pass the conversation history
-      );
+  try {
+    // Use the proxy service to format the request with conversation history
+    const requestBody = formatGeminiRequest(
+      systemInstructions,
+      message,
+      {
+        temperature: 0.7,
+        maxOutputTokens: 1500,
+        topK: 40,
+        topP: 0.95
+      },
+      history
+    );
 
-      console.log('Request body structure:', JSON.stringify(requestBody, null, 2));
+    console.log('Request body structure:', JSON.stringify(requestBody, null, 2));
 
-      // Use the proxy service to make the API call
-      const data = await callGoogleAI('gemini-2.5-flash', requestBody, apiKey);
+    // Use the proxy service to make the API call
+    const data = await callGoogleAI('gemini-2.5-flash', requestBody, apiKey);
 
-      // Use the proxy service to extract the response text
-      const aiResponse = extractResponseText(data);
+    // Use the proxy service to extract the response text
+    const aiResponse = extractResponseText(data);
 
-      if (!aiResponse) {
-        console.error('No response content found in API response:', data);
-        return res.status(500).json({ error: 'No response content from AI service' });
-      }
-
-      // Return the successful response
-      return res.status(200).json({ response: aiResponse });
-    } catch (error) {
-      console.error('Error calling Google AI service:', error);
-      return res.status(500).json({ error: `AI Service error: ${error.message}` });
+    if (!aiResponse) {
+      console.error('No response content found in API response:', data);
+      throw new Error('No response content from AI service');
     }
+
+    return aiResponse;
   } catch (error) {
-    console.error('Server error:', error);
-    return res.status(500).json({ error: 'Internal server error', details: error.message });
+    console.error('Error calling Google AI service:', error);
+    throw error;
   }
 }

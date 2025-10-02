@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "dotenv": "^17.2.2",
     "jsonwebtoken": "^9.0.2",
