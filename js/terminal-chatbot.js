@@ -29,11 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="terminal-body">
             <div class="terminal-output" id="terminal-output">
-                <p><span class="terminal-prompt">jesse@portfolio:~$</span> <span class="typing-animation">Welcome to Jesse Chen's interactive terminal.</span></p>
-                <p><span class="terminal-prompt">jesse@portfolio:~$</span> <span class="multiline-message">Feel free to ask me questions about Jesse's<br>background, skills, or projects.<br>I'm here to help you get to know him better!</span></p>
+                <p><span class="terminal-prompt">virtual-assistant@jesse:~$</span> <span class="multiline-message">Welcome to Jesse Chen's interactive terminal.</span></p>
+                <p><span class="terminal-prompt">virtual-assistant@jesse:~$</span> <span class="multiline-message">I'm more than just an AI chatbot! Jesse implemented the<br>trendy AI workflow to make me action-driven.<br><br>I can perform every action you can do on this website:<br>📧 Send Jesse an email<br>📄 Download his resume<br>🔍 Filter and explore projects<br>💬 Answer questions about his background & skills<br><br>Try asking me to "send an email" or "show me web projects"!</span></p>
             </div>
             <div class="terminal-input-line">
-                <span class="terminal-prompt">jesse@portfolio:~$</span>
+                <span class="terminal-prompt">virtual-assistant@jesse:~$</span>
                 <input type="text" id="terminal-input" autofocus>
             </div>
         </div>
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add user command to output with sanitization
     const sanitizedCommand = sanitizeHTML(command);
-    addToTerminal(`<span class="terminal-prompt">jesse@portfolio:~$</span> ${sanitizedCommand}`, false, true);
+    addToTerminal(`<span class="terminal-prompt">virtual-assistant@jesse:~$</span> ${sanitizedCommand}`, false, true);
 
     // Add user message to conversation history
     conversationHistory.push({ role: 'user', content: command });
@@ -555,7 +555,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingId = 'loading-' + Date.now();
     loadingDiv.id = loadingId;
     loadingDiv.classList.add('terminal-loading');
-    loadingDiv.innerHTML = '<span class="terminal-prompt">jesse@portfolio:~$</span> <span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>';
+    loadingDiv.innerHTML = '<span class="terminal-prompt">virtual-assistant@jesse:~$</span> <span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>';
     outputContainer.appendChild(loadingDiv);
     outputContainer.scrollTop = outputContainer.scrollHeight;
     return loadingId;
