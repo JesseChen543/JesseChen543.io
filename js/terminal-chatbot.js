@@ -121,8 +121,9 @@ document.addEventListener('DOMContentLoaded', function() {
   function processCommand(command) {
     if (!command) return;
 
-    // Add user command to output
-    addToTerminal(`<span class="terminal-prompt">jesse@portfolio:~$</span> ${command}`);
+    // Add user command to output with sanitization
+    const sanitizedCommand = sanitizeHTML(command);
+    addToTerminal(`<span class="terminal-prompt">jesse@portfolio:~$</span> ${sanitizedCommand}`, false, true);
 
     // Add user message to conversation history
     conversationHistory.push({ role: 'user', content: command });
@@ -523,14 +524,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  function addToTerminal(content, isResponse = false) {
+  /**
+   * Sanitize HTML to prevent XSS attacks
+   */
+  function sanitizeHTML(str) {
+    const temp = document.createElement('div');
+    temp.textContent = str;
+    return temp.innerHTML;
+  }
+
+  function addToTerminal(content, isResponse = false, allowHTML = false) {
     const outputContainer = document.getElementById('terminal-output');
     const newLine = document.createElement('p');
 
-    if (isResponse) {
+    if (isResponse || allowHTML) {
+      // Allow HTML for AI responses and formatted content
       newLine.innerHTML = content;
     } else {
-      newLine.innerHTML = content;
+      // Sanitize user input to prevent XSS
+      newLine.textContent = content;
     }
 
     outputContainer.appendChild(newLine);

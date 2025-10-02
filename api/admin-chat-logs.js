@@ -38,16 +38,18 @@ export default async function handler(req, res) {
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    // Get search filter
+    // Get search filter with sanitization
     const searchQuery = req.query.query || '';
     let filter = {};
 
-    // Apply search filter if provided
+    // Apply search filter if provided (sanitize to prevent NoSQL injection)
     if (searchQuery) {
+      // Escape special regex characters to prevent ReDoS attacks
+      const escapedQuery = searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       filter = {
         $or: [
-          { userMessage: { $regex: searchQuery, $options: 'i' } },
-          { aiResponse: { $regex: searchQuery, $options: 'i' } }
+          { userMessage: { $regex: escapedQuery, $options: 'i' } },
+          { aiResponse: { $regex: escapedQuery, $options: 'i' } }
         ]
       };
     }

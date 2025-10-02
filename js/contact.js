@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  // Initialize EmailJS with your user ID (you'll need to sign up for EmailJS)
+  // Initialize EmailJS with your user ID 
   // This will be initialized once the script loads
   const initEmailJS = () => {
     if (typeof emailjs !== 'undefined') {
@@ -143,7 +143,7 @@
     const notificationParams = {
       to_name: 'Jesse',
       from_name: 'Portfolio Contact Form',
-      email: 'jessechen959@gmail.com', // YOUR email address as recipient
+      email: 'jessechen959@gmail.com', 
       subject: `[Portfolio Contact] ${subject}`,
       message: `Hi Jesse,\n\nSomeone sent you an email via https://jesse-chen543-io.vercel.app/\n\nSender's Name: ${name}\nSender's Email: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`,
       reply_to: email // So you can easily reply to them
