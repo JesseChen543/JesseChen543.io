@@ -1,16 +1,16 @@
 // This is a serverless function for Vercel
 // Import the Google AI proxy service
-import { callGoogleAI, formatGeminiRequest, extractResponseText } from './google-ai-proxy.js';
+import { callGoogleAI, formatGeminiRequest, extractResponseText } from '../lib/google-ai-proxy.js';
 // Import rate limiter to prevent abuse
-import { rateLimiter } from './rate-limiter.js';
+import { rateLimiter } from '../lib/rate-limiter.js';
 // Import path and fs for file operations
 import path from 'path';
 import fs from 'fs';
 // Import intent recognition and action dispatcher
-import { recognizeIntent } from './intent-recognition.js';
-import { executeAction, formatActionResponse } from './actions/action-dispatcher.js';
+import { recognizeIntent } from '../lib/intent-recognition.js';
+import { executeAction, formatActionResponse } from '../lib/actions/action-dispatcher.js';
 // Import rate limit configuration
-import { DEFAULT_RATE_LIMIT_OPTIONS } from './rate-limit-config.js';
+import { DEFAULT_RATE_LIMIT_OPTIONS } from '../lib/rate-limit-config.js';
 
 export default async function handler(req, res) {
   // Only allow POST requests

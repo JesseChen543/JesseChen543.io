@@ -1,6 +1,6 @@
 // Admin API to retrieve chat logs
-import { connectToDatabase } from './mongodb.js';
-import { verifyToken, extractTokenFromRequest } from './auth-utils.js';
+import { connectToDatabase } from '../lib/mongodb.js';
+import { verifyToken, extractTokenFromRequest } from '../lib/auth-utils.js';
 
 // JWT-based authentication check for admin access
 function checkAdminAuth(req) {

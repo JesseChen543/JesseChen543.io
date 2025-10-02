@@ -1,5 +1,5 @@
 // Admin login API endpoint
-import { generateToken } from './auth-utils.js';
+import { generateToken } from '../lib/auth-utils.js';
 
 export default async function handler(req, res) {
   // Only allow POST requests

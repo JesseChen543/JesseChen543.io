@@ -1,6 +1,6 @@
-import { connectToDatabase } from './mongodb.js';
-import { rateLimiter } from './rate-limiter.js';
-import { DEFAULT_RATE_LIMIT_OPTIONS } from './rate-limit-config.js';
+import { connectToDatabase } from '../lib/mongodb.js';
+import { rateLimiter } from '../lib/rate-limiter.js';
+import { DEFAULT_RATE_LIMIT_OPTIONS } from '../lib/rate-limit-config.js';
 
 async function saveChatData(chatData) {
   try {
