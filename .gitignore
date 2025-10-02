@@ -44,4 +44,7 @@ rate-limit-data.json
 *.sln
 *.sw?
 
+# Claude AI instructions
+.claude/
+
 .vercel

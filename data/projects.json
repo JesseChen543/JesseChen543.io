@@ -1,0 +1,64 @@
+{
+  "projects": [
+    {
+      "id": "deco7180",
+      "name": "WingWatch",
+      "title": "Birdwatching website",
+      "date": "October, 2024",
+      "description": "As a key team member in the Wingwatch website project, I spearheaded the backend development. My responsibilities included integrating data retrieval from the Wildlife API, implementing Google Maps API to visualize bird location data, and developing algorithms to filter and enhance information, improving overall user experience. To learn more about our design process and development journey, check out our detailed project breakdown on the Wingwatch development Process page.",
+      "link": "https://jessechen543.github.io/wingwatch_portfolio/",
+      "image": "images/wingwatch.png",
+      "isEmbedded": false,
+      "tags": {
+        "software": ["javascript"],
+        "skills": ["data processing", "api", "website optimization", "user research"],
+        "type": ["team"]
+      }
+    },
+    {
+      "id": "data-analyst",
+      "name": "Real Estate Analysis",
+      "title": "Real Estate Analysis with python",
+      "date": "April, 2022",
+      "description": "The goal of this project is to gain insight into the features that influence the length of time a property stays on the market, and to create predictive models for this purpose.",
+      "link": "https://jessechen543.github.io/ESTATE_ANALYSIS/",
+      "image": "pictures/ESTATE_ANA_PIC.png",
+      "isEmbedded": false,
+      "tags": {
+        "software": ["python"],
+        "skills": ["data analysis", "predictive modeling"],
+        "type": ["individual"]
+      }
+    },
+    {
+      "id": "heart-attack-analysis",
+      "name": "Heart Attack Analysis",
+      "title": "Heart Attack Analysis with R",
+      "date": "April, 2022",
+      "description": "This project involved using data analytics to predict heart attacks using a dataset of 300 observations and 20 variables, resulting in achieving finalist status in a competition hosted by BANA and presenting findings to judges from Deloitte, KPMG, and UQ.",
+      "link": "https://jessechen543.github.io/Heart_attack_analysis_Jesse/",
+      "image": "pictures/heart-attack-analysis.png",
+      "isEmbedded": false,
+      "tags": {
+        "software": ["R"],
+        "skills": ["data analytics", "predictive modeling"],
+        "type": ["individual"]
+      }
+    },
+    {
+      "id": "web-design",
+      "name": "GamerverseHub",
+      "title": "Gaming platform-GamerverseHub",
+      "date": "September, 2023",
+      "description": "GamerverseHub functions as a gaming platform aimed at connecting gamers worldwide. It fosters interaction among gamers through various features including events, streams, discussions, and gaming opportunities. This was my first project after learning basic HTML, CSS, and JavaScript, where I polished my skills in styling techniques including flexbox (and I leant how to center a div), responsive web design, learned how APIs work, and implemented 'post' functionality.",
+      "link": "https://jessechen543.github.io/Gamerversehub/",
+      "image": "",
+      "isEmbedded": true,
+      "tags": {
+        "software": ["html", "css", "javascript"],
+        "skills": ["api", "responsive design", "get", "post"],
+        "type": ["individual"]
+      }
+    }
+  ]
+}

@@ -1,5 +1,6 @@
-const { connectToDatabase } = require('./mongodb');
-const { rateLimiter } = require('./rate-limiter');
+import { connectToDatabase } from '../lib/mongodb.js';
+import { rateLimiter } from '../lib/rate-limiter.js';
+import { DEFAULT_RATE_LIMIT_OPTIONS } from '../lib/rate-limit-config.js';
 
 async function saveChatData(chatData) {
   try {
@@ -23,13 +24,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const rateLimitOptions = {
-    maxRequests: 50,
-    windowMs: 24 * 60 * 60 * 1000, // 24 hour window
-  };
-
-  // Apply rate limiting
-  const rateLimitPassed = await rateLimiter(req, res, rateLimitOptions);
+  // Apply rate limiting using global configuration
+  const rateLimitPassed = await rateLimiter(req, res, DEFAULT_RATE_LIMIT_OPTIONS);
   if (!rateLimitPassed) {
     return; // Exit immediately if rate limit is exceeded
   }

@@ -1,0 +1,10 @@
+# Ignore minified and third-party vendor files
+assets/
+*.min.js
+
+# Ignore build outputs
+dist/
+build/
+
+# Ignore dependencies
+node_modules/
