@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  // Initialize EmailJS with your user ID (you'll need to sign up for EmailJS)
+  // Initialize EmailJS with your user ID 
   // This will be initialized once the script loads
   const initEmailJS = () => {
     if (typeof emailjs !== 'undefined') {
@@ -29,6 +29,7 @@
   function showStatus(message, type) {
     formStatus.textContent = message;
     formStatus.className = type;
+    formStatus.style.display = 'block';
 
     // Hide the message after 5 seconds if it's a success message
     if (type === 'success') {
@@ -46,15 +47,50 @@
   }
 
   /**
-   * Validate the form inputs
-   * @returns {boolean} - Whether the form is valid
+   * Validate email with backend API
+   * @param {string} email - The email to validate
+   * @returns {Promise<boolean>} - Whether the email is valid
    */
-  function validateForm() {
+  async function validateEmailBackend(email) {
+    try {
+      const response = await fetch('/api/validate-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email })
+      });
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error('Error validating email:', error);
+      // If validation API fails, allow submission (fail open)
+      return { valid: true, message: 'Could not verify email' };
+    }
+  }
+
+  /**
+   * Validate the form inputs
+   * @returns {Promise<boolean>} - Whether the form is valid
+   */
+  async function validateForm() {
     const email = document.getElementById('email').value;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    // Basic format check
     if (!emailRegex.test(email)) {
       showStatus('Please enter a valid email address.', 'error');
+      return false;
+    }
+
+    // Check if email domain exists
+    showStatus('Validating email...', 'success');
+    const emailValidation = await validateEmailBackend(email);
+
+    if (!emailValidation.valid) {
+      const errorMsg = emailValidation.message || 'Email domain does not exist. Please check your email address.';
+      showStatus(errorMsg, 'error');
       return false;
     }
 
@@ -65,10 +101,11 @@
    * Handle the form submission
    * @param {Event} event - The form submit event
    */
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!validateForm()) {
+    const isValid = await validateForm();
+    if (!isValid) {
       return;
     }
 
@@ -106,7 +143,7 @@
     const notificationParams = {
       to_name: 'Jesse',
       from_name: 'Portfolio Contact Form',
-      email: 'jessechen959@gmail.com', // YOUR email address as recipient
+      email: 'jessechen959@gmail.com', 
       subject: `[Portfolio Contact] ${subject}`,
       message: `Hi Jesse,\n\nSomeone sent you an email via https://jesse-chen543-io.vercel.app/\n\nSender's Name: ${name}\nSender's Email: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`,
       reply_to: email // So you can easily reply to them

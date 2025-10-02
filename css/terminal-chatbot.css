@@ -357,20 +357,20 @@
 .project-card-item h4 {
   color: #6e8efb;
   font-size: 16px;
-  margin: 0 0 6px 0;
+  margin: 0 0 6px;
 }
 
 .project-card-item .project-date {
   color: #aaa;
   font-size: 12px;
-  margin: 0 0 8px 0;
+  margin: 0 0 8px;
 }
 
 .project-card-item .project-description {
   color: #ddd;
   font-size: 13px;
   line-height: 1.4;
-  margin: 0 0 10px 0;
+  margin: 0 0 10px;
 }
 
 .project-tags {
@@ -572,4 +572,5 @@
     max-height: 350px;
   }
 }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(110, 142, 251, 0.6); } }
+
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); box-shadow: 0 0 20px rgb(110 142 251 / 60%); } }
