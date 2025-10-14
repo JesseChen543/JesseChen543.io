@@ -190,4 +190,95 @@
   if (contactForm) {
     contactForm.addEventListener('submit', handleSubmit);
   }
+
+  /**
+   * AI Polish Feature
+   * Polishes the message textarea content using AI
+   */
+  const polishBtn = document.getElementById('polish-btn');
+  const messageTextarea = document.getElementById('message');
+  const polishStatus = document.getElementById('polish-status');
+
+  /**
+   * Show polish status message
+   * @param {string} message - Status message to display
+   * @param {string} type - Message type ('loading', 'success', 'error')
+   */
+  function showPolishStatus(message, type) {
+    polishStatus.textContent = message;
+    polishStatus.className = `polish-status ${type}`;
+    polishStatus.style.display = 'block';
+
+    // Hide after 3 seconds for non-loading messages
+    if (type !== 'loading') {
+      setTimeout(() => {
+        polishStatus.style.display = 'none';
+      }, 3000);
+    }
+  }
+
+  /**
+   * Handle AI polish button click
+   */
+  async function handlePolish() {
+    const originalMessage = messageTextarea.value.trim();
+
+    // Validate that there's content to polish
+    if (!originalMessage) {
+      showPolishStatus('Please enter a message first', 'error');
+      return;
+    }
+
+    // Minimum length check
+    if (originalMessage.length < 10) {
+      showPolishStatus('Message too short to polish', 'error');
+      return;
+    }
+
+    // Disable button and show loading
+    polishBtn.disabled = true;
+    polishBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Polishing...';
+    showPolishStatus('AI is polishing your message...', 'loading');
+
+    try {
+      // Call polish API
+      const response = await fetch('/api/polish-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: originalMessage })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to polish message');
+      }
+
+      const data = await response.json();
+
+      // Update textarea with polished message
+      messageTextarea.value = data.polished;
+
+      // Add a subtle animation
+      messageTextarea.style.backgroundColor = '#f0f9ff';
+      setTimeout(() => {
+        messageTextarea.style.backgroundColor = '';
+      }, 1000);
+
+      showPolishStatus('Message polished successfully!', 'success');
+
+    } catch (error) {
+      console.error('Error polishing message:', error);
+      showPolishStatus('Failed to polish message. Please try again.', 'error');
+    } finally {
+      // Re-enable button
+      polishBtn.disabled = false;
+      polishBtn.innerHTML = '<i class="fas fa-magic"></i> AI Polish';
+    }
+  }
+
+  // Add event listener to polish button
+  if (polishBtn && messageTextarea) {
+    polishBtn.addEventListener('click', handlePolish);
+  }
 })();

@@ -1,609 +1,638 @@
 /**
- * Terminal-style Chatbot for Jesse Chen's portfolio
- * Creates a sticky chatbot icon that opens a terminal-like interface
+ * Modern Chatbot for Jesse Chen's portfolio
+ * Creates a sticky chatbot icon that opens a modern chat interface
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Store conversation history
-  let conversationHistory = [];
-  // Store session context for multi-turn actions (like email flow)
-  let sessionContext = {};
-  // Create chatbot icon
-  const chatbotIcon = document.createElement('div');
-  chatbotIcon.id = 'chatbot-icon';
-  chatbotIcon.innerHTML = '<i class="fas fa-robot"></i>';
-  document.body.appendChild(chatbotIcon);
-
-  // Create terminal container
-  const terminalContainer = document.createElement('div');
-  terminalContainer.id = 'terminal-container';
-  terminalContainer.classList.add('hidden');
-  terminalContainer.innerHTML = `
+    // Store conversation history
+    let conversationHistory = [];
+    // Create chatbot icon
+    const chatbotIcon = document.createElement('div');
+    chatbotIcon.id = 'chatbot-icon';
+    chatbotIcon.innerHTML = '<i class="fas fa-comments"></i>';
+    chatbotIcon.title = 'Chat with Jesse\'s AI Assistant';
+    document.body.appendChild(chatbotIcon);
+    
+    // Create terminal container
+    const terminalContainer = document.createElement('div');
+    terminalContainer.id = 'terminal-container';
+    terminalContainer.classList.add('hidden');
+    terminalContainer.innerHTML = `
         <div class="terminal-header">
-            <div class="terminal-buttons">
-                <span class="terminal-button close"></span>
-                <span class="terminal-button minimize"></span>
-                <span class="terminal-button maximize"></span>
+            <div class="terminal-header-content">
+                <div class="chatbot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="chatbot-info">
+                    <div class="chatbot-name">Jesse's AI Assistant</div>
+                    <div class="chatbot-status">Online</div>
+                </div>
             </div>
-            <div class="terminal-title">JESSE_CHEN.terminal</div>
+            <div class="terminal-buttons">
+                <span class="terminal-button minimize"><i class="fas fa-minus"></i></span>
+                <span class="terminal-button maximize"><i class="fas fa-expand-alt"></i></span>
+                <span class="terminal-button close"><i class="fas fa-times"></i></span>
+            </div>
         </div>
         <div class="terminal-body">
             <div class="terminal-output" id="terminal-output">
-                <p><span class="terminal-prompt">virtual-assistant@jesse:~$</span> <span class="multiline-message">Welcome to Jesse Chen's interactive terminal.</span></p>
-                <p><span class="terminal-prompt">virtual-assistant@jesse:~$</span> <span class="multiline-message">I'm more than just an AI chatbot! Jesse implemented the<br>trendy AI workflow to make me action-driven.<br><br>I can perform every action you can do on this website:<br>📧 Send Jesse an email<br>📄 Download his resume<br>🔍 Filter and explore projects<br>💬 Answer questions about his background & skills<br><br>Try asking me to "send an email" or "show me web projects"!</span></p>
+                <div class="welcome-message">
+                    <strong>Welcome! 👋</strong>
+                    Feel free to ask me questions about Jesse's background, skills, or projects. I'm here to help you get to know him better!
+                </div>
             </div>
             <div class="terminal-input-line">
-                <span class="terminal-prompt">virtual-assistant@jesse:~$</span>
-                <input type="text" id="terminal-input" autofocus>
+                <input type="text" id="terminal-input" placeholder="Type your question..." autofocus>
+                <button class="send-button" id="send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
     `;
-  document.body.appendChild(terminalContainer);
+    document.body.appendChild(terminalContainer);
+    
+    // Event Listeners
+    chatbotIcon.addEventListener('click', function(e) {
+        // Stop propagation to prevent the document click handler from firing
+        e.stopPropagation();
+        toggleTerminal();
+    });
+    
+    const closeButton = terminalContainer.querySelector('.terminal-button.close');
+    closeButton.addEventListener('click', hideTerminal);
+    
+    const minimizeButton = terminalContainer.querySelector('.terminal-button.minimize');
+    minimizeButton.addEventListener('click', minimizeTerminal);
+    
+    const maximizeButton = terminalContainer.querySelector('.terminal-button.maximize');
+    maximizeButton.addEventListener('click', maximizeTerminal);
+    
+    const terminalInput = document.getElementById('terminal-input');
+    const sendButton = document.getElementById('send-button');
 
-  // Event Listeners
-  chatbotIcon.addEventListener('click', function(e) {
-    // Stop propagation to prevent the document click handler from firing
-    e.stopPropagation();
-    toggleTerminal();
-  });
+    // Handle Enter key
+    terminalInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            processCommand(this.value.trim());
+            this.value = '';
+        }
+    });
 
-  const closeButton = terminalContainer.querySelector('.terminal-button.close');
-  closeButton.addEventListener('click', hideTerminal);
-
-  const minimizeButton = terminalContainer.querySelector('.terminal-button.minimize');
-  minimizeButton.addEventListener('click', minimizeTerminal);
-
-  const maximizeButton = terminalContainer.querySelector('.terminal-button.maximize');
-  maximizeButton.addEventListener('click', maximizeTerminal);
-
-  const terminalInput = document.getElementById('terminal-input');
-  terminalInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      processCommand(this.value.trim());
-      this.value = '';
+    // Handle send button click
+    sendButton.addEventListener('click', function() {
+        const message = terminalInput.value.trim();
+        if (message) {
+            processCommand(message);
+            terminalInput.value = '';
+        }
+    });
+    
+    // Make terminal draggable
+    makeDraggable(terminalContainer);
+    
+    // Close terminal when clicking outside of it
+    let clickOutsideEnabled = true;
+    document.addEventListener('click', function(e) {
+        // Only if terminal is visible and click-outside is enabled
+        if (!terminalContainer.classList.contains('hidden') && clickOutsideEnabled) {
+            // Check if click is outside both the terminal and the chatbot icon
+            if (!terminalContainer.contains(e.target) && e.target !== chatbotIcon && !chatbotIcon.contains(e.target)) {
+                hideTerminal();
+            }
+        }
+    });
+    
+    // Prevent click-through on terminal container
+    terminalContainer.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+    
+    // Functions
+    function toggleTerminal() {
+        if (terminalContainer.classList.contains('hidden')) {
+            showTerminal();
+        } else {
+            hideTerminal();
+        }
     }
-  });
-
-  // Make terminal draggable
-  makeDraggable(terminalContainer);
-
-  // Close terminal when clicking outside of it
-  let clickOutsideEnabled = true;
-  document.addEventListener('click', function(e) {
-    // Only if terminal is visible and click-outside is enabled
-    if (!terminalContainer.classList.contains('hidden') && clickOutsideEnabled) {
-      // Check if click is outside both the terminal and the chatbot icon
-      if (!terminalContainer.contains(e.target) && e.target !== chatbotIcon && !chatbotIcon.contains(e.target)) {
-        hideTerminal();
-      }
+    
+    function showTerminal() {
+        // Temporarily disable click-outside to prevent immediate closing
+        clickOutsideEnabled = false;
+        terminalContainer.classList.remove('hidden', 'minimized');
+        setTimeout(() => {
+            document.getElementById('terminal-input').focus();
+            // Re-enable click-outside after a short delay
+            clickOutsideEnabled = true;
+        }, 300);
     }
-  });
-
-  // Prevent click-through on terminal container
-  terminalContainer.addEventListener('click', function(e) {
-    e.stopPropagation();
-  });
-
-  // Functions
-  function toggleTerminal() {
-    if (terminalContainer.classList.contains('hidden')) {
-      showTerminal();
-    } else {
-      hideTerminal();
+    
+    function hideTerminal() {
+        terminalContainer.classList.add('hidden');
     }
-  }
-
-  function showTerminal() {
-    // Temporarily disable click-outside to prevent immediate closing
-    clickOutsideEnabled = false;
-    terminalContainer.classList.remove('hidden', 'minimized');
-    setTimeout(() => {
-      document.getElementById('terminal-input').focus();
-      // Re-enable click-outside after a short delay
-      clickOutsideEnabled = true;
-    }, 300);
-  }
-
-  function hideTerminal() {
-    terminalContainer.classList.add('hidden');
-  }
-
-  function minimizeTerminal() {
-    terminalContainer.classList.add('minimized');
-    terminalContainer.classList.remove('maximized');
-  }
-
-  function maximizeTerminal() {
-    terminalContainer.classList.remove('minimized');
-    terminalContainer.classList.toggle('maximized');
-  }
-
-  function processCommand(command) {
-    if (!command) return;
-
-    // Add user command to output with sanitization
-    const sanitizedCommand = sanitizeHTML(command);
-    addToTerminal(`<span class="terminal-prompt">virtual-assistant@jesse:~$</span> ${sanitizedCommand}`, false, true);
-
-    // Add user message to conversation history
-    conversationHistory.push({ role: 'user', content: command });
-
-    // Keep history to a reasonable length (last 6 messages)
-    if (conversationHistory.length > 10) {
-      conversationHistory = conversationHistory.slice(-10);
+    
+    function minimizeTerminal() {
+        terminalContainer.classList.add('minimized');
+        terminalContainer.classList.remove('maximized');
     }
+    
+    function maximizeTerminal() {
+        terminalContainer.classList.remove('minimized');
+        terminalContainer.classList.toggle('maximized');
+    }
+    
+    function processCommand(command) {
+        if (!command) return;
 
-    // Process commands
-    let response;
+        // Add user message bubble to output
+        const userMessageHTML = `
+            <div class="message-wrapper user-message">
+                <div class="message-avatar user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="message-content">${escapeHtml(command)}</div>
+            </div>
+        `;
+        addToTerminal(userMessageHTML);
 
-    if (command.toLowerCase() === 'help') {
-      response = `
+        // Add user message to conversation history
+        conversationHistory.push({ role: 'user', content: command });
+
+        // Keep history to a reasonable length (last 10 messages)
+        if (conversationHistory.length > 10) {
+            conversationHistory = conversationHistory.slice(-10);
+        }
+
+        // Process commands
+        let response;
+
+        if (command.toLowerCase() === 'help') {
+            response = `
                 <span class="command-help">Available commands:</span>
-                <span class="command-list">help</span> - Display available commands
-                <span class="command-list">projects</span> - List Jesse's key projects
-                <span class="command-list">skills</span> - List Jesse's technical skills
-                <span class="command-list">about</span> - Information about Jesse Chen
-                <span class="command-list">contact</span> - Get contact information
-                <span class="command-list">clear</span> - Clear terminal output
+                <span class="command-list">help</span> <span class="command-list">projects</span> <span class="command-list">skills</span> <span class="command-list">about</span> <span class="command-list">contact</span> <span class="command-list">clear</span>
             `;
-    } else if (command.toLowerCase() === 'clear') {
-      document.getElementById('terminal-output').innerHTML = '';
-      return;
-    } else if (command.toLowerCase() === 'projects') {
-      response = `
+        } else if (command.toLowerCase() === 'clear') {
+            document.getElementById('terminal-output').innerHTML = `
+                <div class="welcome-message">
+                    <strong>Welcome! 👋</strong>
+                    Feel free to ask me questions about Jesse's background, skills, or projects. I'm here to help you get to know him better!
+                </div>
+            `;
+            return;
+        } else if (command.toLowerCase() === 'projects') {
+            response = `
                 <span class="command-help">Jesse's Key Projects:</span>
                 <span class="project-item">• Birdwatching website (Wingwatch) - Backend development with APIs</span>
                 <span class="project-item">• Real Estate Analysis - Python data analysis project</span>
                 <span class="project-item">• GamerverseHub - Gaming platform connecting gamers</span>
                 <span class="project-item">• Heart Attack Analysis - Data analytics with R</span>
-                
+
                 Type the project name to learn more.
             `;
-    } else if (command.toLowerCase() === 'skills') {
-      response = `
+        } else if (command.toLowerCase() === 'skills') {
+            response = `
                 <span class="command-help">Technical Skills:</span>
                 <span class="skill-category">Programming:</span> JavaScript, Python, R, HTML/CSS
                 <span class="skill-category">Data:</span> Data processing, Analysis, Predictive modeling
                 <span class="skill-category">Web:</span> API integration, Website optimization, Responsive design
                 <span class="skill-category">Soft Skills:</span> Team collaboration, User research, Project management
             `;
-    } else if (command.toLowerCase() === 'about') {
-      response = `
+        } else if (command.toLowerCase() === 'about') {
+            response = `
                 <span class="command-help">About Jesse Chen:</span>
                 Recent IT graduate with a passion for solving complex problems.
                 Specializes in web development, data analysis, and creating interactive user experiences.
                 Seeking opportunities to apply technical skills in challenging environments.
             `;
-    } else if (command.toLowerCase() === 'contact') {
-      response = `
+        } else if (command.toLowerCase() === 'contact') {
+            response = `
                 <span class="command-help">Contact Information:</span>
                 <span class="contact-item">• Email: [Your email here]</span>
                 <span class="contact-item">• LinkedIn: [Your LinkedIn profile]</span>
                 <span class="contact-item">• GitHub: https://github.com/JesseChen543</span>
             `;
-    } else {
-      // Simulated AI response
-      simulateTypingResponse(command);
-      return;
-    }
-
-    // Add response with typing animation
-    addToTerminal(response, true);
-  }
-
-  // terminal-chatbot.js (partial update in simulateTypingResponse)
-  async function saveChatWithRetry(data, maxRetries = 3) {
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        const response = await fetch('/api/save-chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Attempt ${attempt} failed: ${errorText}`);
-        }
-        console.log('Chat conversation saved to database');
-        return;
-      } catch (error) {
-        console.error(`Retry ${attempt}/${maxRetries}:`, error);
-        if (attempt === maxRetries) {
-          throw error;
-        }
-        await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
-      }
-    }
-  }
-
-  async function simulateTypingResponse(command) {
-    const loadingId = showLoading();
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: command,
-          history: conversationHistory.slice(0, -1),
-          sessionContext: sessionContext,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`API request failed: ${errorText}`);
-      }
-
-      const data = await response.json();
-      hideLoading(loadingId);
-
-      // Update session context if returned from server
-      if (data.sessionContext) {
-        sessionContext = data.sessionContext;
-      }
-
-      // Check if this is an action response with special rendering
-      if (data.actionType) {
-        renderActionResponse(data);
-      } else {
-        addToTerminal(`<span class="terminal-ai-response">${data.response}</span>`, true);
-      }
-
-      conversationHistory.push({ role: 'assistant', content: data.response });
-
-      await saveChatWithRetry({
-        userMessage: command,
-        aiResponse: data.response,
-        userInfo: {
-          referrer: document.referrer,
-          page: window.location.pathname,
-          timestamp: new Date().toISOString(),
-        },
-      });
-    } catch (error) {
-      console.error('Error calling AI service or saving chat:', error);
-      hideLoading(loadingId);
-      const fallbackResponse = 'I\'m sorry, I\'m having trouble connecting to my AI services right now. Please try again later or use commands like \'help\', \'projects\', or \'skills\' to learn more about Jesse.';
-      addToTerminal(`<span class="terminal-ai-response">${fallbackResponse}</span>`, true);
-    }
-  }
-
-  /**
-     * Render action responses with interactive card UI
-     */
-  function renderActionResponse(data) {
-    const { actionType, response, data: actionData } = data;
-
-    // Always show the text response first
-    if (response) {
-      addToTerminal(`<span class="terminal-ai-response">${response}</span>`, true);
-    }
-
-    // Render action-specific card UI
-    switch (actionType) {
-    case 'download_resume':
-      renderResumeCard(actionData);
-      break;
-    case 'filter_projects':
-      renderProjectsCard(actionData);
-      break;
-    case 'view_project':
-      renderProjectDetailCard(actionData);
-      break;
-    case 'navigation':
-      handleNavigation(actionData);
-      break;
-    case 'fill_contact_form':
-      // Scroll to contact form and fill in extracted info
-      fillContactForm(actionData.contactInfo);
-      break;
-    case 'send_email_ready':
-      // Email data collected, send via EmailJS
-      sendEmailViaEmailJS(actionData.emailData);
-      break;
-    default:
-      // For other action types, just show the response
-      break;
-    }
-  }
-
-  /**
-     * Fill contact form and scroll to it
-     */
-  function fillContactForm(contactInfo) {
-    // Scroll to contact section
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-
-    // Fill in the form fields
-    setTimeout(() => {
-      if (contactInfo.name) {
-        const nameField = document.getElementById('name');
-        if (nameField) nameField.value = contactInfo.name;
-      }
-      if (contactInfo.email) {
-        const emailField = document.getElementById('email');
-        if (emailField) emailField.value = contactInfo.email;
-      }
-      if (contactInfo.subject) {
-        const subjectField = document.getElementById('subject');
-        if (subjectField) subjectField.value = contactInfo.subject;
-      }
-      if (contactInfo.message) {
-        const messageField = document.getElementById('message');
-        if (messageField) messageField.value = contactInfo.message;
-      }
-
-      // Focus on the first empty field or the submit button
-      const nameField = document.getElementById('name');
-      if (nameField && !nameField.value) {
-        nameField.focus();
-      } else {
-        const emailField = document.getElementById('email');
-        if (emailField && !emailField.value) {
-          emailField.focus();
         } else {
-          // All fields filled, highlight the submit button
-          const submitButton = document.querySelector('#contact-form button[type="submit"]');
-          if (submitButton) {
-            submitButton.focus();
-            submitButton.style.animation = 'pulse 1s ease-in-out 3';
-          }
+            // AI response
+            simulateTypingResponse(command);
+            return;
         }
-      }
 
-      addToTerminal('<span class="terminal-ai-response">✅ Form filled! Please review and click "Send Message" to submit.</span>', true);
-    }, 1000);
-  }
-
-  /**
-     * Send email using EmailJS (reuses existing contact form setup)
-     */
-  async function sendEmailViaEmailJS(emailData) {
-    try {
-      // Check if EmailJS is loaded
-      if (typeof emailjs === 'undefined') {
-        console.error('EmailJS library not loaded');
-        throw new Error('EmailJS library not loaded');
-      }
-
-      // Initialize EmailJS (matching js/contact.js configuration)
-      emailjs.init({ publicKey: 'Y88cQ4BFSgiHhYzpt' });
-
-      // EmailJS configuration from js/contact.js
-      const serviceId = 'service_q2r2twm';
-      const autoReplyTemplateId = 'template_etb3h1t';
-      const notificationTemplateId = 'template_150s0n3';
-
-      // Auto-reply parameters
-      const autoReplyParams = {
-        to_name: emailData.name,
-        from_name: 'Jesse Chen',
-        message: emailData.message,
-        email: emailData.email,
-        subject: emailData.subject
-      };
-
-      // Notification parameters
-      const notificationParams = {
-        to_name: 'Jesse',
-        from_name: 'Portfolio Contact Form',
-        email: 'jessechen959@gmail.com',
-        subject: `[Portfolio Contact] ${emailData.subject}`,
-        message: `Hi Jesse,\n\nSomeone sent you an email via chatbot.\n\nSender's Name: ${emailData.name}\nSender's Email: ${emailData.email}\nSubject: ${emailData.subject}\n\nMessage:\n${emailData.message}`,
-        reply_to: emailData.email
-      };
-
-      // Send auto-reply
-      await emailjs.send(serviceId, autoReplyTemplateId, autoReplyParams);
-
-      // Send notification
-      await emailjs.send(serviceId, notificationTemplateId, notificationParams);
-
-      addToTerminal('<span class="terminal-ai-response">✅ Your message has been sent successfully! Jesse will get back to you soon.</span>', true);
-    } catch (error) {
-      console.error('Error sending email:', error);
-      addToTerminal('<span class="terminal-ai-response">❌ Sorry, there was an error sending your message. Please try again or use the contact form.</span>', true);
-    }
-  }
-
-  /**
-     * Render resume download card
-     */
-  function renderResumeCard(data) {
-    const { resumePath, format } = data;
-    const displayFormat = format ? format.toUpperCase() : 'DOCX';
-    const cardHTML = `
-        <div class="action-card resume-card">
-          <div class="card-icon">📄</div>
-          <div class="card-content">
-            <h3>Jesse's Resume (${displayFormat})</h3>
-            <p>Click below to download</p>
-            <a href="${resumePath}" download="Jesse_Chen_Resume.${format || 'docx'}" class="card-button">
-              <i class="fas fa-download"></i> Download Resume
-            </a>
-          </div>
-        </div>
-      `;
-    addToTerminal(cardHTML, true);
-  }
-
-  /**
-     * Render filtered projects card
-     */
-  function renderProjectsCard(data) {
-    const { projects, totalCount } = data;
-
-    if (!projects || projects.length === 0) {
-      return;
+        // Add bot response (contains trusted HTML from static commands)
+        addBotMessage(response, true);
     }
 
-    const projectsHTML = projects.map(project => `
-        <div class="project-card-item">
-          <h4>${project.title}</h4>
-          <p class="project-date">${project.date}</p>
-          <p class="project-description">${project.description.substring(0, 120)}...</p>
-          <div class="project-tags">
-            ${project.tags.software.map(tag => `<span class="tag software-tag">${tag}</span>`).join('')}
-          </div>
-          <a href="${project.link}" target="_blank" class="card-button-small">View Project →</a>
-        </div>
-      `).join('');
+    // Helper function to escape HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    // terminal-chatbot.js (partial update in simulateTypingResponse)
+    async function saveChatWithRetry(data, maxRetries = 3) {
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            const response = await fetch('/api/save-chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+            });
+            if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Attempt ${attempt} failed: ${errorText}`);
+            }
+            console.log('Chat conversation saved to database');
+            return;
+        } catch (error) {
+            console.error(`Retry ${attempt}/${maxRetries}:`, error);
+            if (attempt === maxRetries) {
+            throw error;
+            }
+            await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
+        }
+        }
+    }
+    
+    async function simulateTypingResponse(command) {
+        const loadingId = showLoading();
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: command,
+                    history: conversationHistory.slice(0, -1),
+                }),
+            });
 
-    const cardHTML = `
-        <div class="action-card projects-card">
-          <div class="card-header">
-            <div class="card-icon">🚀</div>
-            <h3>${totalCount} Project${totalCount > 1 ? 's' : ''} Found</h3>
-          </div>
-          <div class="projects-grid">
-            ${projectsHTML}
-          </div>
-        </div>
-      `;
-    addToTerminal(cardHTML, true);
-  }
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`API request failed: ${errorText}`);
+            }
 
-  /**
-     * Render project detail card
-     */
-  function renderProjectDetailCard(data) {
-    const { project } = data;
+            const data = await response.json();
+            hideLoading(loadingId);
 
-    if (!project) {
-      return;
+            // Handle action responses
+            if (data.actionType) {
+                handleActionResponse(data);
+            } else {
+                addBotMessage(data.response);
+            }
+
+            conversationHistory.push({ role: 'assistant', content: data.response });
+
+            await saveChatWithRetry({
+                userMessage: command,
+                aiResponse: data.response,
+                userInfo: {
+                    referrer: document.referrer,
+                    page: window.location.pathname,
+                    timestamp: new Date().toISOString(),
+                },
+            });
+        } catch (error) {
+            console.error('Error calling AI service or saving chat:', error);
+            hideLoading(loadingId);
+            const fallbackResponse = `I'm sorry, I'm having trouble connecting to my AI services right now. Please try again later or use commands like 'help', 'projects', or 'skills' to learn more about Jesse.`;
+            addBotMessage(fallbackResponse);
+        }
     }
 
-    const cardHTML = `
-        <div class="action-card project-detail-card">
-          <div class="card-header">
-            <div class="card-icon">💼</div>
-            <h3>${project.title}</h3>
-          </div>
-          <div class="card-content">
-            <p class="project-date">${project.date}</p>
-            <p class="project-description">${project.description}</p>
-            <div class="project-meta">
-              <div class="meta-section">
-                <strong>Technologies:</strong>
-                <div class="project-tags">
-                  ${project.tags.software.map(tag => `<span class="tag software-tag">${tag}</span>`).join('')}
+    /**
+     * Handle action responses from the API
+     */
+    function handleActionResponse(data) {
+        const { actionType, response, data: actionData } = data;
+
+        // Always show the text response first
+        addBotMessage(response);
+
+        // Handle specific action types
+        switch (actionType) {
+            case 'filter_projects':
+                displayFilteredProjects(actionData);
+                break;
+
+            case 'view_project':
+                displayProjectDetails(actionData);
+                break;
+
+            case 'navigation':
+                handleNavigationAction(actionData);
+                break;
+
+            case 'fill_contact_form':
+            case 'send_email':
+                handleContactFormAction(actionData);
+                break;
+
+            default:
+                console.log('Unknown action type:', actionType);
+        }
+    }
+
+    /**
+     * Display filtered projects as interactive cards
+     */
+    function displayFilteredProjects(actionData) {
+        if (!actionData || !actionData.projects || actionData.projects.length === 0) {
+            return;
+        }
+
+        const projectsHTML = actionData.projects.map(project => `
+            <div class="project-card" data-project-id="${escapeHtml(project.id)}">
+                <div class="project-header">
+                    <h4>${escapeHtml(project.title)}</h4>
+                    <span class="project-date">${escapeHtml(project.date)}</span>
                 </div>
-              </div>
-              <div class="meta-section">
-                <strong>Skills:</strong>
+                <p class="project-description">${escapeHtml(project.description.substring(0, 150))}...</p>
                 <div class="project-tags">
-                  ${project.tags.skills.map(tag => `<span class="tag skill-tag">${tag}</span>`).join('')}
+                    ${project.tags.software.slice(0, 3).map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
                 </div>
-              </div>
+                <a href="${escapeHtml(project.link)}" target="_blank" class="project-link">View Project →</a>
             </div>
-            <a href="${project.link}" target="_blank" class="card-button">
-              <i class="fas fa-external-link-alt"></i> View Full Project
-            </a>
-          </div>
-        </div>
-      `;
-    addToTerminal(cardHTML, true);
-  }
+        `).join('');
 
-  /**
+        const projectsContainer = `
+            <div class="message-wrapper bot-message">
+                <div class="message-avatar bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="projects-container">
+                    ${projectsHTML}
+                </div>
+            </div>
+        `;
+
+        addToTerminal(projectsContainer);
+    }
+
+    /**
+     * Display project details card
+     */
+    function displayProjectDetails(actionData) {
+        if (!actionData || !actionData.project) {
+            return;
+        }
+
+        const project = actionData.project;
+        const detailsHTML = `
+            <div class="message-wrapper bot-message">
+                <div class="message-avatar bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="project-details-card">
+                    <h3>${escapeHtml(project.title)}</h3>
+                    <p class="project-date">${escapeHtml(project.date)}</p>
+                    <p class="project-description">${escapeHtml(project.description)}</p>
+                    <div class="project-tech-section">
+                        <strong>Technologies:</strong>
+                        <div class="project-tags">
+                            ${project.tags.software.map(tag => `<span class="tag tech-tag">${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="project-skills-section">
+                        <strong>Skills:</strong>
+                        <div class="project-tags">
+                            ${project.tags.skills.map(tag => `<span class="tag skill-tag">${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                    </div>
+                    <a href="${escapeHtml(project.link)}" target="_blank" class="project-link-button">View Full Project →</a>
+                </div>
+            </div>
+        `;
+
+        addToTerminal(detailsHTML);
+    }
+
+    /**
      * Handle navigation action
      */
-  function handleNavigation(data) {
-    const { section } = data;
-    // Scroll to section on the page
-    const sectionElement = document.getElementById(section);
-    if (sectionElement) {
-      sectionElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
+    function handleNavigationAction(actionData) {
+        if (!actionData || !actionData.section) {
+            return;
+        }
 
-  /**
-   * Sanitize HTML to prevent XSS attacks
-   */
-  function sanitizeHTML(str) {
-    const temp = document.createElement('div');
-    temp.textContent = str;
-    return temp.innerHTML;
-  }
-
-  function addToTerminal(content, isResponse = false, allowHTML = false) {
-    const outputContainer = document.getElementById('terminal-output');
-    const newLine = document.createElement('p');
-
-    if (isResponse || allowHTML) {
-      // Allow HTML for AI responses and formatted content
-      newLine.innerHTML = content;
-    } else {
-      // Sanitize user input to prevent XSS
-      newLine.textContent = content;
+        // Scroll to the section
+        const sectionElement = document.getElementById(actionData.section);
+        if (sectionElement) {
+            sectionElement.scrollIntoView({ behavior: 'smooth' });
+            // Close the chatbot after navigation
+            setTimeout(() => {
+                hideTerminal();
+            }, 500);
+        }
     }
 
-    outputContainer.appendChild(newLine);
-    outputContainer.scrollTop = outputContainer.scrollHeight;
-  }
+    /**
+     * Handle contact form action - scroll to form and prefill data
+     */
+    function handleContactFormAction(actionData) {
+        if (!actionData) {
+            return;
+        }
 
-  function showLoading() {
-    const outputContainer = document.getElementById('terminal-output');
-    const loadingDiv = document.createElement('p');
-    const loadingId = 'loading-' + Date.now();
-    loadingDiv.id = loadingId;
-    loadingDiv.classList.add('terminal-loading');
-    loadingDiv.innerHTML = '<span class="terminal-prompt">virtual-assistant@jesse:~$</span> <span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>';
-    outputContainer.appendChild(loadingDiv);
-    outputContainer.scrollTop = outputContainer.scrollHeight;
-    return loadingId;
-  }
+        // Show visual feedback
+        const hasContactInfo = actionData.contactInfo &&
+            (actionData.contactInfo.name || actionData.contactInfo.email ||
+             actionData.contactInfo.subject || actionData.contactInfo.message);
 
-  function hideLoading(loadingId) {
-    const loadingDiv = document.getElementById(loadingId);
-    if (loadingDiv) loadingDiv.remove();
-  }
+        if (hasContactInfo) {
+            const feedbackHTML = `
+                <div class="message-wrapper bot-message">
+                    <div class="message-avatar bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="contact-action-card">
+                        <div class="contact-action-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="contact-action-text">
+                            <strong>Opening contact form...</strong>
+                            <p>I've extracted the following information:</p>
+                            <ul class="contact-info-list">
+                                ${actionData.contactInfo.name ? `<li><strong>Name:</strong> ${escapeHtml(actionData.contactInfo.name)}</li>` : ''}
+                                ${actionData.contactInfo.email ? `<li><strong>Email:</strong> ${escapeHtml(actionData.contactInfo.email)}</li>` : ''}
+                                ${actionData.contactInfo.subject ? `<li><strong>Subject:</strong> ${escapeHtml(actionData.contactInfo.subject)}</li>` : ''}
+                                ${actionData.contactInfo.message ? `<li><strong>Message:</strong> ${escapeHtml(actionData.contactInfo.message.substring(0, 80))}${actionData.contactInfo.message.length > 80 ? '...' : ''}</li>` : ''}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+            addToTerminal(feedbackHTML);
+        }
 
-  function makeDraggable(element) {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    const header = element.querySelector('.terminal-header');
+        // Scroll to contact section
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+            setTimeout(() => {
+                contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, hasContactInfo ? 500 : 0);
+        }
 
-    if (header) {
-      header.onmousedown = dragMouseDown;
-    } else {
-      element.onmousedown = dragMouseDown;
+        // Prefill form if contactInfo is provided
+        if (hasContactInfo) {
+            const { name, email, subject, message } = actionData.contactInfo;
+
+            // Wait for scroll to complete, then fill form
+            setTimeout(() => {
+                if (name) {
+                    const nameInput = document.getElementById('name');
+                    if (nameInput) {
+                        nameInput.value = name;
+                        // Add a subtle animation
+                        nameInput.style.backgroundColor = '#f0f9ff';
+                        setTimeout(() => nameInput.style.backgroundColor = '', 1000);
+                    }
+                }
+
+                if (email) {
+                    const emailInput = document.getElementById('email');
+                    if (emailInput) {
+                        emailInput.value = email;
+                        emailInput.style.backgroundColor = '#f0f9ff';
+                        setTimeout(() => emailInput.style.backgroundColor = '', 1000);
+                    }
+                }
+
+                if (subject) {
+                    const subjectInput = document.getElementById('subject');
+                    if (subjectInput) {
+                        subjectInput.value = subject;
+                        subjectInput.style.backgroundColor = '#f0f9ff';
+                        setTimeout(() => subjectInput.style.backgroundColor = '', 1000);
+                    }
+                }
+
+                if (message) {
+                    const messageInput = document.getElementById('message');
+                    if (messageInput) {
+                        messageInput.value = message;
+                        messageInput.style.backgroundColor = '#f0f9ff';
+                        setTimeout(() => messageInput.style.backgroundColor = '', 1000);
+                    }
+                }
+
+                // Focus on the first empty required field
+                const nameInput = document.getElementById('name');
+                const emailInput = document.getElementById('email');
+                const subjectInput = document.getElementById('subject');
+                const messageInput = document.getElementById('message');
+
+                if (!nameInput.value) {
+                    nameInput.focus();
+                } else if (!emailInput.value) {
+                    emailInput.focus();
+                } else if (!subjectInput.value) {
+                    subjectInput.focus();
+                } else if (!messageInput.value) {
+                    messageInput.focus();
+                }
+            }, 1200);
+        }
+
+        // Close the chatbot after a delay
+        setTimeout(() => {
+            hideTerminal();
+        }, hasContactInfo ? 1500 : 800);
     }
 
-    function dragMouseDown(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // Get the mouse cursor position at startup
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      document.onmouseup = closeDragElement;
-      // Call a function whenever the cursor moves
-      document.onmousemove = elementDrag;
+    function addToTerminal(content) {
+        const outputContainer = document.getElementById('terminal-output');
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = content;
+        outputContainer.appendChild(wrapper.firstElementChild || wrapper);
+        outputContainer.scrollTop = outputContainer.scrollHeight;
     }
 
-    function elementDrag(e) {
-      e = e || window.event;
-      e.preventDefault();
-      // Calculate the new cursor position
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      // Set the element's new position
-      element.style.top = (element.offsetTop - pos2) + 'px';
-      element.style.left = (element.offsetLeft - pos1) + 'px';
-    }
+    function addBotMessage(content, isHtml = false) {
+        // Escape content by default for security (prevents XSS from AI responses)
+        // Only render as HTML when explicitly specified (for static command responses)
+        const sanitizedContent = isHtml ? content : escapeHtml(content);
 
-    function closeDragElement() {
-      // Stop moving when mouse button is released
-      document.onmouseup = null;
-      document.onmousemove = null;
+        const botMessageHTML = `
+            <div class="message-wrapper bot-message">
+                <div class="message-avatar bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">${sanitizedContent}</div>
+            </div>
+        `;
+        addToTerminal(botMessageHTML);
     }
-  }
+    
+    function showLoading() {
+        const outputContainer = document.getElementById('terminal-output');
+        const loadingDiv = document.createElement('div');
+        const loadingId = 'loading-' + Date.now();
+        loadingDiv.id = loadingId;
+        loadingDiv.classList.add('terminal-loading');
+        loadingDiv.innerHTML = `
+            <div class="message-avatar bot-avatar">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="loading-bubble">
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        `;
+        outputContainer.appendChild(loadingDiv);
+        outputContainer.scrollTop = outputContainer.scrollHeight;
+        return loadingId;
+    }
+    
+    function hideLoading(loadingId) {
+        const loadingDiv = document.getElementById(loadingId);
+        if (loadingDiv) loadingDiv.remove();
+    }
+    
+    function makeDraggable(element) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        const header = element.querySelector('.terminal-header');
+        
+        if (header) {
+            header.onmousedown = dragMouseDown;
+        } else {
+            element.onmousedown = dragMouseDown;
+        }
+        
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // Get the mouse cursor position at startup
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // Call a function whenever the cursor moves
+            document.onmousemove = elementDrag;
+        }
+        
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // Calculate the new cursor position
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // Set the element's new position
+            element.style.top = (element.offsetTop - pos2) + "px";
+            element.style.left = (element.offsetLeft - pos1) + "px";
+        }
+        
+        function closeDragElement() {
+            // Stop moving when mouse button is released
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
 });
