@@ -217,8 +217,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Add bot response
-        addBotMessage(response);
+        // Add bot response (contains trusted HTML from static commands)
+        addBotMessage(response, true);
     }
 
     // Helper function to escape HTML
@@ -551,13 +551,17 @@ document.addEventListener('DOMContentLoaded', function() {
         outputContainer.scrollTop = outputContainer.scrollHeight;
     }
 
-    function addBotMessage(content) {
+    function addBotMessage(content, isHtml = false) {
+        // Escape content by default for security (prevents XSS from AI responses)
+        // Only render as HTML when explicitly specified (for static command responses)
+        const sanitizedContent = isHtml ? content : escapeHtml(content);
+
         const botMessageHTML = `
             <div class="message-wrapper bot-message">
                 <div class="message-avatar bot-avatar">
                     <i class="fas fa-robot"></i>
                 </div>
-                <div class="message-content">${content}</div>
+                <div class="message-content">${sanitizedContent}</div>
             </div>
         `;
         addToTerminal(botMessageHTML);
