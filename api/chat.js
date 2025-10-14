@@ -11,6 +11,11 @@ import { recognizeIntent } from '../lib/intent-recognition.js';
 import { executeAction, formatActionResponse } from '../lib/actions/action-dispatcher.js';
 // Import rate limit configuration
 import { DEFAULT_RATE_LIMIT_OPTIONS } from '../lib/rate-limit-config.js';
+// Import hybrid ranking system (BM25 + embeddings)
+import { initializeHybridRanker, rankFAQs, getHybridRankerStatus } from '../lib/hybrid-ranker.js';
+
+// Global flag to track if hybrid ranker is initialized
+let rankerInitialized = false;
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -73,6 +78,14 @@ export default async function handler(req, res) {
       const faqContent = fs.readFileSync(faqPath, 'utf-8');
       faqData = JSON.parse(faqContent);
       console.log(`Successfully loaded FAQ data with ${faqData.faqs?.length || 0} questions`);
+
+      // Initialize hybrid ranker on first request (singleton pattern)
+      if (!rankerInitialized && faqData.faqs && faqData.faqs.length > 0) {
+        console.log('First request detected - initializing hybrid ranker...');
+        await initializeHybridRanker(faqData.faqs);
+        rankerInitialized = true;
+        console.log('Hybrid ranker initialized:', getHybridRankerStatus());
+      }
     } catch (error) {
       console.error('Error loading FAQ data from file:', error);
       // Fallback to empty structure if file cannot be loaded
@@ -90,18 +103,30 @@ export default async function handler(req, res) {
 }
 
 /**
- * Function to select relevant FAQs based on user query
+ * Select relevant FAQs using hybrid ranking (BM25 + embeddings)
+ * Falls back to basic keyword matching if ranker not initialized
  */
-function selectRelevantFAQs(query, allFaqs, maxItems = 5) {
-  // Basic keyword matching - could be improved with more sophisticated NLP
+async function selectRelevantFAQs(query, allFaqs, maxItems = 5) {
+  // If hybrid ranker is initialized, use it for superior ranking
+  if (rankerInitialized) {
+    console.log('Using hybrid ranking (BM25 + embeddings)');
+    try {
+      const rankedFaqs = await rankFAQs(query, { topK: maxItems });
+      return rankedFaqs;
+    } catch (error) {
+      console.error('Error using hybrid ranker, falling back to basic matching:', error);
+      // Fall through to basic matching
+    }
+  }
+
+  // Fallback: Basic keyword matching (legacy method)
+  console.log('Using basic keyword matching (fallback)');
   const keywords = query.toLowerCase().split(/\W+/).filter(k => k.length > 2);
 
-  // Score each FAQ
   const scoredFaqs = allFaqs.map(faq => {
     const text = (faq.question + ' ' + faq.answer).toLowerCase();
     let score = 0;
 
-    // Count keyword matches
     keywords.forEach(keyword => {
       if (text.includes(keyword)) {
         score += 1;
@@ -117,14 +142,12 @@ function selectRelevantFAQs(query, allFaqs, maxItems = 5) {
     return { faq, score };
   });
 
-  // Sort by score and take top N
   const selectedFaqs = scoredFaqs
     .sort((a, b) => b.score - a.score)
     .slice(0, maxItems)
     .map(item => item.faq);
 
-  console.log(`Selected ${selectedFaqs.length} relevant FAQs for query: ${query}`);
-
+  console.log(`Selected ${selectedFaqs.length} relevant FAQs using fallback method`);
   return selectedFaqs;
 }
 
@@ -165,8 +188,8 @@ async function runWithApiKey(apiKey, message, faqData, res, history = [], sessio
  * Generate FAQ-based AI response
  */
 async function generateFAQResponse(message, faqData, apiKey, history) {
-  // Select relevant FAQs instead of using all of them
-  const relevantFaqs = selectRelevantFAQs(message, faqData.faqs);
+  // Select relevant FAQs using hybrid ranking (BM25 + embeddings)
+  const relevantFaqs = await selectRelevantFAQs(message, faqData.faqs);
   const faqContent = relevantFaqs.map(faq => `Q: ${faq.question}\nA: ${faq.answer}`).join('\n\n');
 
   // More flexible system instruction that allows for conversational questions
