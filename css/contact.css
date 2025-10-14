@@ -169,6 +169,154 @@
   display: block;
 }
 
+/* Message group with AI polish button */
+.message-group {
+  position: relative;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.6rem;
+}
+
+.message-header label {
+  margin-bottom: 0;
+}
+
+/* AI Polish Button - Small and subtle */
+#contact button.polish-btn {
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgb(110 142 251 / 20%);
+  line-height: 1;
+  white-space: nowrap;
+  margin: 0;
+  position: relative;
+}
+
+/* Tooltip on hover */
+#contact button.polish-btn::before {
+  content: "Don't worry, Jesse won't mind!";
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  background: rgba(44, 62, 80, 0.95);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+/* Tooltip arrow */
+#contact button.polish-btn::after {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 2px);
+  right: 12px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(44, 62, 80, 0.95);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+#contact button.polish-btn:hover::before,
+#contact button.polish-btn:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#contact button.polish-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgb(110 142 251 / 30%);
+  background: linear-gradient(135deg, #5a7ce3, #9363c7);
+}
+
+#contact button.polish-btn:active {
+  transform: scale(0.98);
+}
+
+#contact button.polish-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#contact button.polish-btn:disabled::before,
+#contact button.polish-btn:disabled::after {
+  display: none;
+}
+
+#contact button.polish-btn i {
+  font-size: 0.7rem;
+}
+
+/* Polish status messages */
+.polish-status {
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  display: none;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.polish-status.loading {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+  display: block;
+}
+
+.polish-status.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  display: block;
+}
+
+.polish-status.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  display: block;
+}
+
 /* Responsive styles */
 @media (width <= 768px) {
   #contact {
@@ -177,5 +325,28 @@
 
   #contact h2 {
     font-size: 2rem;
+  }
+
+  .message-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .polish-btn {
+    align-self: flex-end;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
+@media (width <= 480px) {
+  #contact-form {
+    padding: 2rem;
+  }
+
+  .polish-btn {
+    width: 100%;
+    justify-content: center;
   }
 }
